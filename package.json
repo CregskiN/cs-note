@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "git-cz": "^4.7.0"
+  },
+  "name": "cs-note",
+  "description": "目前可以公开的情报： ## 设计模式（Design pattern） ## 算法与数据结构",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "commit": "git-cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CregskiN/cs-note.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CregskiN/cs-note/issues"
+  },
+  "homepage": "https://github.com/CregskiN/cs-note#readme"
+}
