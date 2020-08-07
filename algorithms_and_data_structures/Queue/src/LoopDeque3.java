@@ -1,3 +1,7 @@
+/**
+ * 无size，浪费一个空间
+ * @param <E>
+ */
 public class LoopDeque3<E> implements Deque<E> {
     private E[] data;
     private int front;

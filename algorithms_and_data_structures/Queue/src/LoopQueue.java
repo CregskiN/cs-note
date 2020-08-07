@@ -1,3 +1,7 @@
+/**
+ * 有size 浪费一个空间
+ * @param <E>
+ */
 public class LoopQueue<E> implements Queue<E> {
 
     private E[] data;
