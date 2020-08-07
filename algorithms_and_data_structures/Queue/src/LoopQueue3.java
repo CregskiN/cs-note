@@ -67,6 +67,7 @@ public class LoopQueue3<E> implements Queue<E> {
         return ret;
     }
 
+
     private void resize(int newCapacity) {
         E[] newData = (E[]) new Object[newCapacity + 1];
         int size = this.getSize();
