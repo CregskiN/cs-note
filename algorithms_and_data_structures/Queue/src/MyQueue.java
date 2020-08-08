@@ -44,8 +44,8 @@ class MyQueue {
 
     /**
      * Removes the element from in front of queue and returns that element.
-     * 对于stack1，队首在栈底，队尾在栈顶
-     * 对于stack2，队首在栈顶，队尾在栈底
+     * 对于stack1，队首在栈底，队尾在栈顶，故 stack1 用于入队
+     * 对于stack2，队首在栈顶，队尾在栈底， stack2 用于出队
      */
     public int pop() {
         int res = -1;
