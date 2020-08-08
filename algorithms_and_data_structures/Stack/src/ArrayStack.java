@@ -1,79 +1,68 @@
 public class ArrayStack<E> implements Stack<E> {
-    Array<E> array;
 
-    public ArrayStack(int capacity) {
-        this.array = new Array<E>(capacity);
+    private Array<E> array;
+
+    public ArrayStack(int capacity){
+        array = new Array<>(capacity);
     }
 
     public ArrayStack(){
-        this.array = new Array<E>();
+        array = new Array<>();
     }
 
-    /**
-     * 获取 size
-     * @return
-     */
     @Override
     public int getSize(){
-        return this.array.getSize();
+        return array.getSize();
     }
 
-    /**
-     * 判空
-     * @return
-     */
     @Override
     public boolean isEmpty(){
-        return this.array.isEmpty();
+        return array.isEmpty();
     }
 
-    /**
-     * 获取 capacity
-     * @return
-     */
     public int getCapacity(){
-        return this.array.getCapacity();
+        return array.getCapacity();
     }
 
-    /**
-     * 入栈
-     * @param e
-     */
     @Override
     public void push(E e){
-        this.array.addLast(e);
+        array.addLast(e);
     }
 
-    /**
-     * 出栈
-     * @return
-     */
     @Override
     public E pop(){
-        return this.array.removeLast();
+        return array.removeLast();
     }
 
-    /**
-     * 查看栈顶元素
-     * @return
-     */
     @Override
     public E peek(){
-        return this.array.getLast();
+        return array.getLast();
     }
 
     @Override
     public String toString(){
         StringBuilder res = new StringBuilder();
         res.append("Stack: ");
-        res.append("[");
-        for(int i = 0; i < this.array.getSize(); i ++){
-            res.append(this.array.get(i));
-            if(i != this.array.getSize() - 1){
+        res.append('[');
+        for(int i = 0 ; i < array.getSize() ; i ++){
+            res.append(array.get(i));
+            if(i != array.getSize() - 1)
                 res.append(", ");
-            }
         }
         res.append("] top");
         return res.toString();
+    }
+
+    public static void main(String[] args) {
+
+        ArrayStack<Integer> stack = new ArrayStack<>();
+
+        for(int i = 0 ; i < 5 ; i ++){
+            stack.push(i);
+            System.out.println(stack);
+        }
+
+        stack.pop();
+        System.out.println(stack);
     }
 }
