@@ -1,5 +1,6 @@
 /**
- * 使用 dummyHead
+ * 使用递归
+ * // https://leetcode-cn.com/problems/remove-linked-list-elements/submissions/
  * Definition for singly-linked list.
  * public class ListNode {
  * int val;
@@ -9,18 +10,24 @@
  */
 class Solution {
     public ListNode removeElements(ListNode head, int val) {
-        ListNode dummyHead = new ListNode(-1);
-        dummyHead.next = head;
-
-        ListNode prev = dummyHead;
-        while (prev.next != null) {
-            if (prev.next.val == val) {
-                prev.next = prev.next.next;
-            } else {
-                prev = prev.next;
-            }
+        // 1. 最小情况
+        if (head == null) {
+            return null;
         }
 
-        return dummyHead.next;
+        // 2. 处理头部情况
+//        if (head.val == val) {
+//            // 头部删除
+//            return removeElements(head.next, val);
+//        } else {
+//            // 头部不删除
+//            head.next = removeElements(head.next, val);
+//            return head;
+//        }
+
+        head.next = removeElements(head.next, val);
+        return head.val == val ? head.next : head;
+
+
     }
 }
