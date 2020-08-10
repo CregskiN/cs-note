@@ -76,23 +76,26 @@ public class RecursionLinkList<E> {
      * @param index
      * @return
      */
-    public E remove(int index){
-        if(index < 0 || index >= size)
+    public E remove(int index) {
+        if (index < 0 || index >= size)
             throw new IllegalArgumentException("Remove failed. Index is illegal.");
 
-        Pair<Node, E> res = remove(head, index);
-        size --;
-        head = res.getKey();
+        Pair<Node, E> res = remove(this.head, index);
+        this.head = res.getKey();
         return res.getValue();
     }
 
     // 从以node为头结点的链表中，删除第index位置的元素，递归算法
     // 返回值包含两个元素，删除后的链表头结点和删除的值：）
-    private Pair<Node, E> remove(Node node, int index){
-        if(index == 0)
-            return new Pair<>(node.next, node.e);
+    private Pair<Node, E> remove(Node node, int index) {
+        if (index == 0){
+            Node right = node.next;
+            this.size--;
+            node.next = null;
+            return new Pair<>(right, node.e);
+        }
         Pair<Node, E> res = remove(node.next, index - 1);
-        node.next = res.getKey();
+        node.next = res.getKey(); // Pair.getKey() 存储Node，getValye() 存储E
         return new Pair<>(node, res.getValue());
     }
 
@@ -176,7 +179,7 @@ public class RecursionLinkList<E> {
             System.out.println(list);
 
         }
-        while (!list.isEmpty()){
+        while (!list.isEmpty()) {
             System.out.println("removed " + list.removeLast());
             System.out.println(list);
 
