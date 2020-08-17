@@ -1,33 +1,35 @@
-// abstract class Game {
-//     abstract initialize(): void;
-//     abstract startPlay(): void;
-//     abstract endPlay(): void;
 
-//     // 模版
-//     // 此方法不能被子类重写
-//     play(): void {
-//         this.initialize();
-//         this.startPlay();
-//         this.endPlay();
-//     }
-// }
+function unWritable(target: any, key: any, descriptor: PropertyDescriptor) {
+    descriptor.writable = false;
+}
 
-// class Cricket extends Game {
-//     initialize(): void {
-//         throw new Error("Method not implemented.");
-//     }
-//     startPlay(): void {
-//         throw new Error("Method not implemented.");
-//     }
-//     endPlay(): void {
-//         throw new Error("Method not implemented.");
-//     }
+interface IGame {
+    readonly play: () => void;
+}
 
-//     play() {
-//         console.log('重写')
-//     }
+class Game implements IGame {
+    play: () => void;
+    constructor() {
+        this.play = () => {
+            console.log('未重写')
+        }
+    }
+}
 
-// }
+
+
+
+class Cricket extends Game {
+    play: () => void;
+    constructor() {
+        super();
+        this.play = () => {
+            console.log('重写');
+        }
+    }
+}
+const c = new Cricket();
+c.play();
 
 
 // var a = 1;
