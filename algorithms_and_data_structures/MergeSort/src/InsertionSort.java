@@ -27,15 +27,36 @@ public class InsertionSort {
      * @param <E>
      */
     public static <E extends Comparable<E>> void sort2(E[] arr) {
-        for(int i = 0; i < arr.length; i ++){
+        for (int i = 0; i < arr.length; i++) {
 
             // 将 arr[i] 插入到合适的位置
             E t = arr[i];
             int j;
-            for(j = i; j - 1 >= 0 && t.compareTo(arr[j - 1]) < 0; j --){
+            for (j = i; j - 1 >= 0 && t.compareTo(arr[j - 1]) < 0; j--) {
                 arr[j] = arr[j - 1];
             }
             arr[j] = t;
+        }
+    }
+
+    /**
+     * 对 arr[l, r] 左闭右闭 排序，升序
+     *
+     * @param arr
+     * @param l
+     * @param r
+     * @param <E>
+     */
+    public static <E extends Comparable<E>> void sort(E[] arr, int l, int r) {
+        for (int i = l; i <= r; i++) {
+            E tem = arr[i];
+            int j;
+            for (j = i; j - 1 >= l; j--) {
+                if (tem.compareTo(arr[j]) < 0) {
+                    arr[j] = arr[j - 1];
+                }
+            }
+            arr[j] = tem;
         }
     }
 

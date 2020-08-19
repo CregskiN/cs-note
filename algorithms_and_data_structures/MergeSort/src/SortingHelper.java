@@ -19,14 +19,20 @@ public class SortingHelper {
             InsertionSort.sort(arr);
         } else if (sortName.equals("MergeSort")) {
             MergeSort.sort(arr);
+        } else if(sortName.equals("MergeSort2")) {
+            MergeSort.sort2(arr);
         } else if (sortName.equals("MergeSortDepth")) {
             MergeSort.sortDepth(arr);
+        } else if(sortName.equals("MergeSort3")){
+            MergeSort.sort3(arr);
+        }else if(sortName.equals("MergeSort4")){
+            MergeSort.sort4(arr);
         }
         long endTime = System.nanoTime();
         double time = (endTime - startTime) / 1000000000.0;
 
         if (!SortingHelper.isSorted(arr)) {
-            throw new RuntimeException(sortName + "exception.");
+            throw new RuntimeException(sortName + " exception.");
         }
         System.out.println(String.format("%s, n = %d, : %f s", sortName, arr.length, time));
     }
