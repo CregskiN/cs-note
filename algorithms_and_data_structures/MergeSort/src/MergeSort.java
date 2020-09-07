@@ -56,7 +56,7 @@ public class MergeSort {
      * @param <E>
      */
     public static <E extends Comparable<E>> void sort3(E[] arr) {
-        sort(arr, 0, arr.length - 1); // 对 arr[0, length - 1] 排列
+        MergeSort.sort3(arr, 0, arr.length - 1); // 对 arr[0, length - 1] 排列
     }
 
     private static <E extends Comparable<E>> void sort3(E[] arr, int l, int r) {
