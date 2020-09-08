@@ -11,18 +11,99 @@ public class MergeSort {
      * @param <E>
      */
     public static <E extends Comparable<E>> void sort(E[] arr) {
-        sort(arr, 0, arr.length - 1); // 对 arr[0, length - 1] 排列
+        E[] temp = Arrays.copyOfRange(arr, 0, arr.length - 1); // copy arr[l, r + 1)
+        MergeSort.sort(arr, 0, arr.length - 1, temp);
     }
 
-    private static <E extends Comparable<E>> void sort(E[] arr, int l, int r) {
+    private static <E extends Comparable<E>> void sort(E[] arr, int l, int r, E[] temp) {
         if (l >= r) {
             return;
         }
-        int mid = l + (r - l) / 2;
-        MergeSort.sort(arr, l, mid);
-        MergeSort.sort(arr, mid + 1, r);
-        MergeSort.merge(arr, l, mid, r);
+
+        int mid = l + ((r - l) / 2);
+        MergeSort.sort(arr, l, mid, temp);
+        MergeSort.sort(arr, mid + 1, r, temp);
+        MergeSort.merge(arr, l, mid, r, temp);
+
     }
+
+    private static <E extends Comparable<E>> void merge(E[] arr, int l, int mid, int r, E[] temp) {
+        // 将 arr[l, mid] arr[mid + 1, r] 归并
+
+        int i = l; // temp left
+        int j = mid + 1; // temp right
+        int k; // arr[k]
+
+        for (k = l; k <= r; k++) {
+            // 循环不变量 arr[k, r] 乱序
+            if (l > mid) {
+                // 若左分支处理完成
+                arr[k] = temp[j - l];
+                j++;
+            } else if (j > r) {
+                // 若右分支处理完成
+                arr[k] = temp[i - l];
+                i++;
+            } else if (temp[i].compareTo(temp[j]) <= 0) {
+                arr[k] = temp[i - l];
+                i++;
+            } else if (temp[i].compareTo(temp[j]) > 0) {
+                arr[k] = temp[j - l];
+                j++;
+            }
+        }
+    }
+
+    //    public static <E extends Comparable<E>> void sort(E[] arr) {
+    //        sort(arr, 0, arr.length - 1); // 对 arr[0, length - 1] 排列
+    //    }
+    //
+    //    private static <E extends Comparable<E>> void sort(E[] arr, int l, int r) {
+    //        if (l >= r) {
+    //            return;
+    //        }
+    //        int mid = l + (r - l) / 2;
+    //        MergeSort.sort(arr, l, mid);
+    //        MergeSort.sort(arr, mid + 1, r);
+    //        MergeSort.merge(arr, l, mid, r); // 真正产生排序作用的在merge
+    //    }
+
+    /**
+     * 合并两个有序区间 arr[l, mid] , arr[mid + 1, r]
+     *
+     * @param arr 原数组
+     * @param l   左分支起点
+     * @param mid 中点
+     * @param r   右分支起点
+     * @param <E>
+     */
+//    private static <E extends Comparable<E>> void merge(E[] arr, int l, int mid, int r) {
+//        E[] temp = Arrays.copyOfRange(arr, l, r + 1); // 复制 arr[l, r + 1) 区间到 temp
+//        int i = l; // 左分支索引 -> temp
+//        int j = mid + 1; // 右分支索引 -> temp
+//
+//        for (int k = l; k <= r; k++) {
+//            // 为 arr[k] 赋值
+//            if (i > mid) {
+//                // 如果左分支全部处理完成
+//                arr[k] = temp[j - l]; // temp 从索引 0 开始
+//                j++;
+//            } else if (j > r) {
+//                // 如果右分支全部处理完成
+//                arr[k] = temp[i - l];
+//                i++;
+//            } else if (temp[i - l].compareTo(temp[j - l]) <= 0) {
+//                // 左区间更小
+//                arr[k] = temp[i - l];
+//                i++;
+//            } else {
+//                // 右区间更小 if (temp[i - l].compareTo(temp[j - l]) > 0)
+//                arr[k] = temp[j - l];
+//                j++;
+//            }
+//        }
+//    }
+
 
     /**
      * 优化：比较两片段尾、首，决定是否merge
@@ -31,7 +112,7 @@ public class MergeSort {
      * @param <E>
      */
     public static <E extends Comparable<E>> void sort2(E[] arr) {
-        sort(arr, 0, arr.length - 1); // 对 arr[0, length - 1] 排列
+        sort2(arr, 0, arr.length - 1); // 对 arr[0, length - 1] 排列
     }
 
     private static <E extends Comparable<E>> void sort2(E[] arr, int l, int r) {
@@ -114,6 +195,7 @@ public class MergeSort {
 
     /**
      * 使用公共 temp，避免每次merge都copy
+     *
      * @param arr
      * @param <E>
      */
@@ -162,43 +244,6 @@ public class MergeSort {
     }
 
 
-    /**
-     * 合并两个有序区间 arr[l, mid] , arr[mid + 1, r]
-     *
-     * @param arr 原数组
-     * @param l   左分支起点
-     * @param mid 中点
-     * @param r   右分支起点
-     * @param <E>
-     */
-    private static <E extends Comparable<E>> void merge(E[] arr, int l, int mid, int r) {
-        E[] temp = Arrays.copyOfRange(arr, l, r + 1); // 复制 arr[l, r + 1) 区间到 temp
-        int i = l; // 左分支索引 -> temp
-        int j = mid + 1; // 右分支索引 -> temp
-
-        for (int k = l; k <= r; k++) {
-            // 为 arr[k] 赋值
-            if (i > mid) {
-                // 如果左分支全部处理完成
-                arr[k] = temp[j - l]; // temp 从索引 0 开始
-                j++;
-            } else if (j > r) {
-                // 如果右分支全部处理完成
-                arr[k] = temp[i - l];
-                i++;
-            } else if (temp[i - l].compareTo(temp[j - l]) <= 0) {
-                // 左区间更小
-                arr[k] = temp[i - l];
-                i++;
-            } else {
-                // 右区间更小 if (temp[i - l].compareTo(temp[j - l]) > 0)
-                arr[k] = temp[j - l];
-                j++;
-            }
-        }
-    }
-
-
     public static void main(String[] args) {
         int[] dataSize = {100000};
         for (int n : dataSize) {
@@ -210,3 +255,5 @@ public class MergeSort {
         }
     }
 }
+
+
