@@ -12,8 +12,14 @@ boomBangs xs = [ if x < 10 then "BOOM!" else "BANG!" | x <- xs, odd x]
 length' xs = sum [1 | _ <- xs]
 
 -- 去除所有小写字母
+removeNoneUppercase :: String -> String
 removeNoneUppercase st = [c | c <- st, c `elem` ['A'..'Z']]
 
-triangles zc = [(a,b,c) | c <- [1..zc], b <- [1..zc], a <- [1..zc], a + b > c, a - b < c , a+c>b, a-c<b, ]
+triangles zc = [(a,b,c) | c <- [1..zc], b <- [1..zc], a <- [1..zc], a + b > c, a - b < c , a+c>b, a-c<b ]
 
 rightTriangles tr zc= [ (a,b,c) | (a,b,c) <- tr, a^2 + b^2 == c^2, a + b + c == zc]
+
+addThree :: Int -> Int -> Int -> Int
+addThree x y z = x + y + z
+
+-- 模式匹配
