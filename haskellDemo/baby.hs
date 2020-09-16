@@ -23,3 +23,22 @@ addThree :: Int -> Int -> Int -> Int
 addThree x y z = x + y + z
 
 -- 模式匹配
+lucky :: (Integral a) => a -> String
+lucky 7 = "LUCKY NUMBERS SEVEN."
+lucky x = "Sorry, you are out of lucky."
+
+--
+sayMe :: (Integral a) => a -> String
+sayMe 1 = "Number 1"
+sayMe 2 = "Number 2"
+sayMe 3 = "Number 3"
+sayMe 4 = "Number 4"
+sayMe 5 = "Number 5"
+sayMe x = "Number not between 1 and 5"
+
+
+
+-- 递归
+factorial :: (Integral a) => a -> a
+factorial 0 = 1 -- 先捕获0，作为终止条件
+factorial n = n * factorial(n-1)
