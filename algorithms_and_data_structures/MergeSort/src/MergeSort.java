@@ -28,12 +28,12 @@ public class MergeSort {
         if (l >= r) {
             return;
         }
-
         int mid = l + ((r - l) / 2);
         MergeSort.sort(arr, l, mid, temp);
         MergeSort.sort(arr, mid + 1, r, temp);
-        MergeSort.merge(arr, l, mid, r, temp);
-
+        if(arr[mid].compareTo(arr[mid+1]) > 0){
+            MergeSort.merge(arr, l, mid, r, temp);
+        }
     }
 
     /**
@@ -43,17 +43,15 @@ public class MergeSort {
      * @param <E>
      */
     public static <E extends Comparable<E>> void sortBU(E[] arr) {
-        E[] temp = Arrays.copyOfRange(arr, 0, arr.length);
+        E[] temp = Arrays.copyOf(arr, arr.length);
         int length = arr.length;
+        for (int size = 1; size < length; size = size + size) {
 
-        for (int size = 1; size < length; size = size * 2) {
-            // 合并区间长度为 sz 的数组
-            for (int i = 0; i + size < length; i = size * 2 + i) {
-                // 遍历两个区间的起始位置 i
-                // 合并 [i, i + size - 1], [i + size, i + size + size - 1]
+            for (int i = 0; i + size < length; i = i + size + size) {
+                // i 为每个需要合并的数组的起点下标
+                // 合并 [i, i+size-1] 与 [i+size, i+size+size]
                 if (arr[i + size - 1].compareTo(arr[i + size]) > 0) {
-                    // 一步优化
-                    MergeSort.merge(arr, i, i + size - 1, Math.min(length - 1, i + size + size - 1), temp);
+                    merge(arr, i, i + size - 1, Math.min(i + size + size - 1, length - 1), temp);
                 }
             }
         }
@@ -69,42 +67,38 @@ public class MergeSort {
      * @param r   右分支起点
      * @param <E>
      */
-    private static <E extends Comparable<E>> void merge(E[] arr, int l, int mid, int r, E[] temp) {
-        int i = l; // 左分支索引 -> temp
-        int j = mid + 1; // 右分支索引 -> temp
+    private static <E extends Comparable<E>> void merge(E[] arr, int l, int mid, int r, E[] aux){
 
-        for (int k = l; k <= r; k++) {
-            // 为 arr[k] 赋值
-            if (i > mid) {
-                // 如果左分支全部处理完成
-                arr[k] = temp[j - l]; // temp 从索引 0 开始
-                j++;
-            } else if (j > r) {
-                // 如果右分支全部处理完成
-                arr[k] = temp[i - l];
-                i++;
-            } else if (temp[i - l].compareTo(temp[j - l]) <= 0) {
-                // 左区间更小
-                arr[k] = temp[i - l];
-                i++;
-            } else {
-                // 右区间更小 if (temp[i - l].compareTo(temp[j - l]) > 0)
-                arr[k] = temp[j - l];
-                j++;
+        System.arraycopy(arr, l, aux, l, r - l + 1);
+
+        int i = l, j = mid + 1;
+
+        // 每轮循环为 arr[k] 赋值
+        for(int k = l; k <= r; k ++){
+
+            if(i > mid){
+                arr[k] = aux[j]; j ++;
+            }
+            else if(j > r){
+                arr[k] = aux[i]; i ++;
+            }
+            else if(aux[i].compareTo(aux[j]) <= 0){
+                arr[k] = aux[i]; i ++;
+            }
+            else{
+                arr[k] = aux[j]; j ++;
             }
         }
     }
 
     public static void main(String[] args) {
-        int[] dataSize = {100000};
+        int[] dataSize = { 1000000 };
         for (int n : dataSize) {
             Integer[] arr = ArrayGenerator.generateRandomArray(n, n);
             Integer[] arr2 = Arrays.copyOf(arr, arr.length);
             SortingHelper.sortTest("MergeSort", arr);
-            SortingHelper.sortTest("MergeSort4", arr2);
-//        SortingHelper.sortTest("SelectionSort", arr);
+            SortingHelper.sortTest("MergeSortBU", arr2);
+            // SortingHelper.sortTest("SelectionSort", arr);
         }
     }
 }
-
-
