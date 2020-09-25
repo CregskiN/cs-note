@@ -19,9 +19,7 @@ public class InsertionSort {
     }
 
     /**
-     * 插入排序 优化版 复杂度O(n^2)
-     * 细节上看，底层寻址更少，整体速度更快
-     * 对于有序数组，复杂度O(n^2)
+     * 插入排序 优化版 复杂度O(n^2) 细节上看，底层寻址更少，整体速度更快 对于有序数组，复杂度O(n^2)
      *
      * @param arr
      * @param <E>
@@ -48,15 +46,15 @@ public class InsertionSort {
      * @param <E>
      */
     public static <E extends Comparable<E>> void sort(E[] arr, int l, int r) {
-        for (int i = l; i <= r; i++) {
-            E tem = arr[i];
+        for(int i = l; i <= r; i ++){
+
+            // 将 arr[i] 插入到合适的位置
+            E t = arr[i];
             int j;
-            for (j = i; j - 1 >= l; j--) {
-                if (tem.compareTo(arr[j]) < 0) {
-                    arr[j] = arr[j - 1];
-                }
+            for(j = i; j - 1 >= l && t.compareTo(arr[j - 1]) < 0; j --){
+                arr[j] = arr[j - 1];
             }
-            arr[j] = tem;
+            arr[j] = t;
         }
     }
 
@@ -87,7 +85,7 @@ public class InsertionSort {
     }
 
     public static void main(String[] args) {
-        int[] dataSize = {10000, 100000};
+        int[] dataSize = { 10000, 100000 };
         for (int n : dataSize) {
             Integer[] arr = ArrayGenerator.generateRandomArray(n, n);
             Integer[] arr2 = Arrays.copyOf(arr, arr.length);
