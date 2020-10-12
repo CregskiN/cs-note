@@ -2,6 +2,10 @@ package src;
 
 import java.util.Arrays;
 
+/**
+ * 递归深度 log n
+ * 对于百万数据，不过是 20
+ */
 public class MergeSort {
     private MergeSort() {
     }
