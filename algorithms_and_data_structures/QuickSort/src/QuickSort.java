@@ -4,7 +4,9 @@ import java.util.*;
 
 /**
  * 第一版问题：对于顺序的数组，递归深度是 n，相比 MergeSort 的 log n，非常容易爆栈
- * 解决办法：随机化选取v。随机选v，而不是第一个v
+ * 解决办法：随机选取一个元素作为v，而不是固定的arr[l] 第二版问题：对于元素全部相等的数组，时间复杂度和递归深度再次退化到第一版
+ * 解决办法：双路快速排序
+ *
  */
 public class QuickSort {
     private QuickSort() {
@@ -41,7 +43,6 @@ public class QuickSort {
         QuickSort.sort(arr, p + 1, r);
     }
 
-
     /**
      * 返回 v 所在的索引
      *
@@ -56,13 +57,15 @@ public class QuickSort {
 
         for (int i = l + 1; i <= r; i++) {
             // 把 arr[i] 安排到合适位置
-            // 循环不变量 arr[l+1, j] < v , arr[j+1, i) >v
+            // 循环不变量 arr[l+1, j] < v , arr[j+1, i) >= v
             if (arr[i].compareTo(arr[l]) < 0) {
                 j++;
                 QuickSort.swap(arr, i, j);
             }
         }
         QuickSort.swap(arr, l, j);
+
+        // 如果arr[l, r]中，j = l，说明arr[l]最小
         return j;
     }
 
@@ -80,7 +83,6 @@ public class QuickSort {
         return j;
     }
 
-
     /**
      * 交换位置
      *
@@ -90,6 +92,9 @@ public class QuickSort {
      * @param <E>
      */
     private static <E extends Comparable<E>> void swap(E[] arr, int i, int j) {
+        if (i == j) {
+            return;
+        }
         E temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
