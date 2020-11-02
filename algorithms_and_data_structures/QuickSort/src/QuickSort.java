@@ -20,7 +20,7 @@ public class QuickSort {
         if (l >= r) {
             return;
         }
-
+        
         Random random = new Random();
 
         // 先处理，再递归
