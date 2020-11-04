@@ -1,0 +1,43 @@
+{
+  // 使用 IntelliSense 了解相关属性。 
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug (Launch) - Current File",
+      "request": "launch",
+      "mainClass": "${file}",
+      "vmArgs": "-Xms1024m -Xmx2048m"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-InsertionSort<algorithms_and_data_structures_2289ec09>",
+      "request": "launch",
+      "mainClass": "src.InsertionSort",
+      "projectName": "algorithms_and_data_structures_2289ec09"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-MergeSort<algorithms_and_data_structures_2289ec09>",
+      "request": "launch",
+      "mainClass": "src.MergeSort",
+      "projectName": "algorithms_and_data_structures_2289ec09"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-QuickSort<algorithms_and_data_structures_2289ec09>",
+      "request": "launch",
+      "mainClass": "src.QuickSort",
+      "projectName": "algorithms_and_data_structures_2289ec09"
+    },
+    {
+      "type": "java",
+      "name": "Debug (Launch)-SelectionSort<algorithms_and_data_structures_2289ec09>",
+      "request": "launch",
+      "mainClass": "src.SelectionSort",
+      "projectName": "algorithms_and_data_structures_2289ec09"
+    }
+  ]
+}

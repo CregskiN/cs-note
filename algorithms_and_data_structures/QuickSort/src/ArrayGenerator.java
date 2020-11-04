@@ -6,6 +6,11 @@ public class ArrayGenerator {
     private ArrayGenerator() {
     }
 
+    /**
+     * 生成有序整数数组，[0, n)
+     * @param n
+     * @return
+     */
     public static Integer[] generateOrderArray(int n) {
         Integer[] arr = new Integer[n];
         for (int i = 0; i < n; i++) {

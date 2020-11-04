@@ -12,40 +12,44 @@
 
 新手使用vscode商店的插件 vim ，体验还是可以的
 
-1. 到商店查询 vim，安装
+### 1.1 下载
 
-   ![image-20201102225956710](https://www.qiniu.cregskin.com/image-20201102225956710.png)
+![image-20201102225956710](https://www.qiniu.cregskin.com/image-20201102225956710.png)
 
-2. 复制商店页提供的默认配置到`setting.json`
 
-   ```json
-   "vim.easymotion": true,
-   "vim.incsearch": true,
-   "vim.useSystemClipboard": true,
-   "vim.useCtrlKeys": true,
-   "vim.hlsearch": true,
-   "vim.insertModeKeyBindings": [
-     {
-       "before": ["j", "j"],
-       "after": ["<Esc>"]
-     }
-   ],
-   "vim.normalModeKeyBindingsNonRecursive": [
-     {
-       "before": ["<leader>", "d"],
-       "after": ["d", "d"]
-     },
-     {
-       "before": ["<C-n>"],
-       "commands": [":nohl"]
-     }
-   ],
-   "vim.leader": "<space>",
-   "vim.handleKeys": {
-     "<C-a>": false,
-     "<C-f>": false
-   }
-   ```
+
+### 1.2 配置
+
+复制商店页提供的默认配置到`setting.json`
+
+```json
+"vim.easymotion": true,
+"vim.incsearch": true,
+"vim.useSystemClipboard": true,
+"vim.useCtrlKeys": true,
+"vim.hlsearch": true,
+"vim.insertModeKeyBindings": [
+  {
+    "before": ["j", "j"],
+    "after": ["<Esc>"]
+  }
+],
+"vim.normalModeKeyBindingsNonRecursive": [
+  {
+    "before": ["<leader>", "d"],
+    "after": ["d", "d"]
+  },
+  {
+    "before": ["<C-n>"],
+    "commands": [":nohl"]
+  }
+],
+"vim.leader": "<space>",
+"vim.handleKeys": {
+  "<C-a>": false,
+  "<C-f>": false
+}
+```
 
 ### Reference
 
@@ -55,7 +59,7 @@
 
 ## 2. 常用概念与按键
 
-### 1. 插入模式 / 输入模式
+### 2.1 插入模式 / 输入模式
 
 日常编辑文字的模式
 
@@ -65,7 +69,7 @@
 
 
 
-### 2. 命令模式
+### 2.2 命令模式
 
 1. **移动光标**
 
@@ -80,21 +84,30 @@
 
    
 
-2. **删除复制**
+2. **选择、复制、粘贴、删除**
 
-   | 按键    | 命令                                                         |
-   | ------- | ------------------------------------------------------------ |
-   | dd / dw | 删除光标`所在行` / 删除光标`所在单词`                        |
-   | cc / cw | 删除光标`所在行`并进入编辑模式 / 删除光标`所在单词`并进入编辑模式 |
+   | 按键      | 命令                                                         |
+   | --------- | ------------------------------------------------------------ |
+   | shift + v | 选中光标所在行                                               |
+   |           |                                                              |
+   | yy        | 复制光标所在行                                               |
+   |           |                                                              |
+   | p \ P     | 粘贴到光标所在下一行 / 粘贴到光标所在上一行                  |
+   |           |                                                              |
+   | x / X     | 向后删除一个字符 = Delete / 向前删除一个字符 = Backspace     |
+   | d0 / d$   | 删除行内，从光标位置到开头 / 删除行内，从光标位置到末尾      |
+   | dd / dw   | 删除光标`所在行` / 删除光标`所在单词`                        |
+   | `n`dd     | 从光标位置往下，删除`n`行                                    |
+   | cc / cw   | 删除光标`所在行`并进入编辑模式 / 删除光标`所在单词`并进入编辑模式 |
 
    
 
-3. **命令模式 -> 插入模式**
+3. **直接进入插入模式**
 
-   | 按键    | 命令                                                         |
-   | ------- | ------------------------------------------------------------ |
-   | i       | 在光标`当前位置`进入插入模式                                 |
-   | cc / cw | 删除光标`所在行`并进入编辑模式 / 删除光标`所在单词`并进入编辑模式 |
+   | 按键  | 命令                                                         |
+   | ----- | ------------------------------------------------------------ |
+   | i / a | 在当前选中`字符前`进入 / 在当前选中`字符后`进入              |
+   | O / o | 在当前**行前插入新行**，并将光标移至新行 <br />/ 在当前**行后插入新行**，并将光标移至新行 |
 
    
 
@@ -109,9 +122,17 @@
 
    
 
+5. 多文件编辑
+
+   | 按键 | 含义 |
+   | ---- | ---- |
+   |      |      |
+
+   
 
 
-### 3. 编辑模式
+
+### 2.3. 编辑模式
 
 在**命令模式**下输入`: + 如下字母`，可实现对文件的保存、查找、替换等
 
@@ -130,27 +151,25 @@
 
 [VIM常用快捷键](https://www.cnblogs.com/markleaf/p/7808817.html)
 
+[VIM常用快捷键 - markleaf - 博客园](https://www.cnblogs.com/markleaf/p/7808817.html)
 
 
-# Q&A
 
-1. Q：mac 端 vscode，按官方默认配置后，ctrl + f / b 失效
 
-   A：将 vim.handleKeys 中的 C-f 和 C-b 设置为 true，即**取消在vim中使用**
 
-   ```json
-   "vim.handleKeys": {
-     "<C-a>": false,
-     "<C-f>": true,
-     "<C-b>": true
-   }
-   ```
+# Q & A
 
-   
+## Q：mac 端 vscode，按官方默认配置后，ctrl + f / b 失效
 
-   
+A：将 vim.handleKeys 中的 C-f 和 C-b 设置为 true，即取消**在vim中禁用如下快捷键**
 
-2. 
+```json
+"vim.handleKeys": {
+  "<C-a>": false,
+  "<C-f>": true,
+  "<C-b>": true
+}
+```
 
 
 
