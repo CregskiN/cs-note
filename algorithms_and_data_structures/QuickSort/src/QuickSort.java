@@ -105,11 +105,11 @@ public class QuickSort {
         // arr[l+1, i-1] <= v
         // arr[j+1, r] >= v
         while (true) {
-            while (i < j && arr[i].compareTo(arr[l]) < 0) {
+            while (i <= j && arr[i].compareTo(arr[l]) < 0) {
                 // 还有未遍历元素 && 选中的元素arr[i] < v
                 i++;
             }
-            while (j > i && arr[j].compareTo(arr[l]) > 0) {
+            while (j >= i && arr[j].compareTo(arr[l]) > 0) {
                 // 还有元素未遍历 && 选中的元素arr[j] > v
                 j--;
             }
