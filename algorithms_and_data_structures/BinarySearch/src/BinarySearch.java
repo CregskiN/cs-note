@@ -97,8 +97,10 @@ public class BinarySearch {
     }
 
     /**
-     * 第一个变种：返回比target大的最小值的索引
-     *
+     * upper：返回比target大的元素中的最小索引
+     * 如 1 1 3 3 5 5 7 7
+     * upper(5): 6
+     * upper(6): 6
      * @param target
      * @param <E>
      * @return 比target大的最小值的索引
@@ -125,6 +127,26 @@ public class BinarySearch {
         return l;
     }
 
+    /**
+     * ceil 天花板，即返回 target 的上界
+     * 如，1 1 3 3 5 5 7 7
+     * ceil(5): 5
+     * 如果不存在，返回upper
+     * ceil(6): 6
+     *
+     * @param data
+     * @param target
+     * @param <E>
+     * @return
+     */
+    public static <E extends Comparable<E>> int ceil(E[] data, E target) {
+        int upper = BinarySearch.upper(data, target);
+        if (data[upper - 1] == target) {
+            return upper - 1;
+        } else {
+            return upper;
+        }
+    }
 
     public static void main(String[] args) {
         Integer[] nums = {-1, 0, 3, 5, 5, 9, 9, 12};
@@ -137,6 +159,7 @@ public class BinarySearch {
             int index = BinarySearch.upper(nums, i);
             System.out.print(i + "<" + nums[index] + " ");
         }
+        System.out.println(" ");
     }
 
 }

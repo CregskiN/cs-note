@@ -6,9 +6,9 @@ package Q215;
  */
 public class SelectK {
     private SelectK(){}
-    public static  <E extends Comparable<E>> E selectM(E[] arr, int n){
-
-    }
+//    public static  <E extends Comparable<E>> E selectM(E[] arr, int n){
+//
+//    }
 
 
 }

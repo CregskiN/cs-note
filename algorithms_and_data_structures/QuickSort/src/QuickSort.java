@@ -109,7 +109,7 @@ public class QuickSort {
                 // 还有未遍历元素 && 选中的元素arr[i] < v
                 i++;
             }
-            while (j >= i && arr[j].compareTo(arr[l]) > 0) {
+            while (i <= j && arr[j].compareTo(arr[l]) > 0) {
                 // 还有元素未遍历 && 选中的元素arr[j] > v
                 j--;
             }
