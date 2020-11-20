@@ -1,3 +1,7 @@
+[TOC]
+
+
+
 目前可以公开的情报：
 
 ## 数据结构与算法
@@ -7,18 +11,25 @@
 ### 数据结构
 
 + [x] 顺序表
+
 + [x] 链表 - LinkedList
+
 + [x] 栈 - Stack
+
 + [x] 队列 - Queue
+
 + [ ] 树 - Tree
+
 + [ ] 图
+
+  
 
 ### 算法
 
 + [x] 选择排序 - SelectionSort
 + [x] 归并排序 - MergeSort
 + [x] 快速排序 - QuickSort
-+ [ ] 二分搜索 - BinarySearch
++ [x] 二分搜索 - BinarySearch
 
 
 
@@ -60,10 +71,13 @@
 ## OpenGL
 
 + language：C++、GLSL
++ IDE：XCode & vscode
 
-学习资料来自开源教程
+学习资料来自
 
 [LearnOpenGL - CN](https://learnopengl-cn.github.io/intro/)
+
+[GAMES101-现代计算机图形学入门-闫令琪](https://www.bilibili.com/video/BV1X7411F744?p=3)
 
 感谢大佬们在知乎给我的回答，帮助甚大！
 
@@ -98,10 +112,10 @@
 + [x] 组合查询
 + [x] 数据的插入、删除和更新
 + [x] 视图
-+ [ ] 自定义变量和语句结束分隔符
-+ [ ] 存储函数和存储过程
-+ [ ] 游标的使用
-+ [ ] 触发器和事件
++ [x] 自定义变量和语句结束分隔符
++ [x] 存储函数和存储过程
++ [x] 游标的使用
++ [x] 触发器和事件
 + [ ] 更多
 + [ ] 推荐的书籍
 
