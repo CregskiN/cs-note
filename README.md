@@ -68,18 +68,20 @@
 
 
 
-## OpenGL
+## Computer Graphics
+
+### 图形学理论
+
+[GAMES101-现代计算机图形学入门-闫令琪](https://www.bilibili.com/video/BV1X7411F744?p=3)
+
+### OpenGL
 
 + language：C++、GLSL
 + IDE：XCode & vscode
 
-学习资料来自
-
 [LearnOpenGL - CN](https://learnopengl-cn.github.io/intro/)
 
-[GAMES101-现代计算机图形学入门-闫令琪](https://www.bilibili.com/video/BV1X7411F744?p=3)
-
-感谢大佬们在知乎给我的回答，帮助甚大！
+### 社区讨论
 
 [大三计算机，想接触图形学方面的知识，直接学WebGL还是OpenGL ？](https://www.zhihu.com/question/422713076)
 
@@ -94,8 +96,6 @@
 ## LeetCode
 
 + language：Java
-
-
 
 ## MySql
 
