@@ -82,6 +82,16 @@ $$\begin{pmatrix} -sin{\theta} \\ cos{\theta} \end{pmatrix} = \begin{bmatrix} A 
 
 
 
+#### 顺时针旋转
+
+$$R_{-\theta} = \begin{pmatrix} cos\theta & sin\theta \\ -sin\theta & cos\theta \end{pmatrix} = R^{T}_{\theta}$$
+
+$$R_{-\theta} = R^{-1}_{\theta}$$
+
+> 矩阵M的逆$M^{-1}$等于矩阵M的转置矩阵$M^{T}$，称他们互为正交矩阵
+
+
+
 ## 3. 齐次坐标 Homogeneous coordinates
 
 ### 3.1 遇到问题

@@ -44,5 +44,12 @@ int main(){
     // matrix multiply i * j
     // matrix multiply vector i * v
 
+
+    /* 
+    * PA 0
+    */
+    // TO DO: Define point P
+    // TO DO: Define rotation matrix M
+    // TO DO: M * P
     return 0;
 }
