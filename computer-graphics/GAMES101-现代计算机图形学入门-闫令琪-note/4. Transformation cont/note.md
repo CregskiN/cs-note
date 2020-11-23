@@ -302,10 +302,3 @@ x同理
    最终代入回 M，得 $$M_{presp \rightarrow ortho} = \begin{bmatrix} n & 0 & 0 & 0  \\ 0 & n & 0 & 0 \\ 0 & 0 & n+f & -nf \\ 0 & 0 & 1 & 0 \end{bmatrix} $$
 
 
-
-
-
-
-
-
-
