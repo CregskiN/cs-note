@@ -68,9 +68,7 @@ Roll：以视角正前方为中心旋转
 
 绕轴 $\vec{n}$ 旋转 $\alpha$ 度
 
-$$R( \vec{n}, \alpha ) = cos(\alpha) \vec{I} + (1 - cos(\alpha)) \vec{n} \vec{n}^T + sin(\alpha) \begin{matrix} \underbrace{ \begin{pmatrix} 0 & -n_z & n_y \\ n_z & 0 & -n_x \\ -n_y & n_x & 0 \end{pmatrix} } \\ N \end{matrix}$$
-
-
+<img src="https://www.qiniu.cregskin.com/image-20201123184745890.png" alt="image-20201123184745890" style="zoom:50%;" />
 
 注意：这里默认旋转轴 $\vec{n}$ 是过原点的
 
@@ -191,7 +189,7 @@ $M_{view} = R_{view}T_{view}$
 
 + 一个简单的理解方式
   + 把相机设置在原点，观测方向 -Z，上方向 Y
-  + 把物体中心平移到原点，缩放长宽高到 **cuboid** [-1, 1]
+  + 把物体中心平移到原点，缩放长宽高到 **cuboid** [-1, 1]^3
 
 
 
@@ -209,7 +207,7 @@ $M_{view} = R_{view}T_{view}$
 
 > OpenGL 在投影中的 API 使用的左手坐标系
 
-
+> 正交投影的作用：把立方体中心移动到原点，缩放到 cube [-1, 1]^3
 
 #### (ii) 透视投影 Prespective projection
 
