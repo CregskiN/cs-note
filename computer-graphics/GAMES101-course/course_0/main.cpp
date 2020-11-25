@@ -2,7 +2,6 @@
 #include<eigen3/Eigen/Core>
 #include<eigen3/Eigen/Dense>
 #include<iostream>
-
 int main(){
 
     // Basic Example of cpp

@@ -6,13 +6,3 @@
 
 #IncludeRegexTransform: 
 
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_0/main.cpp
-cmath
--
-eigen3/Eigen/Core
--
-eigen3/Eigen/Dense
--
-iostream
--
-

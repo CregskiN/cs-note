@@ -11,7 +11,7 @@
 int main(){
 
   Sales_item book;
-
+  
   // 读入ISBN号，售出的册数、销售价格
   std::cin >> book;
   

@@ -205,11 +205,17 @@ inside 根据什么原理？
 
 
 
+采样后的点阵
+
 <img src="https://www.qiniu.cregskin.com/image-20201123201846148.png" alt="image-20201123201846148" style="zoom:50%;" />
+
+期待的效果
 
 <img src="https://www.qiniu.cregskin.com/image-20201123202021892.png" alt="image-20201123202021892" style="zoom:33%;" />
 
 
+
+实际的效果
 
 <img src="https://www.qiniu.cregskin.com/image-20201123201917560.png" alt="image-20201123201917560" style="zoom:50%;" />
 
