@@ -24,7 +24,7 @@
 >
 > <img src="https://www.qiniu.cregskin.com/image-20201123190404256.png" alt="image-20201123190404256" style="zoom:25%;" />
 
-<img src="https://www.qiniu.cregskin.com/image-20201123191143511.png" alt="image-20201123191143511" style="zoom:25%;" />
+<img src="https://www.qiniu.cregskin.com/image-20201123191143511.png" alt="image-20201123191143511" style="zoom:25%;" />;l
 
 如何定义平截头体（视锥）？
 

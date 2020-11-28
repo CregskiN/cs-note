@@ -5,6 +5,7 @@
     "*.wxs": "javascript",
     "*.c": "c",
     "*.wxml": "wxml",
-    "dense": "cpp"
+    "dense": "cpp",
+    "cmath": "cpp"
   }
 }
