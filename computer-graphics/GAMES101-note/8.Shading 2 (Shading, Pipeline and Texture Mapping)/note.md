@@ -212,13 +212,13 @@ Blinn-Phong 认为，每个 Shading point 接受的环境光照相同。环境�
 
 
 
-## 2.4 区别
+## 2.4 三种着色频率的区别
 
 <img src="https://www.qiniu.cregskin.com/image-20201129175417576.png" alt="image-20201129175417576" style="zoom:30%;" />
 
 
 
-## Q & A
+## Q&A
 
 + 在 Gouraud Shading、Phone Shading 中，如何获得任意顶点的法线？
 
@@ -393,15 +393,21 @@ $$
 
 
 
-# 5. Barycentric Coordinates
+# 5. 重心坐标 Barycentric Coordinates
 
 已知三角形三个顶点对应的纹理坐标UV，如何知道内部任意一点对应的纹理坐标UV。
 
-答：**插值**
+答：重心坐标
 
 
 
 
+
+# Q&A
+
++ 纹理和着色的关系？
+
+  纹理是定义着色时的一个属性，如果不希望每个点都以固定的方式着色，可以使用纹理
 
 
 
