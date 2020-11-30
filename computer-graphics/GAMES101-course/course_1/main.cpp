@@ -35,6 +35,23 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle) {
   return model;
 }
 
+/**
+ * 获取以axis轴（过原点）为中心的旋转矩阵
+ */
+Eigen::Matrix4f get_rotation(Eigen::Vector3f axis, float rotation_angle) {
+  // Eigen::Matrix4f Rotation = Eigen::Matrix4f();
+  // Eigen::Matrix4f Identity = Eigen::Matrix4f::Identity();
+  // Eigen::Matrix4f N = Eigen::Matrix4f();
+  // Eigen::Vector4f Axis = {axis(0,0), axis(1,0), axis(2,0), 0};
+  // N << 0, -Axis(0, 0), Axis(1, 0), 0, 
+  // Axis(2,0), 0, -Axis(0,0), 0, 
+  // -Axis(1,0), Axis(0,0), 0, 0,
+  // 0, 0, 0, 1;
+
+  // Rotation = cos(rotation_angle)*Identity + (1-cos(rotation_angle))*axis*axis.transpose()+sin(rotation_angle)*N;
+  // return Rotation;
+}
+
 // 给出可视角度、横纵比、Z轴近坐标、Z轴远坐标
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
                                       float zNear, float zFar) {
@@ -53,23 +70,17 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
   float left = -right;
 
   Eigen::Matrix4f presp2ortho = Eigen::Matrix4f();
-  presp2ortho << zNear, 0, 0, 0,
-    0, zNear, 0, 0,
-    0, 0, zNear + zFar, -zNear * zFar,
-    0, 0, -1, 0; // 为什么这里是-1？
+  presp2ortho << zNear, 0, 0, 0, 0, zNear, 0, 0, 0, 0, zNear + zFar,
+      -zNear * zFar, 0, 0, -1, 0;            // 为什么这里是-1？
   Eigen::Matrix4f ortho = Eigen::Matrix4f(); // 先位移，再缩放
   Eigen::Matrix4f translate = Eigen::Matrix4f();
   Eigen::Matrix4f scale = Eigen::Matrix4f();
-  scale << 2 / (right - left), 0, 0, 0,
-    0, 2 / (top - bottom), 0, 0,
-    0, 0, 2/(zNear - zFar), 0,
-    0, 0, 0, 1;
-  translate << 1, 0, 0, -(right + left) / 2,
-    0, 1, 0, -(top + bottom) / 2,
-    0, 0, 1, -(zNear + zFar) / 2,
-    0, 0, 0, 1;
+  scale << 2 / (right - left), 0, 0, 0, 0, 2 / (top - bottom), 0, 0, 0, 0,
+      2 / (zNear - zFar), 0, 0, 0, 0, 1;
+  translate << 1, 0, 0, -(right + left) / 2, 0, 1, 0, -(top + bottom) / 2, 0, 0,
+      1, -(zNear + zFar) / 2, 0, 0, 0, 1;
   ortho = scale * translate;
-  
+
   projection = ortho * presp2ortho;
 
   return projection;
