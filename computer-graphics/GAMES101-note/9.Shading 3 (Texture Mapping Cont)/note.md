@@ -166,10 +166,12 @@ for each rasterized screen sample(x, y) { // 屏幕上采样像素的位置（�
 
 > 问：如何使用这三次插值的结果？
 >
-> <img src="https://www.qiniu.cregskin.com/image-20201130112708523.png" alt="image-20201130112708523" style="zoom: 50%;" />
+> <img src="https://www.qiniu.cregskin.com/image-20201130124729555.png" alt="image-20201130124729555" style="zoom:63%;" />
 > $$
-> f(x, y) 的结果应当是四个点 u_{01}、u_{11}、u_{00}、u_{10}线性组合的结果，其中：\\
-> 
+> f(x, y) 的结果是四个点 u_{01}、u_{11}、u_{00}、u_{00}、u_{10} 纹理插值的结果 \\ 
+> 也就是四个点纹理线性组合的结果 \\
+> f(x, y) = u_{01}S_{rb} + u_{11}S_{lb} + u_{00}S_{rt} + u_{10}S_{lt} \\
+> S_{rb} 意为 S of right-bottom，其他同理 \\
 > $$
 > 
 >
@@ -186,6 +188,8 @@ for each rasterized screen sample(x, y) { // 屏幕上采样像素的位置（�
 #### Bicubic interpolation
 
 更高的计算量
+
+双向三次插值，取周围临近十六个方格，不是线性插值
 
 
 
@@ -218,52 +222,149 @@ for each rasterized screen sample(x, y) { // 屏幕上采样像素的位置（�
 ![image-20201130094747432](https://www.qiniu.cregskin.com/image-20201130094747432.png)
 
 + 问：采样原理在纹理过大的问题中，如何体现？
+
   + 高质量的采样结果，庞大的计算量
+
   + 一个像素内部，包含很大一块纹理
+
+    信号变化过快，采样速度较慢
+
+    解决办法：采样更多的纹理点，生成一个像素
+
   + 在一个像素内频率很高
+
   + 需要更高频的采样方法
 
-*？？？？？*
 
 
+**如何使用更少的采样点？** 
 
-如何使用更少的采样点？ 
-
-采样引起走样，如果不采样呢？如何立刻知道一个纹理区域的平均值？
+**采样引起走样，如果不采样呢？如何立刻知道一个纹理区域的平均值？**
 
 
 
 #### MipMap
 
-额外开销三分之一
+点查询 point query 和 范围查询 range query。原始策略属于点查询。
 
-点查询 point query 和 范围查询 range query
+范围查询有很多种，范围内最大值、最小值、平均值。图形学中，范围查询查的是平均值。
 
-图形学中，范围查询查的是平均值
-
-**Mipmap**：允许做范围查询。**范围查询快、查询结果是近似结果、仅仅做正方形范围查询**
+**Mipmap特性**：允许做范围查询。**范围查询快、查询结果是近似结果、仅仅做正方形范围查询**
 
 
+
+<img src="https://www.qiniu.cregskin.com/image-20201130160440658.png" alt="image-20201130160440658" style="zoom:40%;" />
+
+
+
+MipMap 每一层存储了缩略一倍的纹理
+
+<img src="https://www.qiniu.cregskin.com/image-20201130160708961.png" alt="image-20201130160708961" style="zoom:25%;" />
+
+<img src="https://www.qiniu.cregskin.com/image-20201130161109511.png" style="zoom:25%;" />
+
+
+
+如何知道将要 Shading 的像素，对应纹理为 MipMap 中第几层的区域？
+
+<img src="https://www.qiniu.cregskin.com/image-20201130161533703.png" alt="image-20201130161533703" style="zoom:30%;" />
+
+1. 找到目标像素、临近像素在纹理图中的位置
+
+2. 求出该像素在纹理图中占据的范围边长 L
+
+3. 计算：同一个像素对应的纹理范围边长L，在哪一层 MipMap 中被缩略为 1
+
+   在第 $D = log_2{L}$ 层上
+
+4. 得出该像素对应的纹理
+
+<img src="https://www.qiniu.cregskin.com/image-20201130162358591.png" alt="image-20201130162358591" style="zoom:33%;" />
+
+
+
+问题：MipMap 的层数是不连续的，假设第 k 层，L 为3，k+1层，L为1，对于L=2的范围， 该如何取？
+
+<img src="https://www.qiniu.cregskin.com/image-20201130162616856.png" alt="image-20201130162616856" style="zoom:25%;" />
+
+可能形成如上图的割裂
+
+
+
+
+
+解决办法：**插值**
 
 #### 三线性插值 Trilinear interpolcation
 
+1. 在第 D 层做双线性插值，在 D+1 层做双线性插值
 
+2. 对以上两层结果再做一个线性插值
+
+   $lerp(x, lerp(D), lerp(D+1)$
+
+<img src="https://www.qiniu.cregskin.com/image-20201130162730003.png" alt="image-20201130162730003" style="zoom:37%;" />
+
+
+
+三线性插值结果：
+
+<img src="https://www.qiniu.cregskin.com/image-20201130162957842.png" alt="image-20201130162957842" style="zoom:35%;" />
+
+
+
+#### MipMap 的不足
+
+远处的细节被过分模糊了
+
+<img src="https://www.qiniu.cregskin.com/image-20201130163119357.png" alt="image-20201130163119357" style="zoom:33%;" />
+
+<img src="https://www.qiniu.cregskin.com/image-20201130163634745.png" alt="image-20201130163634745" style="zoom:34%;" />
+
+MipMap 的问题：
+
+1. 查找像素在纹理uv图中的范围，近似成正方形，再在MipMap中查询纹理结果，对于实际纹理是一个近似值
+2. 如果一个像素在纹理图中对应的范围是长方形，被近似成正方形后查询的纹理结果，与实际纹理图中对应的结果差距是很大的
+
+
+
+
+
+解决方法：各向异性过滤 Anisotropic Filtering
 
 #### 各向异性过滤 Anisotropic Filtering
 
-又称 Ripmap
+各向异性：在各个方向上长度不同
 
-2x，3x，占用空间为原来的三倍。显存足够就行
+又称 Ripmap，总开销是原本的3倍。
+
+与 MipMap 不同的是，其内存储压缩了长条形纹理范围
 
 <img src="https://www.qiniu.cregskin.com/image-20201130101911374.png" alt="image-20201130101911374" style="zoom:50%;" />
 
+2x，3x，占用空间为原来的三倍。显存足够就行，不会影响计算力，不会卡顿
 
+
+
++ 可以查找轴对齐的矩形区域
++ 对角线脚印还是个问题
+
+问题：如果一个像素对应的纹理范围是一个斜长方形，MipMap和RipMap都没有拟合的斜长方形范围，如何处理？其他不规则的图形呢？
+
+答：EWA filter
 
 #### EWA filter
 
+任意一个不规则图形，被划分为多个圆形覆盖不规则图形
 
+多次查询多个圆形，得出纹理结果
 
+<img src="https://www.qiniu.cregskin.com/image-20201130164126633.png" alt="image-20201130164126633" style="zoom:30%;" />
 
++ 使用多个查找
++ 加权平均数
++ Mipmap层次结构仍然有用
++ 能处理不规则的脚印
 
 
 
