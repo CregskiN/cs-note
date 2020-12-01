@@ -177,7 +177,7 @@ inside 根据什么原理？
 
 #### Bouding Box 稍微优化一下
 
-三角形不一定占据所有的屏幕空间。蓝色表示占有区域 Bounding Box 包围盒/轴向包围盒。AABB
+三角形不一定占据所有的屏幕空间。蓝色表示占有区域 Bounding Box 包围盒 / 轴向包围盒。AABB
 
 <img src="https://www.qiniu.cregskin.com/image-20201123201150374.png" alt="image-20201123201150374" style="zoom:50%;" />
 

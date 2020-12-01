@@ -8,10 +8,5 @@ find_package(eigen3 REQUIRED)
 # include_directories(${EIGEN3_INCLUDE_DIR})
 include_directories(/usr/local/include)
 
-if(NOT eigen3_FOUND)
-    message(ERROR " Eigen3 NOT FIND! ")
-endif(NOT eigen3_FOUND)
-
-
 # 生成目标文件：将名为 main.cpp 的文件编译成名为Transformation的可执行文件
 add_executable (Transformation main.cpp)

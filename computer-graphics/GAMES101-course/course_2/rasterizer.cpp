@@ -108,7 +108,13 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     
     // TODO : Find out the bounding box of current triangle.
     // iterate through the pixel and find if the current pixel is inside the triangle
-
+    /* 
+    该函数的内部工作流程如下:
+    1. 创建三角形的 2 维 bounding box。
+    2. 遍历此 bounding box 内的所有像素(使用其整数索引)。然后，使用像素中 心的屏幕空间坐标来检查中心点是否在三角形内。
+    3. 如果在内部，则将其位置处的插值深度值 (interpolated depth value) 与深度 缓冲区 (depth buffer) 中的相应值进行比较。
+    4. 如果当前点更靠近相机，请设置像素颜色并更新深度缓冲区 (depth buffer)。
+    */
     // If so, use the following code to get the interpolated z value.
     //auto[alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
     //float w_reciprocal = 1.0/(alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
