@@ -259,7 +259,7 @@ Blinn-Phong 认为，每个 Shading point 接受的环境光照相同。环境�
   + Fragment Stream
 + Fragement Processing：对像素着色
   + Shaded Fragment
-+ Framebuffer Operations：把最终像素呈现。如MSAA，多个 Fragment 呈现一个像素
++ Framebuffer Operations：把最终像素呈现。如 MSAA，多个 Fragment 呈现一个像素
 
 > 问：为什么说把点投影到屏幕上，再连成三角形？
 >

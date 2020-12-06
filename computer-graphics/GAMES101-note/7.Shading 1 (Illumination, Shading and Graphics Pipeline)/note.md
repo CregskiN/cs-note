@@ -136,7 +136,7 @@ for(each triangle T){
 
 <img src="https://www.qiniu.cregskin.com/image-20201128182724228.png" alt="image-20201128182724228" style="zoom:50%;" />
 
-#### 光线角度与Shading point
+#### 光线角度与 Shading point
 
 显示出不同的亮度。入射光携带能量，一部分被物体表面吸收，一部分被反射。
 

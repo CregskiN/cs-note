@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <array>
 #include "rasterizer.hpp"
 #include <opencv2/opencv.hpp>
 #include <math.h>
@@ -43,6 +44,25 @@ auto to_vec4(const Eigen::Vector3f& v3, float w = 1.0f)
 static bool insideTriangle(int x, int y, const Vector3f* _v)
 {   
     // TODO : Implement this function to check if the point (x, y) is inside the triangle represented by _v[0], _v[1], _v[2]
+    Vector3f P(x+0.5f,y+0.5f,1.0f);
+
+    const Vector3f& A = _v[0];
+    const Vector3f& B = _v[1];
+    const Vector3f& C = _v[2];
+
+    Vector3f AB =  B - A;
+    Vector3f BC =  C - B;
+    Vector3f CA =  A - C;
+
+    Vector3f AP = P - A;
+    Vector3f BP = P - B;
+    Vector3f CP = P - C;
+
+    float z1 = AB.cross(AP).z();
+    float z2 = BC.cross(BP).z();
+    float z3 = CA.cross(CP).z();
+
+    return (z1 > 0 && z2 >0 && z3 > 0) ||  (z1 < 0 && z2 <0 && z3 < 0);
 }
 
 static std::tuple<float, float, float> computeBarycentric2D(float x, float y, const Vector3f* v)
@@ -107,7 +127,23 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     auto v = t.toVector4();
     
     // TODO : Find out the bounding box of current triangle.
-    // iterate through the pixel and find if the current pixel is inside the triangle
+    // iterate through the pixel and find if the current pixel is inside the triangle    
+    // 1. 遍历三角形三个顶点，找到bouding box 的边界
+    Eigen::Vector3f vertex1 = t.v[0];
+    float aabb_minX = vertex1.x();
+    float aabb_maxX = aabb_minX;
+    float aabb_minY = vertex1.y();
+    float aabb_maxY = aabb_minY;
+    
+    for(int i = 0; i < 3; i++){
+        Eigen::Vector3f vertex = t.v[i];
+
+        aabb_minX = vertex.x() < aabb_minX ? vertex.x() : aabb_minX;
+        aabb_maxX = vertex.x() > aabb_maxX ? vertex.x() : aabb_maxX;
+        aabb_minY = vertex.y() < aabb_minY ? vertex.y() : aabb_minY;
+        aabb_maxY = vertex.y() > aabb_maxY ? vertex.y() : aabb_maxY;
+    }
+
     /* 
     该函数的内部工作流程如下:
     1. 创建三角形的 2 维 bounding box。
@@ -115,6 +151,31 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     3. 如果在内部，则将其位置处的插值深度值 (interpolated depth value) 与深度 缓冲区 (depth buffer) 中的相应值进行比较。
     4. 如果当前点更靠近相机，请设置像素颜色并更新深度缓冲区 (depth buffer)。
     */
+
+    //  2. 遍历 bounding box，像素(x, y)分两类：在三角形内、不在三角形内
+    // (1) 对于在三角形内的像素，对比当前点的深度、z-buffer中储存的当前像素深度，把深度小的像素存储到z-buffer
+    // (2) 对于不在三角形中的像素，不作处理
+   for(int x = (int)aabb_minX; x < (int)aabb_maxX; x++) {
+       for(int y = (int)aabb_minY; y < (int) aabb_maxY; y++) {
+           if(insideTriangle(x, y, t.v)){
+               // 对于在三角形内的像素 (x, y)
+                auto [alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
+                float w_reciprocal = 1.0/(alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
+                float z_interpolated = alpha * v[0].z() / v[0].w() + beta * v[1].z() / v[1].w() + gamma * v[2].z() / v[2].w();
+                z_interpolated *= w_reciprocal; // 获取z的插值深度
+
+                int buf_index = get_index(x,y); // 获取z-buffer存储 像素(x,y)的深度
+                
+                if(z_interpolated < depth_buf[buf_index]) {
+                    depth_buf[buf_index] = z_interpolated;
+                    set_pixel(Vector3f(x,y,1), t.getColor());
+                }
+           }
+       }
+   }
+
+
+
     // If so, use the following code to get the interpolated z value.
     //auto[alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
     //float w_reciprocal = 1.0/(alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());

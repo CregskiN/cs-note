@@ -16,6 +16,7 @@
     "string_view": "cpp",
     "initializer_list": "cpp",
     "ranges": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "eigen": "cpp"
   }
 }

@@ -1,0 +1,3 @@
+/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/build/CMakeFiles/rebuild_cache.dir
+/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/build/CMakeFiles/edit_cache.dir
+/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/build/CMakeFiles/Rasterizer.dir

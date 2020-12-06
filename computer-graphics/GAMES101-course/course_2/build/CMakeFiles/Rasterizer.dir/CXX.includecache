@@ -6,36 +6,18 @@
 
 #IncludeRegexTransform: 
 
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/Triangle.cpp
-Triangle.hpp
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/Triangle.hpp
-algorithm
--
-array
--
-
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/Triangle.hpp
 eigen3/Eigen/Eigen
 -
 
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/global.hpp
 
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/main.cpp
-iostream
--
-opencv2/opencv.hpp
--
-rasterizer.hpp
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/rasterizer.hpp
-global.hpp
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/global.hpp
-Triangle.hpp
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/Triangle.hpp
-
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/rasterizer.cpp
 algorithm
 -
 vector
+-
+array
 -
 rasterizer.hpp
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_2/rasterizer.hpp

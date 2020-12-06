@@ -362,7 +362,7 @@ Super resolution / super sampling 超分辨率
 
 ## 2. 可见性遮挡 Visiblity occlusion
 
-### 2.1 Z缓冲
+### 2.1 Z-buffer
 
 
 

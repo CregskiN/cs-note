@@ -7,7 +7,8 @@
 
 constexpr double MY_PI = 3.1415926;
 
-// 矫正相机位置
+inline double DEG2RAD(double deg) {return deg * MY_PI/180;}
+
 Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
 {
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
@@ -23,46 +24,36 @@ Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
     return view;
 }
 
-// 摆放所有物体
 Eigen::Matrix4f get_model_matrix(float rotation_angle)
 {
     Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
     return model;
 }
 
-// 投影
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float zNear, float zFar)
 {
+    Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
     // TODO: Copy-paste your implementation from the previous assignment.
-    Eigen::Matrix4f projection;
-    float n = zNear;
-    float f = zFar;
-    float fov = eye_fov;
-    float fov_rad = fov * MY_PI / 180.0;
-    float t = tan(fov_rad / 2.0) * abs(n);
-    float b = -t;
-    float r = aspect_ratio * t;
-    float l = -r;
+    float fov_rad = eye_fov * MY_PI / 180.0;
+    float top = tan(fov_rad / 2.0) * abs(zNear);
+    float right = top * aspect_ratio;
+    float bottom = -top;
+    float left = -right;
 
-    Eigen::Matrix4f Translate = Eigen::Matrix4f::Identity();
-    Translate(0, 3) = -(r+l)/2;
-    Translate(1,3) = -(t+b)/2;
-    Translate(2,3) = -(n+f)/2;
-    Eigen::Matrix4f Scale = Eigen::Matrix4f::Identity();
-    Scale(0,0) = 2/(r-l);
-    Scale(1,1) = 2/(t-b);
-    Scale(2,2) = 2/(n-f);
-    Eigen::Matrix4f Orthographic = Eigen::Matrix4f::Identity();
-    Orthographic = Scale * Translate;
+    Eigen::Matrix4f presp2ortho = Eigen::Matrix4f();
+    presp2ortho << zNear, 0, 0, 0, 0, zNear, 0, 0, 0, 0, zNear + zFar,
+        -zNear * zFar, 0, 0, -1, 0;            // 为什么这里是-1？
+    Eigen::Matrix4f ortho = Eigen::Matrix4f(); // 先位移，再缩放
+    Eigen::Matrix4f translate = Eigen::Matrix4f();
+    Eigen::Matrix4f scale = Eigen::Matrix4f();
+    scale << 2 / (right - left), 0, 0, 0, 0, 2 / (top - bottom), 0, 0, 0, 0,
+        2 / (zNear - zFar), 0, 0, 0, 0, 1;
+    translate << 1, 0, 0, -(right + left) / 2, 0, 1, 0, -(top + bottom) / 2, 0, 0,
+        1, -(zNear + zFar) / 2, 0, 0, 0, 1;
+    ortho = scale * translate;
 
-    Eigen::Matrix4f Prespective2Orthographic = Eigen::Matrix4f::Zero();
-    Prespective2Orthographic(0,0) = n;
-    Prespective2Orthographic(1,1) = n;
-    Prespective2Orthographic(2,2) = n+f;
-    Prespective2Orthographic(2,3) = -n*f;
-    Prespective2Orthographic(2,2) = 1;
+    projection = ortho * presp2ortho;
 
-    projection = Orthographic * Prespective2Orthographic;
     return projection;
 }
 

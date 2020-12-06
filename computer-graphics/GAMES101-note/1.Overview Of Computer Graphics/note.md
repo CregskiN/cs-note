@@ -1,5 +1,7 @@
 ## 1. 什么是计算机图形学 What is Computer Graphics
 
+[TOC]
+
 
 
 ## 2. 为什么学习计算机图形学 Why study Computer Graphics

@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 project(Rasterizer)
 
+# set (CMAKE_C_COMPILER "/usr/bin/gcc")
+# set (CMAKE_CXX_COMPILER "/usr/bin/g++")
+
+
 find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
