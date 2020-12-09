@@ -7,6 +7,7 @@
 
 #include <eigen3/Eigen/Eigen>
 #include "Texture.hpp"
+#include <array>
 
 using namespace Eigen;
 class Triangle{

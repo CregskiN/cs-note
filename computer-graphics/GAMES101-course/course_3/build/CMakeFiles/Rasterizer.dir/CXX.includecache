@@ -21,6 +21,8 @@ math.h
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/Shader.hpp
 eigen3/Eigen/Eigen
 -
+array
+-
 Texture.hpp
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/Texture.hpp
 
@@ -31,12 +33,16 @@ eigen3/Eigen/Eigen
 -
 opencv2/opencv.hpp
 -
+array
+-
 
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/Triangle.hpp
 eigen3/Eigen/Eigen
 -
 Texture.hpp
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/Texture.hpp
+array
+-
 
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/global.hpp
 
@@ -44,6 +50,8 @@ Texture.hpp
 iostream
 -
 opencv2/opencv.hpp
+-
+cmath
 -
 global.hpp
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/global.hpp

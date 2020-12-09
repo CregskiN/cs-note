@@ -1,5 +1,6 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <cmath>
 
 #include "global.hpp"
 #include "rasterizer.hpp"
@@ -59,7 +60,7 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
 
     Eigen::Matrix4f presp2ortho = Eigen::Matrix4f();
     presp2ortho << zNear, 0, 0, 0, 0, zNear, 0, 0, 0, 0, zNear + zFar,
-        -zNear * zFar, 0, 0, -1, 0;            // 为什么这里是-1？
+        -zNear * zFar, 0, 0, 1, 0;            // 为什么这里是-1？
     Eigen::Matrix4f ortho = Eigen::Matrix4f(); // 先位移，再缩放
     Eigen::Matrix4f translate = Eigen::Matrix4f();
     Eigen::Matrix4f scale = Eigen::Matrix4f();
@@ -105,7 +106,10 @@ Eigen::Vector3f texture_fragment_shader(const fragment_shader_payload& payload)
     if (payload.texture)
     {
         // TODO: Get the texture value at the texture coordinates of the current fragment
-
+        // 通过 uv坐标，对纹理采样
+        float u = payload.tex_coords.x();
+        float v = payload.tex_coords.y();
+        return_color = payload.texture->getColor(u, v);
     }
     Eigen::Vector3f texture_color;
     texture_color << return_color.x(), return_color.y(), return_color.z();
@@ -129,16 +133,37 @@ Eigen::Vector3f texture_fragment_shader(const fragment_shader_payload& payload)
 
     Eigen::Vector3f result_color = {0, 0, 0};
 
+    Eigen::Vector3f view_direction = (eye_pos - point).normalized(); // 单位方向向量：从shadePoint指向eye_pos
     for (auto& light : lights)
     {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular* 
         // components are. Then, accumulate that result on the *result_color* object.
+        float r_squared = (light.position - point).squaredNorm();
+        Eigen::Vector3f diffuse(0, 0, 0);
+        Eigen::Vector3f specular(0, 0, 0);
+        Eigen::Vector3f ambient(0, 0, 0);
+        Eigen::Vector3f light_direction = (light.position - point).normalized();
 
+        for(int i = 0; i < 3; i ++){
+            float itensity = light.intensity[i] / r_squared;
+            // diffuse 漫反射
+            diffuse[i] = kd[i] * itensity * std::max(0.0f, normal.dot(light_direction));
+            // specular 高光
+            Eigen::Vector3f h = (view_direction + light_direction).normalized(); // 半程向量
+            specular[i] = ks[i] * itensity * std::pow(std::max(0.0f, normal.dot(h)), p);
+            // ambient 环境光照
+            ambient[i] = ka[i] * amb_light_intensity[i];
+        }
+
+        result_color += diffuse;
+        result_color += specular;
+        result_color += ambient;
     }
 
     return result_color * 255.f;
 }
 
+// 布林冯反射模型
 Eigen::Vector3f phong_fragment_shader(const fragment_shader_payload& payload)
 {
     Eigen::Vector3f ka = Eigen::Vector3f(0.005, 0.005, 0.005);
@@ -159,13 +184,30 @@ Eigen::Vector3f phong_fragment_shader(const fragment_shader_payload& payload)
     Eigen::Vector3f normal = payload.normal;
 
     Eigen::Vector3f result_color = {0, 0, 0};
+
+    Eigen::Vector3f view_direction = (eye_pos - point).normalized(); // point到观测位置的单位方向向量
     for (auto& light : lights)
     {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular* 
         // components are. Then, accumulate that result on the *result_color* object.
-        
-    }
+        // float light_radius_squred_normalized = (light.position - point).squaredNorm(); // point 到 光源 的半径 // 已平方、单位化
+        // Eigen::Vector3f diffuse(0, 0, 0);
+        // Eigen::Vector3f specular(0, 0, 0);
+        // Eigen::Vector3f ambient(0, 0, 0);
+        // Eigen::Vector3f light_direction = (light.position - point).normalized(); // point到光源的方向单位向量
 
+        // for (int i = 0; i < 3; i++) {
+        //     Eigen::Vector3f h = (view_direction + light_direction).normalized();
+        //     float intensity = light.intensity[i] / light_radius_squred_normalized;
+        //     diffuse[i] = kd[i] * intensity * std::max(0.0f, normal.dot(light_direction));
+        //     specular[i] = ks[i] * intensity * std::pow(std::max(0.0f ,normal.dot(h)), p);
+        //     ambient[i] = ka[i] * amb_light_intensity[i];
+        // }
+
+        // result_color += diffuse;
+        // result_color += specular;
+        // result_color += ambient;    
+    }
     return result_color * 255.f;
 }
 

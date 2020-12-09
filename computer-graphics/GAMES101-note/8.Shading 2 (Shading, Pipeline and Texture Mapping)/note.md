@@ -39,7 +39,7 @@ $$
 $$
 
 
-## 1.1 高光 Speculat
+## 1.1 高光 Specular
 
 
 
