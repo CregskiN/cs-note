@@ -41,8 +41,6 @@ $$
 
 ## 1.1 高光 Specular
 
-
-
 ### 观测高光的条件
 
 <img src="https://www.qiniu.cregskin.com/image-20201129164233765.png" alt="image-20201129164233765" style="zoom:50%;" />

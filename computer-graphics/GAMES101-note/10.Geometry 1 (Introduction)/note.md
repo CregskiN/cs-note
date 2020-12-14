@@ -1,5 +1,7 @@
 # Geometry
 
+
+
 [TOC]
 
 
@@ -102,7 +104,7 @@ Shading 过程中，查询到纹理贴图上不同高度的法线，影响最终
 
 
 
-### 细节
+### 实现细节
 
 凹凸贴图定义了纹理点法线高度的相对移动
 
@@ -134,7 +136,7 @@ Shading 过程中，查询到纹理贴图上不同高度的法线，影响最终
 
 真的对顶点做移动
 
-![image-20201130174902733](https://www.qiniu.cregskin.com/image-20201130174902733.png)
+<img src="https://www.qiniu.cregskin.com/image-20201130174902733.png" alt="image-20201130174902733" style="zoom:50%;" />
 
 
 
@@ -176,7 +178,7 @@ Dynamic Tesselation 动态曲面细分，细分小的三角形，使用位移贴
 
 
 
-# 2. Introduction to geometry
+# 2. 几何的介绍 Introduction to geometry
 
 ## 2.1 Examples of Geometry
 

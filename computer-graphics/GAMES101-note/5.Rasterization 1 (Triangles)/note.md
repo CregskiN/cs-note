@@ -37,6 +37,14 @@
 
 <img src="https://www.qiniu.cregskin.com/image-20201123191637232.png" alt="image-20201123191637232" style="zoom: 30%;" />
 
+> 通过控制fov，可以实现视觉上的缩放效果
+>
+> fov增大，压缩到cube中的图像变小
+>
+> fov缩小，压缩到cube中的图像变大
+>
+> 当视野变小时，场景投影出来的空间就会减小，产生放大(Zoom In)了的感觉
+
 
 
 > + **M**odel 变换，摆放物体位置
@@ -85,7 +93,7 @@
 
 <img src="https://www.qiniu.cregskin.com/image-20201123194226934.png" alt="image-20201123194226934" style="zoom: 25%;" />
 
-![image-20201123194531698](https://www.qiniu.cregskin.com/image-20201123194531698.png)
+<img src="https://www.qiniu.cregskin.com/image-20201123194531698.png" alt="image-20201123194531698" style="zoom:40%;" />
 
 
 
