@@ -47,24 +47,24 @@ array
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/global.hpp
 
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/main.cpp
+cmath
+-
 iostream
 -
 opencv2/opencv.hpp
 -
-cmath
--
-global.hpp
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/global.hpp
-rasterizer.hpp
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/rasterizer.hpp
-Triangle.hpp
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/Triangle.hpp
+OBJ_Loader.h
+/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/OBJ_Loader.h
 Shader.hpp
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/Shader.hpp
 Texture.hpp
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/Texture.hpp
-OBJ_Loader.h
-/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/OBJ_Loader.h
+Triangle.hpp
+/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/Triangle.hpp
+global.hpp
+/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/global.hpp
+rasterizer.hpp
+/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/rasterizer.hpp
 
 /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_3/rasterizer.hpp
 eigen3/Eigen/Eigen
