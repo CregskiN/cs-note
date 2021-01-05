@@ -30,17 +30,39 @@ void naive_bezier(const std::vector<cv::Point2f> &points, cv::Mat &window)
     }
 }
 
+cv::Point2f lerp_v2f(const cv::Point2f& a, const cv::Point2f& b, float t)
+{
+    return a + (b - a) * t;
+}
+
 cv::Point2f recursive_bezier(const std::vector<cv::Point2f> &control_points, float t) 
 {
     // TODO: Implement de Casteljau's algorithm
-    return cv::Point2f();
 
+    // 当控制点只剩一个，这个点就是最终描绘的点
+    if(control_points.size() == 1){
+        return control_points[0];
+    }else {
+
+    // 控制点不只剩一个
+    std::vector<cv::Point2f> lerp_points;
+    for (int i = 0; i < control_points.size(); i++){
+        lerp_points.push_back(lerp_v2f(control_points[i - 1], control_points[i], t));
+    }
+    return recursive_bezier(lerp_points,t);
+    }
+    // return cv::Point2f();
 }
 
 void bezier(const std::vector<cv::Point2f> &control_points, cv::Mat &window) 
 {
     // TODO: Iterate through all t = 0 to t = 1 with small steps, and call de Casteljau's 
     // recursive Bezier algorithm.
+    double step = 0.001;
+    for (double t = 0.0; t <= 1.0; t += step) {
+        cv::Point2f point = recursive_bezier(control_points, t);
+        window.at<cv::Vec3b>(point.y, point.x)[1] = 255;
+    }
 
 }
 
