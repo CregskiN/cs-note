@@ -1,4 +1,4 @@
-# Install script for directory: /Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_4
+# Install script for directory: /Users/cregskin/code/cs-note/computer-graphics/GAMES101-homework/course_4
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_4/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/cregskin/code/cs-note/computer-graphics/GAMES101-homework/course_4/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

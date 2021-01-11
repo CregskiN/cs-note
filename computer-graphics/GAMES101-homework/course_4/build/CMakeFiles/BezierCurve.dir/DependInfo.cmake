@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_4/main.cpp" "/Users/cregskin/code/cs-note/computer-graphics/GAMES101-course/course_4/build/CMakeFiles/BezierCurve.dir/main.cpp.o"
+  "/Users/cregskin/code/cs-note/computer-graphics/GAMES101-homework/course_4/main.cpp" "/Users/cregskin/code/cs-note/computer-graphics/GAMES101-homework/course_4/build/CMakeFiles/BezierCurve.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
@@ -12,6 +12,7 @@ set(CMAKE_CXX_COMPILER_ID "AppleClang")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/local/Cellar/opencv@2/2.4.13.7_11/include/opencv"
   "/usr/local/Cellar/opencv@2/2.4.13.7_11/include"
+  "/usr/local/include"
   )
 
 # Targets to which this target links.

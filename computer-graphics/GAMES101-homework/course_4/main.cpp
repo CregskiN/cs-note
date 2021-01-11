@@ -43,13 +43,12 @@ cv::Point2f recursive_bezier(const std::vector<cv::Point2f> &control_points, flo
     if(control_points.size() == 1){
         return control_points[0];
     }else {
-
-    // 控制点不只剩一个
-    std::vector<cv::Point2f> lerp_points;
-    for (int i = 0; i < control_points.size(); i++){
-        lerp_points.push_back(lerp_v2f(control_points[i - 1], control_points[i], t));
-    }
-    return recursive_bezier(lerp_points,t);
+        // 控制点不只剩一个
+        std::vector<cv::Point2f> lerp_points;
+        for (int i = 0; i < control_points.size(); i++){
+            lerp_points.push_back(lerp_v2f(control_points[i - 1], control_points[i], t));
+        }
+        return recursive_bezier(lerp_points,t);
     }
     // return cv::Point2f();
 }
@@ -60,7 +59,7 @@ void bezier(const std::vector<cv::Point2f> &control_points, cv::Mat &window)
     // recursive Bezier algorithm.
     double step = 0.001;
     for (double t = 0.0; t <= 1.0; t += step) {
-        cv::Point2f point = recursive_bezier(control_points, t);
+        auto point = recursive_bezier(control_points, t);
         window.at<cv::Vec3b>(point.y, point.x)[1] = 255;
     }
 
