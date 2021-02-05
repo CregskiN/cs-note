@@ -1,0 +1,1 @@
+const int bufferSize = 512;

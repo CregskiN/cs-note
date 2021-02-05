@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/cregskin/code/cs-note/c++/C++ Primer/build",
+  "command": "/usr/bin/clang++  -I/usr/local/include -std=c++17 -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -o CMakeFiles/Prog.dir/main.cpp.o -c \"/Users/cregskin/code/cs-note/c++/C++ Primer/main.cpp\"",
+  "file": "/Users/cregskin/code/cs-note/c++/C++ Primer/main.cpp"
+}
+]
