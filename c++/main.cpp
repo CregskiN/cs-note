@@ -6,21 +6,19 @@
 #include <vector>
 
 #include "Sales_data.h"
+#include "Screen.h"
+#include "Window_mgr.h"
 
 using std::string;
 using std::vector;
 
 /*
- * 7.2 访问控制与封装
+ * 7.4 类的作用域
  * 
- * + 7.2.1 友元
+ * + 7.4.1 名字查找与类的作用域
  */
 int main() {
     
-
-
-
-
 
 
     return 0;

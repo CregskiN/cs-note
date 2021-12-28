@@ -96,7 +96,9 @@
     "cfenv": "cpp",
     "cinttypes": "cpp",
     "filesystem": "cpp",
-    "cassert": "cpp"
+    "cassert": "cpp",
+    "__functional_03": "cpp",
+    "*.ipp": "cpp"
   },
   "C_Cpp.default.cppStandard": "c++17"
 }
