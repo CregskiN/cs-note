@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/cregskin/code/cs-note/computer-graphics/GAMES101-homeworks/hw0/build",
+  "command": "/usr/bin/clang++  -I/usr/local/include -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -o CMakeFiles/Transformation.dir/main.cpp.o -c /Users/cregskin/code/cs-note/computer-graphics/GAMES101-homeworks/hw0/main.cpp",
+  "file": "/Users/cregskin/code/cs-note/computer-graphics/GAMES101-homeworks/hw0/main.cpp"
+}
+]
