@@ -59,6 +59,10 @@
 
 <img src="http://www.qiniu.cregskin.com/202201051059625.png" alt="image-20220105105937600" style="zoom:50%;" />
 
+> 注意，这里用的不是齐次坐标，而 model 变换矩阵，需要用齐次坐标
+
+
+
 可以分解为：
 
 + 将 n轴 平移到坐标轴
@@ -206,7 +210,7 @@ $M_{perspective \rarr ortho}$ 可以确定一部分：
 >
 >答：远了
 >
-><img src="http://www.qiniu.cregskin.com/202201051718848.jpeg" alt="IMG_5946FDD8ADF1-1" style="zoom:50%;" />
+><img src="http://www.qiniu.cregskin.com/202201062239356.jpeg" alt="IMG_1138CE9705CE-1" style="zoom:50%;" />
 
 
 
