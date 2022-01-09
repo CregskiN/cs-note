@@ -11,9 +11,9 @@ Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
 {
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
 
-    Eigen::Matrix4f translate;
-    translate << 1,0,0,-eye_pos[0],
-                 0,1,0,-eye_pos[1],
+    Eigen::Matrix4f translate; // 绕z轴旋转180度，移动到原点
+    translate << -1,0,0,-eye_pos[0],
+                 0,-1,0,-eye_pos[1],
                  0,0,1,-eye_pos[2],
                  0,0,0,1;
 
@@ -32,7 +32,29 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
 {
     // TODO: Copy-paste your implementation from the previous assignment.
     Eigen::Matrix4f projection;
-
+    Eigen::Matrix4f perspective, orthorgraphic, lineTrans, moveTrans;
+    // 1. Frustum to cube : perspective
+    perspective << zNear, 0, 0, 0,
+        0, zNear, 0, 0,
+        0, 0, zNear + zFar, -zNear * zFar,
+        0, 0, 1, 0;
+    // 2. 正交投影
+    eye_fov = eye_fov * MY_PI / 180; // 化为弧度制
+    float yTop = tan(eye_fov / 2) * zNear;
+    float yBottom = -yTop;
+    float xRight = yTop * aspect_ratio; // 1/2 高 * ( 1/2宽 : 1/2高) = 1/2宽
+    float xLeft = -xRight;
+    lineTrans << 2 / (xRight - xLeft), 0, 0, 0,
+        0, 2 / (yTop - yBottom), 0, 0,
+        0, 0, 2 / (zNear - zFar), 0,
+        0, 0, 0, 1;
+    moveTrans << 1, 0, 0, -(xRight + xLeft) / 2,
+        0, 1, 0, -(yTop + yBottom) / 2,
+        0, 0, 1, -(zNear + zFar) / 2,
+        0, 0, 0, 1;
+    // orthorgraphic = lineTrans * moveTrans; // 先平移，再旋转，不能用复合变换
+    // 3. 组合 返回
+    projection = lineTrans * moveTrans * perspective;
     return projection;
 }
 
