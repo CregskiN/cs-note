@@ -21,9 +21,9 @@
 
 ### 1.1 3D 齐次坐标与仿射变换
 
-<img src="http://www.qiniu.cregskin.com/202201051050759.png" alt="image-20220105105026710" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051050759.png" alt="image-20220105105026710" style="zoom:50%;" />
 
-<img src="http://www.qiniu.cregskin.com/202201051051302.png" alt="image-20220105105115278" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051051302.png" alt="image-20220105105115278" style="zoom:50%;" />
 
 > 先应用的线性变换，还是先应用平移变换？
 >
@@ -33,9 +33,9 @@
 
 ### 1.2 几种 3D 变换
 
-<img src="http://www.qiniu.cregskin.com/202201051052064.png" alt="image-20220105105242041" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051052064.png" alt="image-20220105105242041" style="zoom:50%;" />
 
-<img src="http://www.qiniu.cregskin.com/202201051052159.png" alt="image-20220105105259133" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051052159.png" alt="image-20220105105259133" style="zoom:50%;" />
 
 
 
@@ -45,7 +45,7 @@
 
 用简单的 x、y、z 轴旋转组合成综合的旋转
 
-<img src="http://www.qiniu.cregskin.com/202201051057626.png" alt="image-20220105105702600" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051057626.png" alt="image-20220105105702600" style="zoom:50%;" />
 
 + Pitch 抬头低头
 + Yaw 左转右转
@@ -57,7 +57,7 @@
 
 沿着 n轴 旋转 \alpha 度
 
-<img src="http://www.qiniu.cregskin.com/202201051059625.png" alt="image-20220105105937600" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051059625.png" alt="image-20220105105937600" style="zoom:50%;" />
 
 > 注意，这里用的不是齐次坐标，而 model 变换矩阵，需要用齐次坐标
 
@@ -93,7 +93,7 @@
 + 定义相机朝向 $\vec{g}$
 + 定义上方向 $\vec{t}$
 
-<img src="http://www.qiniu.cregskin.com/202201051118312.png" alt="image-20220105111831269" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051118312.png" alt="image-20220105111831269" style="zoom:50%;" />
 
 > 只要相机、物体相对位置不变，观测内容也不变
 >
@@ -105,7 +105,7 @@
 1. $T_{view}$ 把 $\vec{e}$ 移动到 (0, 0)
 2. $R_{view}$ 把 $\vec{g}$ 旋转到 -Z、把 $\vec{t}$ 旋转到 Y、把 $\vec{g} \cp \vec{t}$ 旋转到 X
 
-<img src="http://www.qiniu.cregskin.com/202201051133039.png" alt="image-20220105113346013" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051133039.png" alt="image-20220105113346013" style="zoom:50%;" />
 
 > 旋转矩阵属于正交矩阵
 
@@ -129,7 +129,7 @@
 + 移除 Z 坐标（直接拍扁）
 + 把坐标缩放到 $[-1, 1]^2$
 
-<img src="http://www.qiniu.cregskin.com/202201051555639.png" alt="image-20220105155532609" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051555639.png" alt="image-20220105155532609" style="zoom:50%;" />
 
 推广理解：
 
@@ -137,13 +137,13 @@
 
 > 注意朝向是 -Z 方向
 
-<img src="http://www.qiniu.cregskin.com/202201051604192.png" alt="image-20220105160425140" style="zoom: 33%;" />
+<img src="https://www.qiniu.cregskin.com/202201051604192.png" alt="image-20220105160425140" style="zoom: 33%;" />
 
 最终得出正交投影的变换矩阵 $M_{ortho}$ 
 
 > 先平移，再缩放。缩放之后，图像会有拉伸的现象，在**视口变换**中会解决
 
-<img src="http://www.qiniu.cregskin.com/202201051607859.png" alt="image-20220105160729830" style="zoom: 33%;" />
+<img src="https://www.qiniu.cregskin.com/202201051607859.png" alt="image-20220105160729830" style="zoom: 33%;" />
 
 
 
@@ -155,54 +155,54 @@
 
 在开始之前，回顾 3D 齐次坐标中点的定义：
 
-<img src="http://www.qiniu.cregskin.com/202201051615810.png" alt="image-20220105161508782" style="zoom: 33%;" />
+<img src="https://www.qiniu.cregskin.com/202201051615810.png" alt="image-20220105161508782" style="zoom: 33%;" />
 
 透视投影基本思路：
 
 1. 把 Frustum 压扁成一个立方体（Z 轴不变） $M_{persp \rarr ortho}$
 2. 对立方体做正交投影 $M_{ortho}$
 
-<img src="http://www.qiniu.cregskin.com/202201051617818.png" alt="image-20220105161719791" style="zoom: 33%;" />
+<img src="https://www.qiniu.cregskin.com/202201051617818.png" alt="image-20220105161719791" style="zoom: 33%;" />
 
 > **near面 任意点 x y z 不变**
 >
 > **far面 任意点 x y z 的 z 不变，中心点 x y z 不变**
 
-<img src="http://www.qiniu.cregskin.com/202201051627631.png" alt="image-20220105162750600" style="zoom:33%;" />
+<img src="https://www.qiniu.cregskin.com/202201051627631.png" alt="image-20220105162750600" style="zoom:33%;" />
 
 变换前后 x、y 关系如下：
 
-<img src="http://www.qiniu.cregskin.com/202201051629531.png" alt="image-20220105162946502" style="zoom: 67%;" />
+<img src="https://www.qiniu.cregskin.com/202201051629531.png" alt="image-20220105162946502" style="zoom: 67%;" />
 
 
 
 即，Frustum 内任意一点的变化如下：
 
-<img src="http://www.qiniu.cregskin.com/202201051630109.png" alt="image-20220105163016082" style="zoom:67%;" />
+<img src="https://www.qiniu.cregskin.com/202201051630109.png" alt="image-20220105163016082" style="zoom:67%;" />
 
 用变换矩阵表示：
 
-<img src="http://www.qiniu.cregskin.com/202201051631522.png" alt="image-20220105163130492" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051631522.png" alt="image-20220105163130492" style="zoom:50%;" />
 
 $M_{perspective \rarr ortho}$ 可以确定一部分：
 
-<img src="http://www.qiniu.cregskin.com/202201051631609.png" alt="image-20220105163140584" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051631609.png" alt="image-20220105163140584" style="zoom:50%;" />
 
 对于 near面 的任意点：
 
-<img src="http://www.qiniu.cregskin.com/202201051634207.png" alt="image-20220105163430176" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051634207.png" alt="image-20220105163430176" style="zoom:50%;" />
 
 确定（1）式：
 
-<img src="http://www.qiniu.cregskin.com/202201051645743.png" alt="image-20220105164558713" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051645743.png" alt="image-20220105164558713" style="zoom:50%;" />
 
 对于 far面 的中心点，其 x y z 坐标均不变，得到（2）式
 
-<img src="http://www.qiniu.cregskin.com/202201051645488.png" alt="image-20220105164548459" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051645488.png" alt="image-20220105164548459" style="zoom:50%;" />
 
 （1）、（2）式联立：
 
-<img src="http://www.qiniu.cregskin.com/202201051648123.png" alt="image-20220105164818095" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051648123.png" alt="image-20220105164818095" style="zoom:50%;" />
 
 
 
@@ -210,7 +210,7 @@ $M_{perspective \rarr ortho}$ 可以确定一部分：
 >
 >答：远了
 >
-><img src="http://www.qiniu.cregskin.com/202201062239356.jpeg" alt="IMG_1138CE9705CE-1" style="zoom:50%;" />
+><img src="https://www.qiniu.cregskin.com/202201062239356.jpeg" alt="IMG_1138CE9705CE-1" style="zoom:50%;" />
 
 
 

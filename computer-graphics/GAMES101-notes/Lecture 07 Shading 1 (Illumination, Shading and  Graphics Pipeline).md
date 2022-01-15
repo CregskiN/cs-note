@@ -31,7 +31,7 @@
 
 > 在 GAMES101 中，朝向为 -Z，故 z 越小，离观测点越远
 
-<img src="http://www.qiniu.cregskin.com/202201081736523.png" alt="image-20220108173658489" style="zoom: 50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081736523.png" alt="image-20220108173658489" style="zoom: 50%;" />
 
 ```c++
 for (each triangle T) // 遍历所有三角形
@@ -55,7 +55,7 @@ for (each triangle T) // 遍历所有三角形
 
 目前为止的内容：
 
-<img src="http://www.qiniu.cregskin.com/202201081752712.png" alt="image-20220108175238684" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081752712.png" alt="image-20220108175238684" style="zoom:50%;" />
 
 1. 摆好相机和物体
 2. 计算物体与相机相对位置
@@ -68,7 +68,7 @@ for (each triangle T) // 遍历所有三角形
 
 ### 2.1 一种简单的着色模型 Blinn-Phong Reflectance Model
 
-<img src="http://www.qiniu.cregskin.com/202201081800940.png" alt="image-20220108180026900" style="zoom: 33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081800940.png" alt="image-20220108180026900" style="zoom: 33%;" />
 
 + 镜面反射高光 Specular highlights（光源在物体表面镜面反射到人眼）
 + 漫反射 Diffuse reflection（光源在物体表面，往对称方向附近散射到人眼）
@@ -80,7 +80,7 @@ for (each triangle T) // 遍历所有三角形
 
 
 
-<img src="http://www.qiniu.cregskin.com/202201081805032.png" alt="image-20220108180520001" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081805032.png" alt="image-20220108180520001" style="zoom:50%;" />
 
 + Shading point：反射点（平面）
 + n：法线方向
@@ -88,7 +88,7 @@ for (each triangle T) // 遍历所有三角形
 + v：光测点相对 Shading point 方向
 + 物体表面材质（颜色、光反射系数）
 
-<img src="http://www.qiniu.cregskin.com/202201081808728.png" alt="image-20220108180843699" style="zoom: 33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081808728.png" alt="image-20220108180843699" style="zoom: 33%;" />
 
 > 暂时不考虑有其他物体遮挡光线
 
@@ -98,11 +98,11 @@ for (each triangle T) // 遍历所有三角形
 
 漫反射示意图：
 
-<img src="http://www.qiniu.cregskin.com/202201081844693.png" alt="image-20220108184441662" style="zoom:33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081844693.png" alt="image-20220108184441662" style="zoom:33%;" />
 
 **光源相对方向、法线角度与反射的关系**：
 
-<img src="http://www.qiniu.cregskin.com/202201081845062.png" alt="image-20220108184500035" style="zoom: 47%;" />
+<img src="https://www.qiniu.cregskin.com/202201081845062.png" alt="image-20220108184500035" style="zoom: 47%;" />
 
 + n、l、v 重合，反射点接收所有的光线
 + l、n 成 60 度角
@@ -112,7 +112,7 @@ for (each triangle T) // 遍历所有三角形
 
 **到光源距离，与光强的关系**：
 
-<img src="http://www.qiniu.cregskin.com/202201081849128.png" alt="image-20220108184901100" style="zoom:33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081849128.png" alt="image-20220108184901100" style="zoom:33%;" />
 
 某时某刻，光线的能量 I 均匀分布在一个球壳上。球壳上某一点接收到的能量，与其到电光源的距离 r。有线性函数关系。
 
@@ -120,7 +120,7 @@ for (each triangle T) // 遍历所有三角形
 
 最终得出漫反射公式：
 
-<img src="http://www.qiniu.cregskin.com/202201081854679.png" alt="image-20220108185441653" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081854679.png" alt="image-20220108185441653" style="zoom:50%;" />
 
 + $L_d$
 + $k_d$：材料表面光线反射系数，1 为全反射，0 为不反射

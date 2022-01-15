@@ -24,7 +24,7 @@
 
 
 
-<img src="http://www.qiniu.cregskin.com/202201081117269.png" alt="image-20220108111746236" style="zoom:33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081117269.png" alt="image-20220108111746236" style="zoom:33%;" />
 
 
 
@@ -42,7 +42,7 @@
 
 采样的过程：滤波➡️采样
 
-<img src="http://www.qiniu.cregskin.com/202201081123565.png" alt="image-20220108112325538" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081123565.png" alt="image-20220108112325538" style="zoom:50%;" />
 
 > 先采样，发现走样，再 Blurring 可以吗？
 >
@@ -52,13 +52,13 @@
 
 ### 1.2 走样的原因
 
-<img src="http://www.qiniu.cregskin.com/202201081128244.png" alt="image-20220108112816216" style="zoom:33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081128244.png" alt="image-20220108112816216" style="zoom:33%;" />
 
 #### 傅立叶级数展开
 
 任何一个函数，可以展开为常数+包含三角函数的多项式
 
-<img src="http://www.qiniu.cregskin.com/202201081130148.png" alt="image-20220108113006117" style="zoom: 50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081130148.png" alt="image-20220108113006117" style="zoom: 50%;" />
 
 #### 傅立叶变换
 
@@ -66,17 +66,17 @@
 
 而 F 也可以通过逆傅立叶变换成 f
 
-<img src="http://www.qiniu.cregskin.com/202201081131928.png" alt="image-20220108113157901" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081131928.png" alt="image-20220108113157901" style="zoom:50%;" />
 
 
 
 #### 采样的频率需要与原函数的频率匹配
 
-<img src="http://www.qiniu.cregskin.com/202201081137373.png" alt="image-20220108113711345" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081137373.png" alt="image-20220108113711345" style="zoom:50%;" />
 
 
 
-<img src="http://www.qiniu.cregskin.com/202201081251545.png" alt="image-20220108125157508" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081251545.png" alt="image-20220108125157508" style="zoom:50%;" />
 
 高频信号没有被充分采样，导致采样结果显示：原信号为一个低频信号
 
@@ -92,21 +92,21 @@
 
 + （原图像、频域图像）
 
-​	<img src="http://www.qiniu.cregskin.com/202201081304061.png" alt="image-20220108130410032" style="zoom:50%;" />
+​	<img src="https://www.qiniu.cregskin.com/202201081304061.png" alt="image-20220108130410032" style="zoom:50%;" />
 
 + （过滤低频信号的图像、频域图像）高通滤波器
 
-​	<img src="http://www.qiniu.cregskin.com/202201081304826.png" alt="image-20220108130455797" style="zoom:50%;" />
+​	<img src="https://www.qiniu.cregskin.com/202201081304826.png" alt="image-20220108130455797" style="zoom:50%;" />
 
 >图像有明显变化的地方，经傅立叶变换频率较高，可以通过高通滤波器
 
 + （过滤高频信号的图像、频域信号）低通滤波器 / Blur
 
-​	<img src="http://www.qiniu.cregskin.com/202201081306247.png" alt="image-20220108130651217" style="zoom:50%;" />
+​	<img src="https://www.qiniu.cregskin.com/202201081306247.png" alt="image-20220108130651217" style="zoom:50%;" />
 
 + (过滤高频、低频信号的图像、频域信号)
 
-​	<img src="http://www.qiniu.cregskin.com/202201081308401.png" alt="image-20220108130846374" style="zoom:50%;" />
+​	<img src="https://www.qiniu.cregskin.com/202201081308401.png" alt="image-20220108130846374" style="zoom:50%;" />
 
 
 
@@ -114,7 +114,7 @@
 
 卷积
 
-<img src="http://www.qiniu.cregskin.com/202201081313870.png" alt="image-20220108131329842" style="zoom:33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081313870.png" alt="image-20220108131329842" style="zoom:33%;" />
 
 
 
@@ -134,7 +134,7 @@
 
 实例：
 
-<img src="http://www.qiniu.cregskin.com/202201081511876.png" alt="image-20220108151110842" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081511876.png" alt="image-20220108151110842" style="zoom:50%;" />
 
 > 九分之一是归一化操作，避免卷积之后提亮
 
@@ -146,7 +146,7 @@
 
 重复频域上的内容
 
-<img src="http://www.qiniu.cregskin.com/202201081520984.png" alt="image-20220108152002952" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081520984.png" alt="image-20220108152002952" style="zoom:50%;" />
 
 + e = a * c（时域上的乘积）
   + a 为给出的时域信号
@@ -161,7 +161,7 @@
 
 
 
-<img src="http://www.qiniu.cregskin.com/202201081525700.png" alt="image-20220108152520657" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081525700.png" alt="image-20220108152520657" style="zoom:50%;" />
 
 > 当采样频率低时，频域上，频谱搬移的间隔小，甚至混合，导致**走样**
 
@@ -177,23 +177,23 @@
 
 方法二：反走样 Antialiasing
 
-i. 模糊 用低通滤波器卷积，去除高频分量<img src="http://www.qiniu.cregskin.com/202201081534990.png" alt="image-20220108153448959" style="zoom:33%;" />
+i. 模糊 用低通滤波器卷积，去除高频分量<img src="https://www.qiniu.cregskin.com/202201081534990.png" alt="image-20220108153448959" style="zoom:33%;" />
 
 ii. 像素卷积后，对九宫格采样，再平均
 
-<img src="http://www.qiniu.cregskin.com/202201081538906.png" alt="image-20220108153855875" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201081538906.png" alt="image-20220108153855875" style="zoom:50%;" />
 
 #### MSAA
 
 对应 Antialiasing 的第一步：**模糊**
 
-<img src="http://www.qiniu.cregskin.com/202201081540723.png" alt="image-20220108154049691" style="zoom: 33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081540723.png" alt="image-20220108154049691" style="zoom: 33%;" />
 
 
 
-<img src="http://www.qiniu.cregskin.com/202201081541340.png" alt="image-20220108154143305" style="zoom:33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081541340.png" alt="image-20220108154143305" style="zoom:33%;" />
 
-<img src="http://www.qiniu.cregskin.com/202201081543576.png" alt="image-20220108154319545" style="zoom:33%;" />
+<img src="https://www.qiniu.cregskin.com/202201081543576.png" alt="image-20220108154319545" style="zoom:33%;" />
 
 
 

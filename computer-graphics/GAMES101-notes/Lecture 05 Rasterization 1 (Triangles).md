@@ -24,9 +24,9 @@
 
 
 
-<img src="http://www.qiniu.cregskin.com/202201051727797.png" alt="image-20220105172748772" style="zoom: 33%;" />
+<img src="https://www.qiniu.cregskin.com/202201051727797.png" alt="image-20220105172748772" style="zoom: 33%;" />
 
-<img src="http://www.qiniu.cregskin.com/202201051728924.png" alt="image-20220105172805898" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051728924.png" alt="image-20220105172805898" style="zoom:50%;" />
 
 + fov：field-of-view 
 + fovY：垂直可视角度
@@ -36,12 +36,12 @@
 
 
 
-<img src="http://www.qiniu.cregskin.com/202201051734102.png" alt="image-20220105173430077" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201051734102.png" alt="image-20220105173430077" style="zoom:50%;" />
 
 ### 1.2 定义一个屏幕
 
 + 把一个像素，视为二维数组的一个元素，用 (x, y) 表示
-  + <img src="http://www.qiniu.cregskin.com/202201051750277.png" alt="image-20220105175003251" style="zoom:50%;" />
+  + <img src="https://www.qiniu.cregskin.com/202201051750277.png" alt="image-20220105175003251" style="zoom:50%;" />
   + 像素 (x, y) 的中心，是 (x+0.5, y+0.5)
 
 
@@ -52,7 +52,7 @@
 
 + 将 $[-1, 1]^2$ 变换到 $[0, width] \cp [0, height]$
 
-  <img src="http://www.qiniu.cregskin.com/202201051754494.png" alt="image-20220105175441469" style="zoom:50%;" />
+  <img src="https://www.qiniu.cregskin.com/202201051754494.png" alt="image-20220105175441469" style="zoom:50%;" />
 
 > 先缩放，再平移
 
@@ -80,7 +80,7 @@
 
 采样：把函数离散化
 
-<img src="http://www.qiniu.cregskin.com/202201060920379.png" alt="image-20220106092032349" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201060920379.png" alt="image-20220106092032349" style="zoom:50%;" />
 
 
 
@@ -99,7 +99,7 @@ void Sampling(){
 
 ### 2.2 inside 函数
 
-<img src="http://www.qiniu.cregskin.com/202201061135291.png" alt="image-20220106113529264" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201061135291.png" alt="image-20220106113529264" style="zoom:50%;" />
 
 ```c++
 bool inside(float *tri, float x, float y){
@@ -109,7 +109,7 @@ bool inside(float *tri, float x, float y){
 
 > 边界情况：
 >
-> <img src="http://www.qiniu.cregskin.com/202201061139014.png" alt="image-20220106113926985" style="zoom:33%;" />
+> <img src="https://www.qiniu.cregskin.com/202201061139014.png" alt="image-20220106113926985" style="zoom:33%;" />
 >
 > 是否算在三角形内？是在1内，还是在2内？需要在inside里规定
 
@@ -121,14 +121,14 @@ bool inside(float *tri, float x, float y){
 
 答：不需要，用 Bounding Box （轴向）包围盒
 
-<img src="http://www.qiniu.cregskin.com/202201061141924.png" alt="image-20220106114120897" style="zoom:50%;" />
+<img src="https://www.qiniu.cregskin.com/202201061141924.png" alt="image-20220106114120897" style="zoom:50%;" />
 
 > 这属于一种加速光栅化的方法
 
 ### 2.4 其他光栅化加速方法
 
 + 每一行都做一个 Bouding Box
-  + <img src="http://www.qiniu.cregskin.com/202201061143096.png" alt="image-20220106114302068" style="zoom:50%;" />
+  + <img src="https://www.qiniu.cregskin.com/202201061143096.png" alt="image-20220106114302068" style="zoom:50%;" />
   + 适用于狭长的三角形
 
 
@@ -139,7 +139,7 @@ bool inside(float *tri, float x, float y){
 
 1. 锯齿 Jaggies，走样问题 Aliasing
 
-   <img src="http://www.qiniu.cregskin.com/202201061149833.png" alt="image-20220106114902803" style="zoom: 33%;" /><img src="http://www.qiniu.cregskin.com/202201061149926.png" alt="image-20220106114915897" style="zoom:33%;" />
+   <img src="https://www.qiniu.cregskin.com/202201061149833.png" alt="image-20220106114902803" style="zoom: 33%;" /><img src="https://www.qiniu.cregskin.com/202201061149926.png" alt="image-20220106114915897" style="zoom:33%;" />
 
    
 
