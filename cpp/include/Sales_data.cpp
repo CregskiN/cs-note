@@ -1,6 +1,4 @@
 #include <iostream>
+#include "Sales_data.h"
 
-struct Sales_data {
-//   std::string isbn() const { return bookNo; }
-
-};
+Sales_data sales;
