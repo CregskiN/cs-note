@@ -9,6 +9,7 @@ MESSAGE(STATUS "Project: c_primer Start To Complie") #打印相关消息消息
 
 # 4. 头文件
 include_directories(/usr/local/include)
+include_directories(./include)
 
 # 5. 通过设定SRC变量，将源代码路径都给SRC，如果有多个，可以直接在后面继续添加
 set(SRC ${PROJECT_SOURCE_DIR}/main.cpp)
