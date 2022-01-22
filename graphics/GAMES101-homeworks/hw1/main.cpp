@@ -1,13 +1,13 @@
-#include "Triangle.hpp"
-#include "rasterizer.hpp"
 #include <eigen3/Eigen/Eigen>
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
+#include "Triangle.hpp"
+#include "rasterizer.hpp"
+
 constexpr double MY_PI = 3.1415926;
 
-Eigen::Matrix4f get_rotation(Vector3f axis, float angle)
-{
+Eigen::Matrix4f get_rotation(Vector3f axis, float angle) {
     // 该函数的作用是得到绕任意 过原点的轴的旋转变换矩阵
     Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
     // 1. 把轴 axis 旋转至与 Z 轴重合 2. 绕 Z 轴旋转 3. 旋转回 axis 原方向
@@ -29,21 +29,19 @@ Eigen::Matrix4f get_rotation(Vector3f axis, float angle)
     return model;
 }
 
-Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
-{
+Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos) {
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
 
     Eigen::Matrix4f translate;
     translate << 1, 0, 0, -eye_pos[0], 0, 1, 0, -eye_pos[1], 0, 0, 1,
-        -eye_pos[2], 0, 0, 0, 1; // 将物体移动到轴线上
+        -eye_pos[2], 0, 0, 0, 1;  // 将物体移动到轴线上
 
     view = translate * view;
 
     return view;
 }
 
-Eigen::Matrix4f get_model_matrix(float rotation_angle)
-{
+Eigen::Matrix4f get_model_matrix(float rotation_angle) {
     Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
 
     // TODO: Implement this function
@@ -56,8 +54,7 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
 }
 
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
-                                      float zNear, float zFar)
-{
+                                      float zNear, float zFar) {
     // Students will implement this function
 
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
@@ -72,10 +69,10 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
         0, 0, zNear + zFar, -zNear * zFar,
         0, 0, 1, 0;
     // 2. 正交投影
-    eye_fov = eye_fov * MY_PI / 180; // 化为弧度制
+    eye_fov = eye_fov * MY_PI / 180;  // 化为弧度制
     float yTop = tan(eye_fov / 2) * zNear;
     float yBottom = -yTop;
-    float xRight = yTop * aspect_ratio; // 1/2 高 * ( 1/2宽 : 1/2高) = 1/2宽
+    float xRight = yTop * aspect_ratio;  // 1/2 高 * ( 1/2宽 : 1/2高) = 1/2宽
     float xLeft = -xRight;
     lineTrans << 2 / (xRight - xLeft), 0, 0, 0,
         0, 2 / (yTop - yBottom), 0, 0,
@@ -91,21 +88,17 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
     return projection;
 }
 
-int main(int argc, const char **argv)
-{
+int main(int argc, const char **argv) {
     float angle = 0;
     bool command_line = false;
     std::string filename = "output.png";
 
-    if (argc >= 3)
-    {
+    if (argc >= 3) {
         command_line = true;
-        angle = std::stof(argv[2]); // -r by default
-        if (argc == 4)
-        {
+        angle = std::stof(argv[2]);  // -r by default
+        if (argc == 4) {
             filename = std::string(argv[3]);
-        }
-        else
+        } else
             return 0;
     }
 
@@ -123,8 +116,7 @@ int main(int argc, const char **argv)
     int key = 0;
     int frame_count = 0;
 
-    if (command_line)
-    {
+    if (command_line) {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
         r.set_model(get_model_matrix(angle));
@@ -140,8 +132,7 @@ int main(int argc, const char **argv)
         return 0;
     }
 
-    while (key != 27)
-    {
+    while (key != 27) {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
         // r.set_model(get_model_matrix(angle));
@@ -158,12 +149,9 @@ int main(int argc, const char **argv)
 
         std::cout << "frame count: " << frame_count++ << '\n';
 
-        if (key == 'a')
-        {
+        if (key == 'a') {
             angle += 10;
-        }
-        else if (key == 'd')
-        {
+        } else if (key == 'd') {
             angle -= 10;
         }
     }

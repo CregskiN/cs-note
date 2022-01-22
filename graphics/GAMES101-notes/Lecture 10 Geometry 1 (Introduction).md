@@ -65,9 +65,9 @@ Light from the environment：环境光（此处用贴图记录）
 >
 > <img src="https://www.qiniu.cregskin.com/202201131144780.png" alt="image-20220113114424753" style="zoom: 33%;" />
 >
-> + Ambient：环境光项
-> + Diffust：漫反射项（$k_d$ 为漫反射项系数，即颜色，**可用纹理代替**）
-> + Specular：高光项
+> + **Ambient**：环境光项
+> + **Diffust**：漫反射项（$k_d$ 为漫反射项系数，即颜色，**可用纹理代替**）
+> + **Specular**：高光项
 
 
 
@@ -77,6 +77,37 @@ Light from the environment：环境光（此处用贴图记录）
 
 <img src="https://www.qiniu.cregskin.com/202201211524725.png" alt="image-20220121152404684" style="zoom: 50%;" />
 
++ 通过定义不同位置的高度，扰动法线
+
+<img src="https://www.qiniu.cregskin.com/202201221028222.png" alt="image-20220122102854187" style="zoom: 50%;" />
+
+<img src="https://www.qiniu.cregskin.com/202201221032989.png" alt="image-20220122103201957" style="zoom:50%;" />
+
+在二维平面中，Bump texture 是一维的
+
++ 原法线 $n(p) = (0, 1)$
+
++ 在 bump texture 中，该点导数 $dp = c * [h(p + 1) - h(p)]$
+
+  切向量 $(1, dp)$，法线 $\vec{n}$ 与切向量垂直，旋转后得到：
+
++ 扰动后的法线 $n(p) = (-dp, 1).normalized()$
+
+
+
+在三维情况下，Bump texture 是二维平面
+
++ 原法线 $n(p) = (0, 0, 1)$
++ 在 bump texture 中，该点
+  + 沿 u 方向的导数：$dp/du = c1 * [h(u+1) - h(u)]$
+  + 沿 v 方向的偏导：$dp/dv = c2 * [h(v+1) - h(v)]$
+
++ 扰动后的法线 $n(p) = (-dp/du, -dp/dv, 1).normalized()$
+
+> 现在局部坐标下计算完扰动后的法线，再变换到世界坐标下
+
+> 此处局部坐标，假设原法向量向上
+
 
 
 #### 位移贴图 Displacement Mapping
@@ -85,9 +116,12 @@ Light from the environment：环境光（此处用贴图记录）
 
 
 
-> 凹凸贴图实际上没有改变定点的位置，只是扰动法线
+> **凹凸贴图**和**位移贴图**
 >
-> 而位移贴图实际上**改变了各个三角形顶点的位置**，不只是扰动法线（模型的 Frequencies 必须要契合纹理的高度变化）
+> + 相同点：用完全相同的纹理，目的是扰动法线
+> + 不同点：在具体扰动法线时的操作不一样
+>   + Bump 中，对每个像素 Shading 时，用 texture 扰动原法线
+>   + Displacement 中，先改变三角形顶点位置，内部法线用插值（要求模型频率很高）
 
 
 
