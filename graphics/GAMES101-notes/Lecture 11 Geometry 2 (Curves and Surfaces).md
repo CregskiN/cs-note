@@ -186,7 +186,7 @@
 
 
 
-## 3. 曲面 curved surface
+## 3. 曲面 curved surface (Explicit)
 
 ### 3.1 贝塞尔曲线 to 曲面
 
