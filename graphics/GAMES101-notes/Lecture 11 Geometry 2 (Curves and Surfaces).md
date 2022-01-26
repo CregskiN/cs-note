@@ -67,7 +67,7 @@
 
 
 
-#### de Casteljau Algorithm####
+#### de Casteljau Algorithm
 
 **三个控制点**
 
@@ -119,11 +119,11 @@
 
 <img src="https://www.qiniu.cregskin.com/202201222017497.png" alt="image-20220122201748470" style="zoom:50%;" />
 
+<img src="https://www.qiniu.cregskin.com/202201231013387.png" alt="image-20220123101338330" style="zoom: 20%;" />
 
 
 
-
-<img src="https://www.qiniu.cregskin.com/202201222034202.png" alt="image-20220122203454179" style="zoom: 67%;" />
+<img src="https://www.qiniu.cregskin.com/202201222034202.png" alt="image-20220122203454179" style="zoom: 70%;" />
 
 
 
