@@ -3,6 +3,7 @@
 #include "Triangle.hpp"
 #include "Light.hpp"
 #include "Renderer.hpp"
+#include <array>
 
 // In the main function of the program, we create the scene (create objects and lights)
 // as well as set the options for the render (image width and height, maximum recursion
@@ -34,6 +35,7 @@ int main()
 
     Renderer r;
     r.Render(scene);
+
 
     return 0;
 }

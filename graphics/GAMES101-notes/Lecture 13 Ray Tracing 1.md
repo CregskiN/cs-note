@@ -125,7 +125,7 @@
 
 **Möller Trumbore Algorithm**
 
-一次计算出交点
+一次计算出**光线与三角形**交点
 
 <img src="https://www.qiniu.cregskin.com/202201261648075.png" alt="image-20220126164823043" style="zoom:50%;" />
 
