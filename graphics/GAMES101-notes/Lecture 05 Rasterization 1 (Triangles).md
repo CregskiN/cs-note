@@ -58,6 +58,12 @@
 
 
 
+### 像素到屏幕空间的映射
+
+<img src="https://www.qiniu.cregskin.com/202201310852661.png" alt="image-20220131085220586" style="zoom: 67%;" />
+
+
+
 
 
 ## 2. Rasterization
