@@ -189,11 +189,11 @@ Radiant flux：单位时间内，释放、反射、传输或接受的能量，�
 
 
 
-### 2.1 Radiant Intensity
+## 2.2 Radiant Intensity
 
 Definition: The radiant (luminous) intensity is the power per unit solid angle (?) emitted by a point light source.
 
-Radiant Intensity：单位时间内，点光源往单位角度（**立体角**）发射的能量 <img src="https://www.qiniu.cregskin.com/202201271722148.png" alt="image-20220127172200124" style="zoom: 50%;" />
+Radiant Intensity：点光源往单位**立体角**发射的能量 <img src="https://www.qiniu.cregskin.com/202201271722148.png" alt="image-20220127172200124" style="zoom: 50%;" />
 
 > 单位是坎德拉 <img src="https://www.qiniu.cregskin.com/202201271722331.png" alt="image-20220127172229308" style="zoom: 50%;" />
 
