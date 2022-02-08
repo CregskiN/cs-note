@@ -93,17 +93,15 @@ Radiance：辐射度（亮度）是指在一个表面上，单位投影面积在
 
 <img src="https://www.qiniu.cregskin.com/202202011028652.png" alt="image-20220201102821622" style="zoom:50%;" />
 
-
-
 <img src="https://www.qiniu.cregskin.com/202202011028139.png" alt="image-20220201102832115" style="zoom: 33%;" />
 
 **Exiting Radiance**：从一个单位投影面积开始，朝着某一个方向角发出的光线的功率（Radiant Intensity 是从一个点开始，朝某个方向角发出的光线的功率）
 
 <img src="https://www.qiniu.cregskin.com/202202011042645.png" alt="image-20220201104233603" style="zoom:50%;" />
 
-
-
 <img src="https://www.qiniu.cregskin.com/202202011042997.png" alt="image-20220201104243956" style="zoom:33%;" />
+
+
 
 **Irradiance 和 Radiance**
 
