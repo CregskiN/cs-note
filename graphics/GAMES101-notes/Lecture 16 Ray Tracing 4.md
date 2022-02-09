@@ -378,3 +378,6 @@ shade(p, wo){
 
 
 
+<img src="https://www.qiniu.cregskin.com/202202081740877.png" alt="image-20220208174000822" style="zoom:50%;" />
+
+（真实场景 与 考虑全局光照的 Path Tracing）

@@ -12,10 +12,10 @@ class Sphere;
 struct Intersection
 {
     Intersection(){
-        happened=false;
-        coords=Vector3f();
-        normal=Vector3f();
-        distance= std::numeric_limits<double>::max();
+        happened=false; // 是否相交
+        coords=Vector3f(); // 三角形内一点
+        normal=Vector3f(); // 法线
+        distance= std::numeric_limits<double>::max(); // 光源经过disatance时间到达三角形表面
         obj =nullptr;
         m=nullptr;
     }

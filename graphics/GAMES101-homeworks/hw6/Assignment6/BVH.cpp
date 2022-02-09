@@ -1,12 +1,11 @@
+#include "BVH.hpp"
+
 #include <algorithm>
 #include <cassert>
-#include "BVH.hpp"
 
 BVHAccel::BVHAccel(std::vector<Object*> p, int maxPrimsInNode,
                    SplitMethod splitMethod)
-    : maxPrimsInNode(std::min(255, maxPrimsInNode)), splitMethod(splitMethod),
-      primitives(std::move(p))
-{
+    : maxPrimsInNode(std::min(255, maxPrimsInNode)), splitMethod(splitMethod), primitives(std::move(p)) {
     time_t start, stop;
     time(&start);
     if (primitives.empty())
@@ -25,8 +24,7 @@ BVHAccel::BVHAccel(std::vector<Object*> p, int maxPrimsInNode,
         hrs, mins, secs);
 }
 
-BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
-{
+BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects) {
     BVHBuildNode* node = new BVHBuildNode();
 
     // Compute bounds of all primitives in BVH node
@@ -40,39 +38,37 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
         node->left = nullptr;
         node->right = nullptr;
         return node;
-    }
-    else if (objects.size() == 2) {
+    } else if (objects.size() == 2) {
         node->left = recursiveBuild(std::vector{objects[0]});
         node->right = recursiveBuild(std::vector{objects[1]});
 
         node->bounds = Union(node->left->bounds, node->right->bounds);
         return node;
-    }
-    else {
+    } else {
         Bounds3 centroidBounds;
         for (int i = 0; i < objects.size(); ++i)
             centroidBounds =
                 Union(centroidBounds, objects[i]->getBounds().Centroid());
         int dim = centroidBounds.maxExtent();
         switch (dim) {
-        case 0:
-            std::sort(objects.begin(), objects.end(), [](auto f1, auto f2) {
-                return f1->getBounds().Centroid().x <
-                       f2->getBounds().Centroid().x;
-            });
-            break;
-        case 1:
-            std::sort(objects.begin(), objects.end(), [](auto f1, auto f2) {
-                return f1->getBounds().Centroid().y <
-                       f2->getBounds().Centroid().y;
-            });
-            break;
-        case 2:
-            std::sort(objects.begin(), objects.end(), [](auto f1, auto f2) {
-                return f1->getBounds().Centroid().z <
-                       f2->getBounds().Centroid().z;
-            });
-            break;
+            case 0:
+                std::sort(objects.begin(), objects.end(), [](auto f1, auto f2) {
+                    return f1->getBounds().Centroid().x <
+                           f2->getBounds().Centroid().x;
+                });
+                break;
+            case 1:
+                std::sort(objects.begin(), objects.end(), [](auto f1, auto f2) {
+                    return f1->getBounds().Centroid().y <
+                           f2->getBounds().Centroid().y;
+                });
+                break;
+            case 2:
+                std::sort(objects.begin(), objects.end(), [](auto f1, auto f2) {
+                    return f1->getBounds().Centroid().z <
+                           f2->getBounds().Centroid().z;
+                });
+                break;
         }
 
         auto beginning = objects.begin();
@@ -93,8 +89,7 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
     return node;
 }
 
-Intersection BVHAccel::Intersect(const Ray& ray) const
-{
+Intersection BVHAccel::Intersect(const Ray& ray) const {
     Intersection isect;
     if (!root)
         return isect;
@@ -102,8 +97,17 @@ Intersection BVHAccel::Intersect(const Ray& ray) const
     return isect;
 }
 
-Intersection BVHAccel::getIntersection(BVHBuildNode* node, const Ray& ray) const
-{
+Intersection BVHAccel::getIntersection(BVHBuildNode* node, const Ray& ray) const {
     // TODO Traverse the BVH to find intersection
+    Vector3f invDir = {1 / ray.direction.x, 1 / ray.direction.y, 1 / ray.direction.z};
+    std::array<int, 3> dirIsNeg = {ray.direction.x < 0, ray.direction.y < 0, ray.direction.z < 0};
 
+    // 如果本包围盒与光线不相交
+    if (!node->bounds.IntersectP(ray, invDir, dirIsNeg)) return {};
+    // 如果本包围盒就是叶子结点
+    if (node->left == nullptr && node->right == nullptr) return node->object->getIntersection(ray);  // 调用顺序？？
+
+    Intersection leaf1 = BVHAccel::getIntersection(node->left, ray);
+    Intersection leaf2 = BVHAccel::getIntersection(node->right, ray);
+    return leaf1.distance < leaf2.distance ? leaf1 : leaf2;
 }
