@@ -103,9 +103,11 @@ Intersection BVHAccel::getIntersection(BVHBuildNode* node, const Ray& ray) const
     std::array<int, 3> dirIsNeg = {ray.direction.x < 0, ray.direction.y < 0, ray.direction.z < 0};
 
     // 如果本包围盒与光线不相交
-    if (!node->bounds.IntersectP(ray, invDir, dirIsNeg)) return {};
+    if (!node->bounds.IntersectP(ray, invDir, dirIsNeg))
+        return Intersection();
     // 如果本包围盒就是叶子结点
-    if (node->left == nullptr && node->right == nullptr) return node->object->getIntersection(ray);  // 调用顺序？？
+    if (node->left == nullptr && node->right == nullptr)
+        return node->object->getIntersection(ray);  // 调用顺序？？
 
     Intersection leaf1 = BVHAccel::getIntersection(node->left, ray);
     Intersection leaf2 = BVHAccel::getIntersection(node->right, ray);

@@ -9,7 +9,7 @@ void Scene::buildBVH() {
     this->bvh = new BVHAccel(objects, 1, BVHAccel::SplitMethod::NAIVE);
 }
 
-Intersection Scene::obj_intert(const Ray &ray) const {
+Intersection Scene::intersect(const Ray &ray) const {
     return this->bvh->Intersect(ray);
 }
 
@@ -42,7 +42,7 @@ bool Scene::trace(
         float tNearK = kInfinity;
         uint32_t indexK;
         Vector2f uvK;
-        if (objects[k]->obj_intert(ray, tNearK, indexK) && tNearK < tNear) {
+        if (objects[k]->intersect(ray, tNearK, indexK) && tNearK < tNear) {
             *hitObject = objects[k];
             tNear = tNearK;
             index = indexK;
@@ -55,32 +55,37 @@ bool Scene::trace(
 // Implementation of Path Tracing
 Vector3f Scene::castRay(const Ray &ray, int depth) const {
     // TO DO Implement Path Tracing Algorithm here
-    Intersection obj_inter = obj_intert(ray);
-    if (!obj_inter.happened) {
+
+    Intersection intersec = intersect(ray);
+    if (!intersec.happened) {
         return Vector3f();
     }
 
     // 打到光源
-    if (obj_inter.m->hasEmission()) {
-        return obj_inter.m->getEmission();
+    if (intersec.m->hasEmission()) {
+        return intersec.m->getEmission();
     }
 
     Vector3f l_dir;
     Vector3f l_indir;
 
     // 对光源积分
-    Intersection light_inter;
+    Intersection lightInter;
     float lightPdf = 0.0f;
-    sampleLight(light_inter, lightPdf);
+    sampleLight(lightInter, lightPdf);
 
-    Vector3f obj2light = light_inter.coords - obj_inter.coords;
+    Vector3f obj2light = lightInter.coords - intersec.coords;
     Vector3f obj2lightDir = obj2light.normalized();
     float obj2lightPow = obj2light.x * obj2light.x + obj2light.y * obj2light.y + obj2light.z * obj2light.z;
 
-    Ray obj2lightRay(obj_inter.coords, obj2lightDir);
-    Intersection block_inter1 = obj_intert(obj2lightRay);
-    if (block_inter1.distance - obj2light.norm() > -EPSILON) {
-        l_dir = light_inter.emit * obj_inter.m->eval(ray.direction, obj2lightDir, obj_inter.normal) * dotProduct(obj2lightDir, obj_inter.normal) * dotProduct(-obj2lightDir, light_inter.normal) / obj2lightPow / lightPdf;
+    Ray obj2lightRay(intersec.coords, obj2lightDir);
+    Intersection t = intersect(obj2lightRay);
+    if (t.distance - obj2light.norm() > -EPSILON) {
+        l_dir = lightInter.emit *
+         intersec.m->eval(ray.direction, obj2lightDir, intersec.normal) * 
+         dotProduct(obj2lightDir, intersec.normal) * 
+         dotProduct(-obj2lightDir, lightInter.normal) 
+         / obj2lightPow / lightPdf;
     }
 
     if (get_random_float() > RussianRoulette) {
@@ -88,13 +93,12 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const {
     }
 
     // 对其他方向积分
-    Vector3f obj2otherDir = obj_inter.m->sample(ray.direction, obj_inter.normal).normalized();
-    Ray obj2nextobjray(obj_inter.coords, obj2otherDir);
-    Intersection other_inter = obj_intert(obj2nextobjray);
-    
-    if (other_inter.happened && !other_inter.m->hasEmission()) {
-        float pdf = obj_inter.m->pdf(ray.direction, obj2otherDir, obj_inter.normal);
-        l_indir = castRay(obj2nextobjray, depth + 1) * obj_inter.m->eval(ray.direction, obj2otherDir, obj_inter.normal) * dotProduct(obj2otherDir, obj_inter.normal) / pdf / RussianRoulette;
+    Vector3f obj2nextobjdir = intersec.m->sample(ray.direction, intersec.normal).normalized();
+    Ray obj2nextobjray(intersec.coords, obj2nextobjdir);
+    Intersection nextObjInter = intersect(obj2nextobjray);
+    if (nextObjInter.happened && !nextObjInter.m->hasEmission()) {
+        float pdf = intersec.m->pdf(ray.direction, obj2nextobjdir, intersec.normal);
+        l_indir = castRay(obj2nextobjray, depth + 1) * intersec.m->eval(ray.direction, obj2nextobjdir, intersec.normal) * dotProduct(obj2nextobjdir, intersec.normal) / pdf / RussianRoulette;
     }
 
     return l_dir + l_indir;
