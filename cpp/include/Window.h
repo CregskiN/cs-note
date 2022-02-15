@@ -3,8 +3,6 @@
 #include <iostream>
 #include <string>
 
-#include "Window.h"
-
 // extern std::ostream &storeOn(std::ostream &, Screen &);
 // extern BitMap &storeOn(BitMap &, Screen &); // 不能接受 BitMap 版本的 storeON
 // 作为友元

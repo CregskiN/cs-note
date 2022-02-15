@@ -1,7 +1,7 @@
 # 1. 声明要求的cmake最低版本
 cmake_minimum_required( VERSION 3.12 )
 # 2. 添加c++11标准支持
-set( CMAKE_CXX_FLAGS "-std=c++11" )
+set( CMAKE_CXX_STANDARD 17 )
 # 3. 声明一个cmake工程
 PROJECT(c_primer)
 
@@ -40,7 +40,8 @@ set(SRC ${PROJECT_SOURCE_DIR}/main.cpp)
    
 # 可执行文件生成
 # add_executable(${PROJECT_NAME} ${SRC})
-add_executable (Prog main.cpp)
+add_executable (c_primer main.cpp ./include/StrBlob.h ./include/StrBlob.cpp)
+
    
 # 这个可执行文件所需的库（一般就是刚刚生成的工程的库咯）
 # target_link_libraries(${PROJECT_NAME} pthread dl ${LIB_NAME})
