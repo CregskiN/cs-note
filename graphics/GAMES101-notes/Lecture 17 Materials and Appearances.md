@@ -118,6 +118,108 @@ Schilick's approximation 史密克斯近似：
 
 距离足够远，表面的细节看不到，只能看到光反射形成的“整体情况”，看不到微小的细节，如几何
 
+<img src="https://www.qiniu.cregskin.com/202202150910684.png" alt="image-20220215091017643" style="zoom: 50%;" />
+
+**近处能看到的几何，随着观测距离的增加，会慢慢“近似”成材质**
+
+> 此处“材质”体现为 BRDF，“近似”即推导 BRDF 的过程
+
+如何近似？
+
+<img src="https://www.qiniu.cregskin.com/202202150912164.png" alt="image-20220215091205131" style="zoom:50%;" />
+
+可以观察到，microsurface 的法线分布在一个范围内
+
+<img src="https://www.qiniu.cregskin.com/202202150916044.png" alt="image-20220215091603013" style="zoom:50%;" />
+
++ $F(i, h)$ 菲涅尔项 
++ $G(i, o, h)$ 阴影遮挡项
++ $D(h)$ 法线分布项
+
+有多少光线，经过材质的反射，能进入人眼？
+
+wi、wo 的半程向量在材质法线范围 D 内
+
+<img src="https://www.qiniu.cregskin.com/202202151028799.png" alt="image-20220215102845743" style="zoom:50%;" />
+
+
+
+# 4. 微表面的方向性（区分材质的方式）
+
+以金属表面为例，分为两种：各向同性表面 Isotropic，各向异性表面 Anisotropic
+
+<img src="https://www.qiniu.cregskin.com/202202151029565.png" alt="image-20220215102935532" style="zoom:50%;" />
+
+上图中，通过观察金属光泽可知，金属表面是沿着竖直方向打磨的
+
+原因如下图所示：
+
+<img src="https://www.qiniu.cregskin.com/202202151033444.png" alt="image-20220215103313413" style="zoom:50%;" />
+
+在方位角上旋转物体，观察入射光和出射光的相对方向：
+
++ 相对方向基本没有变化的是 Isotropic。微表面法线分布非常均匀
+
++ 相对方向发生变化的是 Aniostropic。微表面法线分布有明确的方向性
+
+<img src="https://www.qiniu.cregskin.com/202202151110486.png" alt="image-20220215111014454" style="zoom:50%;" />
+
+Anisotropic 的 BRDF 与绝对方位角有关
+
+> ????
+
+<img src="https://www.qiniu.cregskin.com/202202151110904.png" alt="image-20220215111050873" style="zoom:37%;" /> <img src="https://www.qiniu.cregskin.com/202202151111585.png" alt="image-20220215111107557" style="zoom:33%;" /> <img src="https://www.qiniu.cregskin.com/202202151111244.png" alt="image-20220215111120205" style="zoom:33%;" />
+
+
+
+
+
+# 5. BRDF 深入
+
+**BRDF 的性质**
+
++ 非负 <img src="https://www.qiniu.cregskin.com/202202151113226.png" alt="image-20220215111330200" style="zoom:50%;" /> 
++ 线性 <img src="https://www.qiniu.cregskin.com/202202151114583.png" alt="image-20220215111415552" style="zoom:50%;" />
++ 可逆 <img src="https://www.qiniu.cregskin.com/202202151115567.png" alt="image-20220215111511540" style="zoom:33%;" /> 
++ 能量守恒（BRDF 不大于 1，能量不会增加） <img src="https://www.qiniu.cregskin.com/202202151115113.png" alt="image-20220215111533087" style="zoom:50%;" /> 
++ BRDF 分两种
+  + 对于 Isotropic，只与相对方位角有关 <img src="https://www.qiniu.cregskin.com/202202151530520.png" alt="image-20220215153045490" style="zoom:50%;" /> 
+  + 对于 Anisotropic，<img src="https://www.qiniu.cregskin.com/202202151530442.png" alt="image-20220215153058415" style="zoom:50%;" /> 
+
+
+
+## BRDF 的测量
+
+为什么要测量 BRDF？
+
+如下图：
+
+<img src="https://www.qiniu.cregskin.com/202202151532766.png" alt="image-20220215153259715" style="zoom: 67%;" />
+
+**史密克斯近似得到的菲涅尔项，与真实材料的菲涅尔项差距较大**
+
+### 基于图像的测量
+
+$f(w_i, w_o)$
+
+如下图：
+
+<img src="https://www.qiniu.cregskin.com/202202151535812.png" alt="image-20220215153505761" style="zoom:50%;" />
+
+枚举所有的入射方向，放置一个光源。枚举所有出射方向，放置一个摄像机。在四个维度上测量 BRDF：光源任意位置、物体任意位置、相机任意位置、相机任意朝向
+
+数据量是四维的！
+
+可以改进效率的思路：
+
++ Isotropic surfaces reduce dimensionality from 4D to 3D 
++ Reciprocity reduces # of measurements by half
++ ...
+
+
+
+
+
 
 
 
