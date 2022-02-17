@@ -59,11 +59,12 @@ Bidirectional Path Tracing：
 
   2. 从观测位置打出 camera-sub-path，经过折射/反射，同样停留到 diffuse 表面
 
-  3. 计算： 对 diffuse 局部表面的光子做密度估计density estimation
+  3. 1、2 两步重叠的点，视为光子
+  4. 计算： 对 diffuse 局部表面的光子做密度估计density estimation
 
   通过找 Shading point 附近 N 个光子，及这些光子所处区域的面积，计算
 
-+ 为什么有偏？
++ 为什么 unbaised？
 
   估计局部光子密度的时候，使用的 <img src="https://www.qiniu.cregskin.com/202202151731066.png" alt="image-20220215173149031" style="zoom: 33%;" /> $\ne$ <img src="https://www.qiniu.cregskin.com/202202151732633.png" alt="image-20220215173203603" style="zoom: 33%;" /> 
 
@@ -85,7 +86,7 @@ Bidirectional Path Tracing：
 
 ### Vertex Connection Merging (VCM)
 
-+ 解决的问题：
++ 解决的问题：在 3. 步中，为减少前两步的浪费，两点相近即可视为光子
 
 <img src="https://www.qiniu.cregskin.com/202202151722178.png" alt="image-20220215172248153" style="zoom:67%;" />
 
@@ -101,13 +102,191 @@ Bidirectional Path Tracing：
 
   2. 再将 VPLs 当作新的光源，重复 1
 
+<img src="https://www.qiniu.cregskin.com/202202151720054.png" alt="image-20220215172017028"  />
+
 + 在漫反射居多的场景中，有不错的表现
 
 + 不足：
+
   1. 有的地方会产生亮点（因为改良后的蒙特卡洛，用对光源积分代替对点积分中，除以两个点的距离的平方。当两个点很接近，这步除法的商会变的非常大）
+
   2. 不能处理 glossy 材质
 
-<img src="https://www.qiniu.cregskin.com/202202151720054.png" alt="image-20220215172017028"  />
+<img src="https://www.qiniu.cregskin.com/202202161023111.png" alt="image-20220216102352076" style="zoom:50%;" />
+
+
+
+
+
+# 2. 高级外观建模 Advanced Apperarance Modeling
+
+## 2.1 非表面模型 Non-surface models 
+
+### Participating Media 参与介质 / 散射介质
+
+如下图：雾气 fog、云 cloud。不定义在物体表面，而是空间中
+
+<img src="https://www.qiniu.cregskin.com/202202161053523.png" alt="image-20220216105355494" style="zoom: 25%;" /> <img src="https://www.qiniu.cregskin.com/202202161054479.png" alt="image-20220216105415445" style="zoom:25%;" /> 
+
+微观上，光线穿过散射介质，可能被吸收、被散射
+
+<img src="https://www.qiniu.cregskin.com/202202161056322.png" alt="image-20220216105625295" style="zoom:50%;" />
+
+**Phase Function 相位函数**
+
+定义了再那个位置，光线如何散射（类比 BSDF）
+
+<img src="https://www.qiniu.cregskin.com/202202161107781.png" alt="image-20220216110741748" style="zoom:50%;" />
+
+
+
+**Participating Media 渲染**
+
++ 能弹射多少次，取决于散射介质
++ 能传播多远，也取决于散射介质
++ 连接每个 Shading point，生成一条从观测点到光源的 Path，做路径追踪
+
+<img src="https://www.qiniu.cregskin.com/202202161110597.png" alt="image-20220216111037568" style="zoom:50%;" />
+
+
+
+**应用**
+
+<img src="https://www.qiniu.cregskin.com/202202161110874.png" alt="image-20220216111055838" style="zoom: 27%;" /> <img src="https://www.qiniu.cregskin.com/202202161111371.png" alt="image-20220216111111335" style="zoom:27%;" /> 
+
+
+
+
+
+### Hair / fur / fiber (BCSDF)
+
+**kajiya-Key Model**
+
+把头发视为能产生反射的圆柱，反射方向在一定范围内
+
+<img src="https://www.qiniu.cregskin.com/202202161115774.png" alt="image-20220216111548725" style="zoom: 37%;" /> <img src="https://www.qiniu.cregskin.com/202202161042644.png" alt="image-20220216104218614" style="zoom: 30%;" />
+
+
+
+**Marschner Model**
+
+Marschner Model 将头发建模为 Glass-like cylinder：
+
+<img src="https://www.qiniu.cregskin.com/202202161120171.png" alt="image-20220216112030141" style="zoom: 50%;" />
+
+考虑 反射 R、折射再折射 TT、折射 内部反射 再折射 TRT
+
+<img src="https://www.qiniu.cregskin.com/202202161117830.png" alt="image-20220216111733801" style="zoom:40%;" />  <img src="https://www.qiniu.cregskin.com/202202161042766.png" alt="image-20220216104201732" style="zoom:30%;" />
+
+
+
+> 头发计算量太大了
+
+
+
+人的头发模型，能否应用到动物身上呢？
+
+答案：不能。如图
+
+<img src="https://www.qiniu.cregskin.com/202202161044861.png" alt="image-20220216104434828" style="zoom:50%;" />
+
+
+
+从实际上动物毛发，与人毛发的材质分析：
+
+<img src="https://www.qiniu.cregskin.com/202202161122941.png" alt="image-20220216112217911" style="zoom:50%;" />
+
+实际上无论人、动物，毛发的结构从外到内都是：
+
++ Culticle 角质
++ Cortex 表皮，折射、反射光线
++ Medulla 髓质，散射光线
+
+
+
+引入后的渲染结果：
+
+<img src="https://www.qiniu.cregskin.com/202202161126074.png" alt="image-20220216112624042" style="zoom:50%;" />
+
+
+
+
+
+**Double Cylinder Model 双层圆柱模型 —— by 闫令琪**
+
++ R、TT、TRT 未穿过髓质的 path
+
++ TTs、TRTs 穿过髓质的 path
+
+<img src="https://www.qiniu.cregskin.com/202202161127776.png" alt="image-20220216112712745" style="zoom: 33%;" /> <img src="https://www.qiniu.cregskin.com/202202161406561.png" alt="image-20220216140622529" style="zoom: 33%;" /> 
+
+最终的结果，是这几类 path 叠加的结果
+
+<img src="https://www.qiniu.cregskin.com/202202161406645.png" alt="image-20220216140651614" style="zoom:50%;" />
+
+
+
+### Granular material 颗粒材质
+
+<img src="https://www.qiniu.cregskin.com/202202170924938.png" alt="image-20220217092430897" style="zoom:50%;" />
+
+
+
+## 2.2 Surface models 表面模型
+
+### Translucent material (BSSRDF)
+
+以玉石为例，光线在 Translucent （半透明） 材质一点进入，在另一点出去
+
+**Subsurface Scattering 次表面反射（类似 BRDF）**
+
+比 BRDF 多考虑光线射入位置、射出位置
+
+<img src="https://www.qiniu.cregskin.com/202202170945107.png" alt="image-20220217094545071" style="zoom:50%;" />
+
+**Dipole Approximation 偶极子近似**
+
+近似的思路：光源发出光线打到半透明材质上，经过散射进入人眼，就好像半透明材质内部，有一个光源（为了物理上近似，假象有两个光源）
+
+<img src="https://www.qiniu.cregskin.com/202202170949039.png" alt="image-20220217094953009" style="zoom:50%;" />
+
+结果：
+
+<img src="https://www.qiniu.cregskin.com/202202170952631.png" alt="image-20220217095242593" style="zoom:25%;" /> <img src="https://www.qiniu.cregskin.com/202202170952950.png" alt="image-20220217095254914" style="zoom:25%;" />
+
+
+
+<img src="https://www.qiniu.cregskin.com/202202170954280.png" alt="image-20220217095431221" style="zoom:50%;" />
+
+
+
+### Cloth 布料
+
+<img src="https://www.qiniu.cregskin.com/202202170956176.png" alt="image-20220217095646138" style="zoom:40%;" />
+
+不同的织法，有不同的外观效果
+
+<img src="https://www.qiniu.cregskin.com/202202170957224.png" alt="image-20220217095742189" style="zoom:50%;" />
+
++ 一种改进的思路：把织物当作 Participating Media 渲染（不把织物当成一个面，而是一个“体积”）
+
+  <img src="https://www.qiniu.cregskin.com/202202170959483.png" alt="image-20220217095907447" style="zoom:50%;" />
+
++ 另一种思路：把织物当作“头发”渲染
+
+  <img src="https://www.qiniu.cregskin.com/202202171000296.png" alt="image-20220217100015261" style="zoom:50%;" />
+
+
+
+
+
+### Detailed material (non-statistical BRDF)
+
+## Procedural apperance 程序生成的外观
+
+
+
+
 
 
 
