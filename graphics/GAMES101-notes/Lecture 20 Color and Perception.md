@@ -304,7 +304,11 @@ VR 虚拟现实类比：
 
 **颜色是人的感知**
 
-<img src="https://www.qiniu.cregskin.com/202203011057419.png" alt="image-20220301105757386" style="zoom: 25%;" /> <img src="https://www.qiniu.cregskin.com/202203011058941.png" alt="image-20220301105816909" style="zoom:33%;" /> 
+<img src="https://www.qiniu.cregskin.com/202203011057419.png" alt="image-20220301105757386" style="zoom: 25%;" /> <img src="https://www.qiniu.cregskin.com/202203011058941.png" alt="image-20220301105816909" style="zoom: 25%;" /> 
+
+<img src="https://www.qiniu.cregskin.com/202203011105115.png" alt="image-20220301110535083" style="zoom:33%;" /> <img src="https://www.qiniu.cregskin.com/202203011105765.png" alt="image-20220301110545701" style="zoom: 33%;" /> 
+
+
 
 
 
