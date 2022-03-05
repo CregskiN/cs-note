@@ -70,7 +70,6 @@ int main() {
         // 2. 渲染指令
         // 激活着色器
         ourShader.use();
-
         // 绘制
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);

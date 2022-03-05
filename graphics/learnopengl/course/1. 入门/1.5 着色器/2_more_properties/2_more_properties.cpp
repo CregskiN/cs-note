@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <math.h>
-#include "shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);  // 窗口大小改变时的回调函数
 void processInput(GLFWwindow* window);                                      // 处理键盘输入
@@ -35,7 +34,59 @@ int main() {
     /*-- 注册事件对应的回调函数 --*/
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  // 注册：当窗口改变时的回调函数
 
-    Shader ourShader("../shader.vert", "../shader.frag");  // 相对路径从 可执行文件 的位置开始算，与 shell 的 pwd 无关
+    /*-- Shader --*/
+    // vertex shader
+    const char* vertexShaderSource =
+        "#version 330 core\n"
+        "layout (location = 0) in vec3 aPos;\n"
+        "layout (location = 1) in vec3 aColor;\n"
+        "out vec3 ourColor;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+        "   ourColor = aColor;\n"
+        "}\0";
+    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);  // 创建 Shader
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);    // 传递 GLSL
+    glCompileShader(vertexShader);                                 // 编译 Shader
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
+                  << infoLog << std::endl;
+    }
+    // fragment shader
+    const char* fragmentShaderSource =
+        "#version 330 core\n"
+        "out vec4 FragColor;\n"
+        "in vec3 ourColor;\n"
+        "void main()\n"
+        "{\n"
+        "   FragColor = vec4(ourColor, 1.0);\n"
+        "}\n";
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
+                  << infoLog << std::endl;
+    }
+    // 将所有 Shader 链接到一个 Shader Program
+    unsigned int shaderProgram = glCreateProgram();  // 创建程序
+    glAttachShader(shaderProgram, vertexShader);     // 关联
+    glAttachShader(shaderProgram, fragmentShader);   // 关联
+    glLinkProgram(shaderProgram);                    // 链接
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+    }
+    glDeleteShader(vertexShader);    // link 后删除
+    glDeleteShader(fragmentShader);  // link 后删除
 
     float vertices[] = {
         // 位置              // 颜色
@@ -58,6 +109,8 @@ int main() {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));  //
     glEnableVertexAttribArray(1);                                                                    // 应用到 location = 1
 
+    glUseProgram(shaderProgram);  // run shader
+
     // Render loop
     while (!glfwWindowShouldClose(window)) {
         // 0. 清屏
@@ -69,7 +122,6 @@ int main() {
 
         // 2. 渲染指令
         // 激活着色器
-        ourShader.use();
 
         // 绘制
         glBindVertexArray(VAO);
@@ -79,6 +131,9 @@ int main() {
         glfwPollEvents();         // 检查事件
         glfwSwapBuffers(window);  // 绘制 颜色buffer
     }
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
 
     // 关闭 glfw 窗口
     glfwTerminate();

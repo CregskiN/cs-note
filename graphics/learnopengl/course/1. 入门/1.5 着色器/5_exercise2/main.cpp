@@ -71,6 +71,11 @@ int main() {
         // 激活着色器
         ourShader.use();
 
+        float timeValue = glfwGetTime();
+        float moveX = sin(timeValue);
+        int vertexMoveLocation = glGetUniformLocation(ourShader.ID, "move");
+        glUniform3f(vertexMoveLocation, moveX, 0, 0);
+
         // 绘制
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);

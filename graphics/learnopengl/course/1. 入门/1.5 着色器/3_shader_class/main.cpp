@@ -35,7 +35,7 @@ int main() {
     /*-- 注册事件对应的回调函数 --*/
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  // 注册：当窗口改变时的回调函数
 
-    Shader ourShader("../shader.vert", "../shader.frag");  // 相对路径从 可执行文件 的位置开始算，与 shell 的 pwd 无关
+    Shader ourShader("../shader.vert", "../shader.frag"); // 相对路径从 可执行文件 的位置开始算，与 shell 的 pwd 无关
 
     float vertices[] = {
         // 位置              // 颜色
@@ -58,6 +58,8 @@ int main() {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));  //
     glEnableVertexAttribArray(1);                                                                    // 应用到 location = 1
 
+    ourShader.use();
+
     // Render loop
     while (!glfwWindowShouldClose(window)) {
         // 0. 清屏
@@ -69,7 +71,6 @@ int main() {
 
         // 2. 渲染指令
         // 激活着色器
-        ourShader.use();
 
         // 绘制
         glBindVertexArray(VAO);
