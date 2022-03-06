@@ -9,8 +9,6 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);  // 窗口大小改变时的回调函数
 void processInput(GLFWwindow* window);                                      // 处理键盘输入
 
-float radio = 0, step = 0.01;
-
 int main() {
     // 初始化 GLFW 窗口
     glfwInit();                                                     // 初始化 GLFW
@@ -42,11 +40,11 @@ int main() {
     Shader ourShader("../shader.vert", "../shader.frag");  // 相对路径从 可执行文件 的位置开始算，与 shell 的 pwd 无关
 
     float vertices[] = {
-        // //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
+        //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
         0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,    // 右上
         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,   // 右下
         -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // 左下
-        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,   // 左上
+        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f    // 左上
     };
     unsigned int indices[] = {
         // 注意索引从0开始!
@@ -77,8 +75,8 @@ int main() {
     unsigned int texture1;
     glGenTextures(1, &texture1);
     glBindTexture(GL_TEXTURE_2D, texture1);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 读入纹理图像、生成纹理
@@ -113,7 +111,6 @@ int main() {
     stbi_image_free(data);
     // 设置 uniform 之前必须激活
     ourShader.use();
-
     glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
     ourShader.setInt("texture2", 1);
 
@@ -136,7 +133,6 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         ourShader.use();
-        ourShader.setFloat("radio", radio);  // TODO: 按键盘输入调整 radio [0, 1]
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -160,14 +156,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 void processInput(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)  // press esc
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)  // 如果按下 esc // 另一种是 释放 esc
         glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {  // press up
-        float tem = radio + step;
-        radio = tem > 1 ? tem - 1 : tem;
-    }
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {  // press down
-        float tem = radio - step;
-        radio = tem > 1 ? tem - 1 : tem;
-    }
 }

@@ -9,8 +9,6 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);  // 窗口大小改变时的回调函数
 void processInput(GLFWwindow* window);                                      // 处理键盘输入
 
-float radio = 0, step = 0.01;
-
 int main() {
     // 初始化 GLFW 窗口
     glfwInit();                                                     // 初始化 GLFW
@@ -42,11 +40,11 @@ int main() {
     Shader ourShader("../shader.vert", "../shader.frag");  // 相对路径从 可执行文件 的位置开始算，与 shell 的 pwd 无关
 
     float vertices[] = {
-        // //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
+        //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
         0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,    // 右上
         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,   // 右下
         -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // 左下
-        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,   // 左上
+        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f    // 左上
     };
     unsigned int indices[] = {
         // 注意索引从0开始!
@@ -74,16 +72,15 @@ int main() {
     glEnableVertexAttribArray(2);
 
     // 创建纹理，设置st纹理环绕方式、设置纹理过滤
-    unsigned int texture1;
-    glGenTextures(1, &texture1);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 读入纹理图像、生成纹理
     int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);                                                // 反转y轴纹理
     unsigned char* data = stbi_load("../container.jpg", &width, &height, &nrChannels, 0);  // 图像路径、宽度、高度、通道数量
     if (data) {
         // target、MitMap级别、纹理储存格式（由图像格式决定）、宽高、0、图源格式、数据类型、图像数据
@@ -95,31 +92,6 @@ int main() {
     // 释放读入图像占用的内存
     stbi_image_free(data);
 
-    unsigned int texture2;
-    glGenTextures(1, &texture2);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    data = stbi_load("../awesomeface.png", &width, &height, &nrChannels, 0);
-    if (data) {
-        // target、MitMap级别、纹理储存格式（由图像格式决定）、宽高、0、图源格式、数据类型、图像数据
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-    // 设置 uniform 之前必须激活
-    ourShader.use();
-
-    glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
-    ourShader.setInt("texture2", 1);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-
     // Render loop
     while (!glfwWindowShouldClose(window)) {
         // 0. 清屏
@@ -130,13 +102,11 @@ int main() {
         processInput(window);
 
         // 2. 渲染指令
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
-
+        // 激活着色器
         ourShader.use();
-        ourShader.setFloat("radio", radio);  // TODO: 按键盘输入调整 radio [0, 1]
+
+        // 绘制
+        glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -144,10 +114,6 @@ int main() {
         glfwPollEvents();         // 检查事件
         glfwSwapBuffers(window);  // 绘制 颜色buffer
     }
-
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
 
     // 关闭 glfw 窗口
     glfwTerminate();
@@ -160,14 +126,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 void processInput(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)  // press esc
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)  // 如果按下 esc // 另一种是 释放 esc
         glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {  // press up
-        float tem = radio + step;
-        radio = tem > 1 ? tem - 1 : tem;
-    }
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {  // press down
-        float tem = radio - step;
-        radio = tem > 1 ? tem - 1 : tem;
-    }
 }
