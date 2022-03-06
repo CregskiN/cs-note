@@ -103,13 +103,13 @@
 数学上，用 $M_{view}$ 完成：
 
 1. $T_{view}$ 把 $\vec{e}$ 移动到 (0, 0)
-2. $R_{view}$ 把 $\vec{g}$ 旋转到 -Z、把 $\vec{t}$ 旋转到 Y、把 $\vec{g} \cp \vec{t}$ 旋转到 X
+2. $R_{view}$ 把 $\vec{g}$ 旋转到 -Z、把 $\vec{t}$ 旋转到 Y、把 $\vec{g} \times \vec{t}$ 旋转到 X
 
 <img src="https://www.qiniu.cregskin.com/202201051133039.png" alt="image-20220105113346013" style="zoom:50%;" />
 
 > 旋转矩阵属于正交矩阵
 
-> 因先平移，后旋转，不能直接用齐次坐标下的复合公式
+> 因先平移，后旋转，不能直接用齐次坐标下的复合公式（复合公式是先旋转后平移）
 
 
 
@@ -133,7 +133,7 @@
 
 推广理解：
 
-把一个 $[l, r] \cp [b, t] \cp [f, n]$ 的长方体，映射到 $[-1, 1]^3$ 的立方体（正则立方体 Canonical cube）
+把一个 $[l, r] \times [b, t] \times [f, n]$ 的长方体，映射到 $[-1, 1]^3$ 的立方体（正则立方体 Canonical cube）
 
 > 注意朝向是 -Z 方向
 
