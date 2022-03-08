@@ -8,12 +8,12 @@
 
 #include "shader.h"
 #include "stb_image.h"
-#include "camera.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);  // 窗口大小改变响应函数
 void processInput(GLFWwindow* window);                                      // 键盘输入响应函数
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);          // 鼠标移动响应函数
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);   // 鼠标滑轮滚动响应函数
+glm::mat4 _LookAt(glm::vec3 position, glm::vec3 front, glm::vec3 up);
 
 // 摄像机相关参数
 glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -200,7 +200,7 @@ int main() {
             model = glm::translate(model, cubePositions[i]);
 
             glm::mat4 view = glm::mat4(1.0f);
-            view = glm::lookAt(cameraPosition, cameraFront, cameraUp);
+            view = _LookAt(cameraPosition, cameraFront, cameraUp);
 
             glm::mat4 projection = glm::mat4(1.0f);
             projection = glm::perspective(glm::radians(fov), SCR_WIDTH / SCR_HEIGHT * 1.0f, 0.1f, 100.0f);
@@ -286,4 +286,31 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
         fov = 1.0f;
     if (fov >= 45.0f)
         fov = 45.0f;
+}
+
+glm::mat4 _LookAt(glm::vec3 position, glm::vec3 front, glm::vec3 worldUp) {
+    glm::vec3 direction = -front;
+    glm::vec3 right = glm::normalize(glm::cross(worldUp, direction));
+    glm::vec3 up = glm::normalize(glm::cross(direction, right));
+
+    glm::mat4 _trans = glm::mat4(1.0f);
+    _trans[3][0] = -position.x;
+    _trans[3][1] = -position.y;
+    _trans[3][2] = -position.z;
+
+    // glm [col][row]
+    glm::mat4 _rotation = glm::mat4(1.0f);
+    _rotation[0][0] = right.x;
+    _rotation[1][0] = right.y;
+    _rotation[2][0] = right.z;
+
+    _rotation[0][1] = up.x;
+    _rotation[1][1] = up.y;
+    _rotation[2][1] = up.z;
+
+    _rotation[0][2] = direction.x;
+    _rotation[1][2] = direction.y;
+    _rotation[2][2] = direction.z;
+
+    return _rotation * _trans;
 }

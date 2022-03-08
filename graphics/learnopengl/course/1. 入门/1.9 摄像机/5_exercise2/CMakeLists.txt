@@ -9,7 +9,7 @@ MESSAGE(STATUS "Project: learnopengl Start To Complie") #打印相关消息消�
 
 # 4. 头文件
 include_directories(/usr/local/include)
-include_directories(./include)
+include_directories(/Users/cregskin/code/cs-note/graphics/learnopengl/include)
 
 # set(SRC ${PROJECT_SOURCE_DIR}/main.cpp)
 

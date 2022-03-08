@@ -8,29 +8,19 @@
 
 #include "shader.h"
 #include "stb_image.h"
-#include "camera.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);  // 窗口大小改变响应函数
-void processInput(GLFWwindow* window);                                      // 键盘输入响应函数
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);          // 鼠标移动响应函数
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);   // 鼠标滑轮滚动响应函数
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);  // 窗口大小改变时的回调函数
+void processInput(GLFWwindow* window);                                      // 处理键盘输入
 
-// 摄像机相关参数
+unsigned int SCR_WIDTH = 800;
+unsigned int SCR_HEIGHT = 600;
+
 glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0, 0.0, -1.0f);  // Direction = - cameraFront
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-unsigned int SCR_WIDTH = 800;
-unsigned int SCR_HEIGHT = 600;
 float lastFrameTime = 0.0f;  // 上一帧时间点
 float deltaTime = 0.0f;      // 当前与上一帧时间差
-
-float lastX = 400;
-float lastY = 300;  // 鼠标上一帧位置
-float pitch = 0.0f;
-float yaw = -90.0f;
-bool firstMouse = true;
-float fov = 45.0f;
 
 int main() {
     // 初始化 GLFW 窗口
@@ -47,8 +37,7 @@ int main() {
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(window);                               // 将窗口上下文，设置为当前线程上下文
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  // 设置 glfw 窗口捕捉鼠标光标
+    glfwMakeContextCurrent(window);  // 将窗口上下文，设置为当前线程上下文
 
     // 初始化 GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -59,9 +48,7 @@ int main() {
     glViewport(0, 0, 800, 600);  // 设置 OPENGL 视口 viewpoit
 
     /*-- 注册事件对应的回调函数 --*/
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  // 注册：窗口尺寸改变响应函数
-    glfwSetCursorPosCallback(window, mouse_callback);                   // 注册：鼠标移动响应函数
-    glfwSetScrollCallback(window, scroll_callback);                     // 注册：鼠标滑轮滚动响应函数
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  // 注册：当窗口改变时的回调函数
 
     Shader ourShader("../shader.vert", "../shader.frag");  // 相对路径从 可执行文件 的位置开始算，与 shell 的 pwd 无关
     float vertices[] = {
@@ -200,10 +187,10 @@ int main() {
             model = glm::translate(model, cubePositions[i]);
 
             glm::mat4 view = glm::mat4(1.0f);
-            view = glm::lookAt(cameraPosition, cameraFront, cameraUp);
+            view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
 
             glm::mat4 projection = glm::mat4(1.0f);
-            projection = glm::perspective(glm::radians(fov), SCR_WIDTH / SCR_HEIGHT * 1.0f, 0.1f, 100.0f);
+            projection = glm::perspective(glm::radians(45.0f), SCR_WIDTH / SCR_HEIGHT * 1.0f, 0.1f, 100.0f);
 
             unsigned int modelLocation = glGetUniformLocation(ourShader.ID, "model");
             unsigned int viewLocation = glGetUniformLocation(ourShader.ID, "view");
@@ -248,42 +235,4 @@ void processInput(GLFWwindow* window) {
         cameraPosition -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         cameraPosition += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-}
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-    if (firstMouse) {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;  // 鼠标右移，xpos 增大
-    float yoffset = lastY - ypos;  // 鼠标上移，ypos 减小
-    lastX = xpos;
-    lastY = ypos;
-
-    float sensitivity = 0.05f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    pitch += yoffset;
-    yaw += xoffset;
-
-    pitch = pitch > 89.0f ? 89.0f : pitch;
-    pitch = pitch < -89.0f ? -89.0f : pitch;
-
-    glm::vec3 front;
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(front);
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    if (fov >= 1.0f && fov <= 45.0f)
-        fov -= yoffset;
-    if (fov <= 1.0f)
-        fov = 1.0f;
-    if (fov >= 45.0f)
-        fov = 45.0f;
 }

@@ -9,7 +9,7 @@ MESSAGE(STATUS "Project: learnopengl Start To Complie") #打印相关消息消�
 
 # 4. 头文件
 include_directories(/usr/local/include)
-include_directories(./include)
+include_directories(/Users/cregskin/code/cs-note/graphics/learnopengl/include)
 
 # set(SRC ${PROJECT_SOURCE_DIR}/main.cpp)
 
@@ -18,7 +18,7 @@ find_package(glfw3 REQUIRED)
 
 # aux_source_directory(. SRC_LIST)
 # add_executable (learnopengl ${SRC_LIST})
-add_executable (learnopengl main.cpp ./include/glad.c ./include/stb_image.cpp )
+add_executable (learnopengl main.cpp ./include/glad.c ./include/stb_image.cpp)
 
 target_link_libraries(learnopengl glfw)
 # target_link_libraries(learnopengl glad)
