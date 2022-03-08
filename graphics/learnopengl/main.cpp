@@ -20,19 +20,25 @@ glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0, 0.0, -1.0f);  // Direction = - cameraFront
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+// 屏幕
 unsigned int SCR_WIDTH = 800;
 unsigned int SCR_HEIGHT = 600;
+
 float lastFrameTime = 0.0f;  // 上一帧时间点
 float deltaTime = 0.0f;      // 当前与上一帧时间差
-
+// 鼠标
+bool firstMouse = true;
 float lastX = 400;
-float lastY = 300;  // 鼠标上一帧位置
+float lastY = 300;
 float pitch = 0.0f;
 float yaw = -90.0f;
-bool firstMouse = true;
 float fov = 45.0f;
 
+// light cube
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+// cube
+glm::vec3 objectColor(1.0f, 0.5f, 0.31f);
 
 int main() {
     // 初始化 GLFW 窗口
@@ -66,51 +72,51 @@ int main() {
     glfwSetCursorPosCallback(window, mouse_callback);                   // 注册：鼠标移动响应函数
     glfwSetScrollCallback(window, scroll_callback);                     // 注册：鼠标滑轮滚动响应函数
 
-    Shader cubeShader("../color.vert", "../color.frag");                 // 盒子
+    Shader cubeShader("../cube.vert", "../cube.frag");                   // 盒子
     Shader lightCubeShader("../light_cube.vert", "../light_cube.frag");  // 光源盒子
 
     float vertices[] = {
-        -0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f,
-        0.5f, 0.5f, -0.5f,
-        0.5f, 0.5f, -0.5f,
-        -0.5f, 0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
 
-        -0.5f, -0.5f, 0.5f,
-        0.5f, -0.5f, 0.5f,
-        0.5f, 0.5f, 0.5f,
-        0.5f, 0.5f, 0.5f,
-        -0.5f, 0.5f, 0.5f,
-        -0.5f, -0.5f, 0.5f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 
-        -0.5f, 0.5f, 0.5f,
-        -0.5f, 0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, 0.5f,
-        -0.5f, 0.5f, 0.5f,
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
 
-        0.5f, 0.5f, 0.5f,
-        0.5f, 0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, 0.5f,
-        0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
 
-        -0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, 0.5f,
-        0.5f, -0.5f, 0.5f,
-        -0.5f, -0.5f, 0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
 
-        -0.5f, 0.5f, -0.5f,
-        0.5f, 0.5f, -0.5f,
-        0.5f, 0.5f, 0.5f,
-        0.5f, 0.5f, 0.5f,
-        -0.5f, 0.5f, 0.5f,
-        -0.5f, 0.5f, -0.5f};
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f};
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
@@ -120,14 +126,16 @@ int main() {
     unsigned int cubeVAO;
     glGenVertexArrays(1, &cubeVAO);
     glBindVertexArray(cubeVAO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     unsigned int lightCubeVAO;
     glGenVertexArrays(1, &lightCubeVAO);
     glBindVertexArray(lightCubeVAO);
     // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     glEnable(GL_DEPTH_TEST);  // 启用深度测试 z-buffer
@@ -138,7 +146,7 @@ int main() {
 
     while (!glfwWindowShouldClose(window)) {
         // 0. 清屏
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);                // 设置颜色
+        // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);                // 设置颜色
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // 清除 buffer 和 color 缓冲
 
         // 1. 处理键盘输入
@@ -148,7 +156,7 @@ int main() {
         processInput(window);
 
         // 2. 渲染指令
-        // 渲染灯
+        // 渲染 light cube
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f));
@@ -159,31 +167,30 @@ int main() {
         unsigned int modelLocation = glGetUniformLocation(lightCubeShader.ID, "model");
         unsigned int viewLocation = glGetUniformLocation(lightCubeShader.ID, "view");
         unsigned int projectionLocation = glGetUniformLocation(lightCubeShader.ID, "projection");
-
         lightCubeShader.use();
         glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
-        // 绘制 灯
+        // 绘制
         glBindVertexArray(lightCubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // 渲染 cube
         model = glm::mat4(1.0f);
-        glm::vec3 objectColor(1.0f, 0.5f, 0.31f);
-        glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
-        unsigned int objectColorLocation = glGetUniformLocation(cubeShader.ID, "objectColor");
-        unsigned int lightColorLocation = glGetUniformLocation(cubeShader.ID, "lightColor");
         modelLocation = glGetUniformLocation(cubeShader.ID, "model");
         viewLocation = glGetUniformLocation(cubeShader.ID, "view");
         projectionLocation = glGetUniformLocation(cubeShader.ID, "projection");
+        unsigned int objectColorLocation = glGetUniformLocation(cubeShader.ID, "objectColor");
+        unsigned int lightColorLocation = glGetUniformLocation(cubeShader.ID, "lightColor");
+        unsigned int lightPosLocation = glGetUniformLocation(cubeShader.ID, "lightPos");
         cubeShader.use();
-        glUniform3f(objectColorLocation, objectColor.x, objectColor.y, objectColor.z);
-        glUniform3f(lightColorLocation, lightColor.x, lightColor.y, lightColor.z);
         glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
-        // 绘制 cube
+        glUniform3f(objectColorLocation, objectColor.x, objectColor.y, objectColor.z);
+        glUniform3f(lightColorLocation, lightColor.x, lightColor.y, lightColor.z);
+        glUniform3f(lightPosLocation, lightPos.x, lightPos.y, lightPos.z);
+        // 绘制
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
