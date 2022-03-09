@@ -180,29 +180,18 @@ int main() {
         modelLocation = glGetUniformLocation(cubeShader.ID, "model");
         viewLocation = glGetUniformLocation(cubeShader.ID, "view");
         projectionLocation = glGetUniformLocation(cubeShader.ID, "projection");
+        unsigned int objectColorLocation = glGetUniformLocation(cubeShader.ID, "objectColor");
+        unsigned int lightColorLocation = glGetUniformLocation(cubeShader.ID, "lightColor");
+        unsigned int lightPosLocation = glGetUniformLocation(cubeShader.ID, "lightPos");
         unsigned int viewPosLocation = glGetUniformLocation(cubeShader.ID, "viewPos");
-        unsigned int material_ambientLocation = glGetUniformLocation(cubeShader.ID, "material.ambient");
-        unsigned int material_diffuseLocation = glGetUniformLocation(cubeShader.ID, "material.diffuse");
-        unsigned int material_specularLocation = glGetUniformLocation(cubeShader.ID, "material.specular");
-        unsigned int material_shininessLocation = glGetUniformLocation(cubeShader.ID, "material.shininess");
-        unsigned int light_positionLocation = glGetUniformLocation(cubeShader.ID, "light.position");
-        unsigned int light_ambientLocation = glGetUniformLocation(cubeShader.ID, "light.ambient");
-        unsigned int light_diffuseLocation = glGetUniformLocation(cubeShader.ID, "light.diffuse");
-        unsigned int light_specularLocation = glGetUniformLocation(cubeShader.ID, "light.specular");
         cubeShader.use();
         glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
-        glUniform3fv(viewPosLocation, 1, glm::value_ptr(cameraPosition));
-        glUniform3f(material_ambientLocation, 0.0215f, 0.1745f, 0.0215f);
-        glUniform3f(material_diffuseLocation, 0.07568f, 0.61424f, 0.07568f);
-        glUniform3f(material_specularLocation, 0.633f, 0.727811f, 0.633f);
-        glUniform1f(material_shininessLocation, 0.6f);
-        glUniform3fv(light_positionLocation, 1, glm::value_ptr(lightPos));
-        glUniform3f(light_ambientLocation, 1.0f, 1.0f, 1.0f);
-        glUniform3f(light_diffuseLocation, 1.0f, 1.0f, 1.0f);
-        glUniform3f(light_specularLocation, 1.0f, 1.0f, 1.0f);
-
+        glUniform3f(objectColorLocation, objectColor.x, objectColor.y, objectColor.z);
+        glUniform3f(lightColorLocation, lightColor.x, lightColor.y, lightColor.z);
+        glUniform3f(lightPosLocation, lightPos.x, lightPos.y, lightPos.z);
+        glUniform3f(viewPosLocation, cameraPosition.x, cameraPosition.y, cameraPosition.z);
         // 绘制
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);

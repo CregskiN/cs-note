@@ -89,12 +89,11 @@ Blinn-Phone 模型假设，所有 Shading point 接收的环境光是一定的
 
   <img src="https://www.qiniu.cregskin.com/202201131819010.png" alt="image-20220113181908959" style="zoom: 50%;" />
 
-+ Gouraud Shading：对四边形每个顶点着色，其内插值
-  + 顶点法线怎么求？
-
++ Gouraud Shading：已知顶点法线，直接对四边形每个顶点着色，其内插值
+  
   <img src="https://www.qiniu.cregskin.com/202201131819326.png" alt="image-20220113181922302" style="zoom:50%;" />
-
-+ Phone shading:已知顶点法线 ，然后对四边形内各像素做插值求法线，最后 Shading
+  
++ Phone shading：已知顶点法线 ，然后对四边形内各像素做插值求法线，最后再 Shading 结果
 
   <img src="https://www.qiniu.cregskin.com/202201131819941.png" alt="image-20220113181934920" style="zoom:50%;" />
 

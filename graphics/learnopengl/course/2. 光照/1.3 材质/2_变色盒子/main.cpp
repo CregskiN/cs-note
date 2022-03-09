@@ -175,6 +175,13 @@ int main() {
         glBindVertexArray(lightCubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
+        glm::vec3 lightColor;
+        lightColor.x = sin(glfwGetTime() * 2.0f);
+        lightColor.y = sin(glfwGetTime() * 0.7f);
+        lightColor.z = sin(glfwGetTime() * 1.3f);
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);    // 降低影响
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);  // 很低的影响
+
         // 渲染 cube
         model = glm::mat4(1.0f);
         modelLocation = glGetUniformLocation(cubeShader.ID, "model");
@@ -194,13 +201,13 @@ int main() {
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
         glUniform3fv(viewPosLocation, 1, glm::value_ptr(cameraPosition));
-        glUniform3f(material_ambientLocation, 0.0215f, 0.1745f, 0.0215f);
-        glUniform3f(material_diffuseLocation, 0.07568f, 0.61424f, 0.07568f);
-        glUniform3f(material_specularLocation, 0.633f, 0.727811f, 0.633f);
-        glUniform1f(material_shininessLocation, 0.6f);
+        glUniform3f(material_ambientLocation, 1.0f, 0.5f, 0.31f);
+        glUniform3f(material_diffuseLocation, 1.0f, 0.5f, 0.31f);
+        glUniform3f(material_specularLocation, 0.5f, 0.5f, 0.5f);
+        glUniform1f(material_shininessLocation, 32);
         glUniform3fv(light_positionLocation, 1, glm::value_ptr(lightPos));
-        glUniform3f(light_ambientLocation, 1.0f, 1.0f, 1.0f);
-        glUniform3f(light_diffuseLocation, 1.0f, 1.0f, 1.0f);
+        glUniform3fv(light_ambientLocation, 1, glm::value_ptr(ambientColor));
+        glUniform3fv(light_diffuseLocation, 1, glm::value_ptr(diffuseColor));
         glUniform3f(light_specularLocation, 1.0f, 1.0f, 1.0f);
 
         // 绘制
