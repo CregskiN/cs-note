@@ -21,6 +21,11 @@ class Shader {
     void setFloat(const std::string &name, float value) const;
     void setMat4(const std::string &name, glm::mat4 value) const;
     void setVec3(const std::string &name, glm::vec3 value) const;
+
+    void setTransormation(glm::mat4 model, glm::mat4 view, glm::mat4 projection) const;
+    void setDirLight(const std::string &lightName, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) const;
+    void setPointLight(const std::string &lightName, glm::vec3 position, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specualr) const;
+    void setSpotLight(const std::string &lightName, glm::vec3 position, glm::vec3 direction, float cutOff, float outerCutOff, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) const;
 };
 
 Shader::Shader(const char *vertexPath, const char *fragmentPath) {
@@ -110,6 +115,39 @@ void Shader::setMat4(const std::string &name, glm::mat4 value) const {
 }
 void Shader::setVec3(const std::string &name, glm::vec3 value) const {
     glUniform3fv(glGetUniformLocation(this->ID, name.c_str()), 1, glm::value_ptr(value));
+}
+void Shader::setTransormation(glm::mat4 model, glm::mat4 view, glm::mat4 projection) const {
+    this->setMat4("model", model);
+    this->setMat4("view", view);
+    this->setMat4("projection", projection);
+}
+
+void Shader::setDirLight(const std::string &lightName, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) const {
+    this->setVec3(lightName + ".direction", direction);
+    this->setVec3(lightName + ".ambient", ambient);
+    this->setVec3(lightName + ".diffuse", diffuse);
+    this->setVec3(lightName + ".specualr", specular);
+}
+void Shader::setPointLight(const std::string &lightName, glm::vec3 position, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) const {
+    this->setVec3(lightName + ".position", position);
+    this->setFloat(lightName + ".constant", constant);
+    this->setFloat(lightName + ".linear", linear);
+    this->setFloat(lightName + ".quadratic", quadratic);
+    this->setVec3(lightName + ".ambient", ambient);
+    this->setVec3(lightName + ".diffuse", diffuse);
+    this->setVec3(lightName + ".specualr", specular);
+}
+void Shader::setSpotLight(const std::string &lightName, glm::vec3 position, glm::vec3 direction, float cutOff, float outerCutOff, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) const {
+    this->setVec3(lightName + ".position", position);
+    this->setVec3(lightName + ".direction", direction);
+    this->setFloat(lightName + ".cutOff", cutOff);
+    this->setFloat(lightName + ".outerCutOff", outerCutOff);
+    this->setFloat(lightName + ".constant", constant);
+    this->setFloat(lightName + ".linear", linear);
+    this->setFloat(lightName + ".quadratic", quadratic);
+    this->setVec3(lightName + ".ambient", ambient);
+    this->setVec3(lightName + ".diffuse", diffuse);
+    this->setVec3(lightName + ".specualr", specular);
 }
 
 #endif

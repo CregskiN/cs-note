@@ -36,38 +36,12 @@ float yaw = -90.0f;
 float fov = 45.0f;
 
 // light cube
-struct DirLight {
-    glm::vec3 direction = glm::vec3(-0.2f, -1.0f, -0.3f);
-    glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-    glm::vec3 diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
-    glm::vec3 specular = glm::vec3(0.5f, 0.5f, 0.5f);
-} dirLight;
-struct PointLight {
-    float constant = 1.0f;     // k_c
-    float linear = 0.09f;      // k_l
-    float quadratic = 0.032f;  // k_q
-    glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f);
-    glm::vec3 diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
-    glm::vec3 specular = glm::vec3(1.0f, 1.0f, 1.0f);
-} pointLight;
-
-struct SpotLight {
-    float cutOff = glm::cos(glm::radians(12.5f));       // phi 内圆锥半径切角余弦值
-    float outerCutOff = glm::cos(glm::radians(15.0f));  // gamma 外圆锥半径切角余弦值
-    float constant = 1.0f;
-    float linear = 0.09f;
-    float quadratic = 0.032f;
-    glm::vec3 ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
-    glm::vec3 specular = glm::vec3(1.0f, 1.0f, 1.0f);
-} spotLight;
-
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 glm::vec3 lightAmbient(0.3f, 0.3f, 0.3f);
 glm::vec3 lightDiffuse(0.5f, 0.5f, 0.5f);
 glm::vec3 lightSpecular(1.0f, 1.0f, 1.0f);
-
+glm::vec3 lightDirection(-0.2f, -1.0f, -0.3f);
 // cube
 glm::vec3 objectColor(1.0f, 0.5f, 0.31f);
 
@@ -161,12 +135,6 @@ int main() {
         glm::vec3(1.5f, 0.2f, -1.5f),
         glm::vec3(-1.3f, 1.0f, -1.5f)};
 
-    glm::vec3 lightCubePositions[] = {
-        glm::vec3(0.7f, 0.2f, 2.0f),
-        glm::vec3(2.3f, -3.3f, -4.0f),
-        glm::vec3(-4.0f, 2.0f, -12.0f),
-        glm::vec3(0.0f, 0.0f, -3.0f)};
-
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -212,20 +180,20 @@ int main() {
 
         // 2. 渲染指令
         // 渲染 light cube
-        for (unsigned int i = 0; i < 4; i++) {
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, lightCubePositions[i]);
-            model = glm::scale(model, glm::vec3(0.2f));
-            view = glm::mat4(1.0f);
-            view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
-            projection = glm::mat4(1.0f);
-            projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
-            lightCubeShader.use();
-            lightCubeShader.setTransormation(model, view, projection);
-            // 绘制
-            glBindVertexArray(lightCubeVAO);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f));
+        view = glm::mat4(1.0f);
+        view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
+        projection = glm::mat4(1.0f);
+        projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
+        lightCubeShader.use();
+        lightCubeShader.setMat4("model", model);
+        lightCubeShader.setMat4("view", view);
+        lightCubeShader.setMat4("projection", projection);
+        // 绘制
+        glBindVertexArray(lightCubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // 渲染 cube
         for (unsigned int i = 0; i < 10; i++) {
@@ -234,15 +202,17 @@ int main() {
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             cubeShader.use();
-            cubeShader.setTransormation(model, view, projection);
+            cubeShader.setMat4("model", model);
+            cubeShader.setMat4("view", view);
+            cubeShader.setMat4("projection", projection);
+            cubeShader.setVec3("viewPos", cameraPosition);
             cubeShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
             cubeShader.setFloat("material.shininess", 64.0f);
-            cubeShader.setDirLight("dirLight", dirLight.direction, dirLight.ambient, dirLight.diffuse, dirLight.specular);
-            cubeShader.setPointLight("pointLight[0]", lightCubePositions[0], pointLight.constant, pointLight.linear, pointLight.quadratic, pointLight.ambient, pointLight.diffuse, pointLight.specular);
-            cubeShader.setPointLight("pointLight[1]", lightCubePositions[1], pointLight.constant, pointLight.linear, pointLight.quadratic, pointLight.ambient, pointLight.diffuse, pointLight.specular);
-            cubeShader.setPointLight("pointLight[2]", lightCubePositions[2], pointLight.constant, pointLight.linear, pointLight.quadratic, pointLight.ambient, pointLight.diffuse, pointLight.specular);
-            cubeShader.setPointLight("pointLight[3]", lightCubePositions[3], pointLight.constant, pointLight.linear, pointLight.quadratic, pointLight.ambient, pointLight.diffuse, pointLight.specular);
-            cubeShader.setSpotLight("spotLight", cameraPosition, cameraFront, spotLight.cutOff, spotLight.outerCutOff, spotLight.constant, spotLight.linear, spotLight.quadratic, spotLight.ambient, spotLight.diffuse, spotLight.specular);
+            // cubeShader.setVec3("light.position", lightPos);
+            cubeShader.setVec3("light.ambient", lightAmbient);
+            cubeShader.setVec3("light.diffuse", lightDiffuse);
+            cubeShader.setVec3("light.specular", lightSpecular);
+            cubeShader.setVec3("light.direction", lightDirection);
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, diffuseMap);
