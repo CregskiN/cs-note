@@ -30,19 +30,19 @@ uniform Light light;
 void main()
 {
     // 环境光项 ambient
-    vec3 ambient=light.ambient*texture(material.diffuse,TexCoords).rgb;
+    vec3 ambient=light.ambient*vec3(texture(material.diffuse,TexCoords).rgb);
     
     // 漫反射项 diffuse
     vec3 normal=normalize(Normal);
     vec3 lightDir=normalize(light.position-FragPos);
     float diff=max(dot(normal,lightDir),0.f);
-    vec3 diffuse=light.diffuse*diff*texture(material.diffuse,TexCoords).rgb;
+    vec3 diffuse=light.diffuse*diff*vec3(texture(material.diffuse,TexCoords));
     
     // 高光项 specular
     vec3 viewDir=normalize(viewPos-FragPos);
-    vec3 halfVector=normalize(lightDir+viewDir);
-    float spec=pow(max(dot(normal,halfVector),0.),material.shininess);
-    vec3 specular=light.specular*spec*texture(material.specular,TexCoords).rgb;
+    vec3 reflectDir=reflect(-lightDir,normal);
+    float spec=pow(max(dot(viewDir,reflectDir),0.),material.shininess);
+    vec3 specular=light.specular*spec*(vec3(1.)-vec3(texture(material.specular,TexCoords)));
     
     FragColor=vec4(ambient+specular+diffuse,1.f);
 }

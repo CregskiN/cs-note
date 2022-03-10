@@ -7,6 +7,7 @@
 struct Material{
     sampler2D diffuse;// 漫反射光照下，物体反射的颜色，通常也是物体颜色
     sampler2D specular;// 在 specular 下，对 R G B 三色的反射程度 // 即物体颜色
+    sampler2D emission;
     float shininess;// 镜面高光的散射/半径
 };
 
@@ -40,9 +41,12 @@ void main()
     
     // 高光项 specular
     vec3 viewDir=normalize(viewPos-FragPos);
-    vec3 halfVector=normalize(lightDir+viewDir);
-    float spec=pow(max(dot(normal,halfVector),0.),material.shininess);
+    vec3 reflectDir=reflect(-lightDir,normal);
+    float spec=pow(max(dot(viewDir,reflectDir),0.),material.shininess);
     vec3 specular=light.specular*spec*texture(material.specular,TexCoords).rgb;
     
-    FragColor=vec4(ambient+specular+diffuse,1.f);
+    // 自发光项 emission
+    vec3 emission=texture(material.emission,TexCoords).rgb;
+    
+    FragColor=vec4(ambient+specular+diffuse+emission,1.f);
 }

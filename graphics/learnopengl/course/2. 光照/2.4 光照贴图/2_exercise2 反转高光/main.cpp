@@ -18,7 +18,7 @@ unsigned int loadTexture(char const* path);
 
 // 摄像机相关参数
 glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);  // Direction = - cameraFront
+glm::vec3 cameraFront = glm::vec3(0.0, 0.0, -1.0f);  // Direction = - cameraFront
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 // 屏幕
@@ -38,6 +38,10 @@ float fov = 45.0f;
 // light cube
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+glm::vec3 lightAmbient(0.2f, 0.2f, 0.2f);
+glm::vec3 lightDiffuse(0.5f, 0.5f, 0.5f);
+glm::vec3 lightSpecular(1.0f, 1.0f, 1.0f);
+
 // cube
 glm::vec3 objectColor(1.0f, 0.5f, 0.31f);
 
@@ -205,9 +209,9 @@ int main() {
             cubeShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
             cubeShader.setFloat("material.shininess", 64.0f);
             cubeShader.setVec3("light.position", lightPos);
-            cubeShader.setVec3("light.ambient", glm::vec3(0.3f, 0.3f, 0.3f));
-            cubeShader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-            cubeShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+            cubeShader.setVec3("light.ambient", lightAmbient);
+            cubeShader.setVec3("light.diffuse", lightDiffuse);
+            cubeShader.setVec3("light.specular", lightSpecular);
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, diffuseMap);

@@ -18,7 +18,7 @@ unsigned int loadTexture(char const* path);
 
 // 摄像机相关参数
 glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);  // Direction = - cameraFront
+glm::vec3 cameraFront = glm::vec3(0.0, 0.0, -1.0f);  // Direction = - cameraFront
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 // 屏幕
@@ -205,7 +205,7 @@ int main() {
             cubeShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
             cubeShader.setFloat("material.shininess", 64.0f);
             cubeShader.setVec3("light.position", lightPos);
-            cubeShader.setVec3("light.ambient", glm::vec3(0.3f, 0.3f, 0.3f));
+            cubeShader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
             cubeShader.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
             cubeShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 
