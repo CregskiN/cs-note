@@ -9,17 +9,19 @@ MESSAGE(STATUS "Project: learnopengl Start To Complie") #打印相关消息消�
 
 # 4. 头文件
 include_directories(/usr/local/include)
-include_directories(./include)
+include_directories(/usr/local/Cellar)
+include_directories(include)
 
 # set(SRC ${PROJECT_SOURCE_DIR}/main.cpp)
 
 find_package(glfw3 REQUIRED)
-# find_package(glad REQUIRED)
+find_package(assimp REQUIRED)
+
 
 # aux_source_directory(. SRC_LIST)
 # add_executable (learnopengl ${SRC_LIST})
 add_executable (learnopengl main.cpp ./include/glad.c ./include/stb_image.cpp )
 
-target_link_libraries(learnopengl glfw)
-# target_link_libraries(learnopengl glad)
 # 必须在添加可执行文件后 添加 link
+target_link_libraries(learnopengl glfw)
+target_link_libraries(learnopengl assimp)

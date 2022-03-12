@@ -221,7 +221,7 @@ int main() {
             projection = glm::mat4(1.0f);
             projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
             lightCubeShader.use();
-            lightCubeShader.setTransormation(model, view, projection);
+            lightCubeShader.setTransformation(model, view, projection);
             // 绘制
             glBindVertexArray(lightCubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -234,7 +234,7 @@ int main() {
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             cubeShader.use();
-            cubeShader.setTransormation(model, view, projection);
+            cubeShader.setTransformation(model, view, projection);
             cubeShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
             cubeShader.setFloat("material.shininess", 64.0f);
             cubeShader.setDirLight("dirLight", dirLight.direction, dirLight.ambient, dirLight.diffuse, dirLight.specular);
