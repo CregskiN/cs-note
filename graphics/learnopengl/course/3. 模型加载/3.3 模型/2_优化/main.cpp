@@ -73,8 +73,9 @@ int main() {
 
     Shader ourShader("../shader.vert", "../shader.frag");  // 盒子
 
+    Model ourModel("../objects/nanosuit/nanosuit.obj", false);
+
     glEnable(GL_DEPTH_TEST);  // 启用深度测试 z-buffer
-    glDepthMask(GL_FALSE);    // 禁用 z-buffer 的写入
 
     while (!glfwWindowShouldClose(window)) {
         // 0. 清屏
@@ -94,9 +95,12 @@ int main() {
 
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-        ourShader.setTransformation(model, view, projection);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));  // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));      // it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        ourShader.setMat4("view", view);
+        ourShader.setMat4("projection", projection);
+        ourModel.Draw(ourShader);
 
         // 3. 检查并调用事件，交换 framebuffer缓冲
         glfwPollEvents();         // 检查事件

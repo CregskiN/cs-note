@@ -77,7 +77,7 @@
 
 
 
-## 2. Viewing Transf ormation
+## 2. Viewing Transformation
 
 3D物体 ➡️ 2D图片
 

@@ -50,7 +50,7 @@
 
 + 先不管 z
 
-+ 将 $[-1, 1]^2$ 变换到 $[0, width] \cp [0, height]$
++ 将 $[-1, 1]^2$ 变换到 $[0, width] \p [0, height]$
 
   <img src="https://www.qiniu.cregskin.com/202201051754494.png" alt="image-20220105175441469" style="zoom:50%;" />
 
