@@ -16,7 +16,7 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
 
 class Model {
    public:
-    Model(char *path, bool gamma) : gammaCorrection(gamma) { this->loadModel(path); };
+    Model(string const &path, bool gamma) : gammaCorrection(gamma) { this->loadModel(path); };
     void Draw(Shader shader);
     vector<Texture> textures_loaded;
     vector<Mesh> meshes;
@@ -79,8 +79,11 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     // vertex // 顶点位置、法线、纹理坐标
     for (size_t i = 0; i < mesh->mNumVertices; ++i) {
         Vertex vertex;
+        // position
         vertex.Position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+        // normal
         vertex.Normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+        // texture coords
         if (mesh->mTextureCoords[0])  // assimp 允许每个 mesh 有 8个 texcoords，这里只考虑第 1 个
             vertex.TexCoords = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
         else

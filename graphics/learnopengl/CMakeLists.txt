@@ -1,27 +1,21 @@
 # 1. 声明要求的cmake最低版本
-cmake_minimum_required( VERSION 3.12 )
-# 2. 添加c++17标准支持
-set( CMAKE_CXX_STANDARD 17 )
-# 3. 声明一个cmake工程
-PROJECT(learnopengl)
+cmake_minimum_required(VERSION 3.12)
+# 1. 添加c++17标准支持
+set(CMAKE_CXX_STANDARD 17)
+# 1. 声明一个cmake工程
+project(learnopengl)
 
-MESSAGE(STATUS "Project: learnopengl Start To Complie") #打印相关消息消息
+message(STATUS "Project: learnopengl Start To Complie") # 打印相关消息消息
 
-# 4. 头文件
+# 1. 头文件
 include_directories(/usr/local/include)
-include_directories(/usr/local/Cellar)
 include_directories(include)
 
-# set(SRC ${PROJECT_SOURCE_DIR}/main.cpp)
+link_directories(/usr/local/lib)
 
-find_package(glfw3 REQUIRED)
-find_package(assimp REQUIRED)
+# aux_source_directory(. SRC_LIST) add_executable (learnopengl ${SRC_LIST})
+add_executable(learnopengl main.cpp ./include/glad.c ./include/stb_image.cpp)
 
-
-# aux_source_directory(. SRC_LIST)
-# add_executable (learnopengl ${SRC_LIST})
-add_executable (learnopengl main.cpp ./include/glad.c ./include/stb_image.cpp )
-
-# 必须在添加可执行文件后 添加 link
-target_link_libraries(learnopengl glfw)
-target_link_libraries(learnopengl assimp)
+# 必须在添加可执行文件后 添加 link target_link_libraries(learnopengl glfw)
+target_link_libraries(learnopengl -lglfw)
+target_link_libraries(learnopengl -lassimp)

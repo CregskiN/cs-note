@@ -1,0 +1,4 @@
+// the configured options and settings for Tutorial
+// cmake 配置这个头文件时，会替换这两个宏
+#define Tutorial_VERSION_MAJOR @Tutorial_VERSION_MAJOR@
+#define Tutorial_VERSION_MINOR @Tutorial_VERSION_MINOR@

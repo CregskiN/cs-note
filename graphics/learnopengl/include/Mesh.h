@@ -11,22 +11,26 @@
 
 using namespace std;
 
+#define MAX_BONE_INFLUENCE 4
+
 // 一个网格 Mash 包含一系列 Vertex、索引、material(纹理形式)
 // 每个 Vertex 包含
 struct Vertex {
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec2 TexCoords;
+
+    glm::vec3 Tangent;
+    glm::vec3 BitTangent;
+    int m_BonIDs[MAX_BONE_INFLUENCE];
+    float m_Weights[MAX_BONE_INFLUENCE];
 };
 
 struct Texture {  // 纹理数据
     unsigned int id;
     string type;  // 纹理类型：漫反射贴图、高光贴图...
     string path;
-    
 };
-
-
 
 class Mesh {
    public:
@@ -74,17 +78,11 @@ void Mesh::setupMesh() {
 void Mesh::Draw(Shader shader) {
     unsigned int diffuseNumber = 1;
     unsigned int specularNumber = 1;
+
     for (size_t i = 0; i < textures.size(); ++i) {
         glActiveTexture(GL_TEXTURE0 + i);
         string number;
         string type = textures[i].type;
-        /*
-            uniform sampler2D texture_diffuse1;
-            uniform sampler2D texture_diffuse2;
-            uniform sampler2D texture_diffuse3;
-            uniform sampler2D texture_specular1;
-            uniform sampler2D texture_specular2;
-         */
         if (type == "texture_diffuse")  // 针对漫反射贴图
             number = std::to_string(diffuseNumber++);
         else if (type == "texture.specular")  // 针对高光贴图

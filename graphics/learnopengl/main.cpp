@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <math.h>
+#include <string>
 
 #include "shader.h"
 #include "stb_image.h"
@@ -70,9 +71,7 @@ int main() {
     glfwSetCursorPosCallback(window, mouse_callback);                   // 注册：鼠标移动响应函数
     glfwSetScrollCallback(window, scroll_callback);                     // 注册：鼠标滑轮滚动响应函数
 
-    Shader cubeShader("../shader.vert", "../shader.frag");  // 盒子
-
-    
+    Shader ourShader("../shader.vert", "../shader.frag");  // 盒子
 
     Model ourModel("../objects/nanosuit/nanosuit.obj", false);
 
@@ -80,7 +79,7 @@ int main() {
 
     while (!glfwWindowShouldClose(window)) {
         // 0. 清屏
-        glClearColor(GL_COLOR_BUFFER_BIT, 190.0 / 255, 132.0 / 255, 76.0 / 255);
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // 清除 buffer 和 color 缓冲
 
         // 1. 处理键盘输入
@@ -90,7 +89,18 @@ int main() {
         processInput(window);
 
         // 2. 渲染指令
-        // 渲染 light cube
+        ourShader.use();
+        glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
+
+        // render the loaded model
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));  // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));      // it's a bit too big for our scene, so scale it down
+        ourShader.setMat4("model", model);
+        ourShader.setMat4("view", view);
+        ourShader.setMat4("projection", projection);
+        ourModel.Draw(ourShader);
 
         // 3. 检查并调用事件，交换 framebuffer缓冲
         glfwPollEvents();         // 检查事件
