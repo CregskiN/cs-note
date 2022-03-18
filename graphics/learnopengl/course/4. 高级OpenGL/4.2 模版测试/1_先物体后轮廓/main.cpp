@@ -186,10 +186,26 @@ int main() {
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
 
-        // 2.3 绘制放大的纯色 cube 作为边框 // 轮廓置1
+        // 2.2 绘制 cubes，对应 stencil value 置 1
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilMask(0xFF);
-        glDisable(GL_DEPTH_TEST);
+        glStencilMask(0xFF);  // 开启模版写入
+        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, cubeTexture);
+        normalShader.setTransformation(model, view, projection);
+        glBindVertexArray(cubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);  // 绘制 cube1
+
+        glStencilMask(0x00);  // 开启模版写入
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        normalShader.setTransformation(model, view, projection);
+        glBindVertexArray(cubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);  // 绘制 cube2
+
+        // 2.3 绘制放大的纯色 cubes 作为边框
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);  // stencil value != 1 通过测试
+        glStencilMask(0x00);                  // 禁用模版写入
+        glDisable(GL_DEPTH_TEST);             // 边框作为最后绘制的内容，会展示在最顶层
         signleShader.use();
         float scale = 1.1f;
         model = glm::mat4(1.0f);
@@ -198,26 +214,6 @@ int main() {
         signleShader.setTransformation(model, view, projection);
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);  // 绘制 cube1
-
-        // 2.2 绘制 cubes 置 0
-        glStencilFunc(GL_EQUAL, 1, 0x00);
-        glStencilMask(0xFF);
-        glEnable(GL_DEPTH_TEST);
-        normalShader.use();
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, cubeTexture);
-        normalShader.setTransformation(model, view, projection);
-        glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);  // 绘制 cube1
-
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-        glStencilMask(0x00);
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-        normalShader.setTransformation(model, view, projection);
-        glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);  // 绘制 cube2
 
         glBindVertexArray(0);
         glStencilMask(0xFF);
