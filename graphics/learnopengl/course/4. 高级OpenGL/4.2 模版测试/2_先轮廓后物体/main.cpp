@@ -164,7 +164,7 @@ int main() {
         glEnable(GL_STENCIL_TEST);                  // 启用模版测试
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);  // 模版失败、深度测试失败、都成功
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); // 清除模版缓冲，置0
 
         // 1. 处理键盘输入
         float currentFrameTime = glfwGetTime();
@@ -186,10 +186,11 @@ int main() {
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
 
-        // 2.3 绘制放大的纯色 cube 作为边框 // 轮廓置1
+        // 2.3 绘制放大的纯色 cube 作为边框
+        /* 绘制轮廓cube时，stencil_value置1 */
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
         glStencilMask(0xFF);
-        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST); // 禁用深度测试，保证边框展示在floor之上
         signleShader.use();
         float scale = 1.1f;
         model = glm::mat4(1.0f);
@@ -200,7 +201,8 @@ int main() {
         glDrawArrays(GL_TRIANGLES, 0, 36);  // 绘制 cube1
 
         // 2.2 绘制 cubes 置 0
-        glStencilFunc(GL_EQUAL, 1, 0x00);
+        /* 内层cube，stencil_value置0，启用深度测试 */
+        glStencilFunc(GL_EQUAL, 1, 0x00); // sp & dp
         glStencilMask(0xFF);
         glEnable(GL_DEPTH_TEST);
         normalShader.use();
@@ -212,7 +214,8 @@ int main() {
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);  // 绘制 cube1
 
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+        /* cube2，stencil_value置0，保证轮廓展示到cube2之上 */
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // dfail & sp
         glStencilMask(0x00);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
         normalShader.setTransformation(model, view, projection);

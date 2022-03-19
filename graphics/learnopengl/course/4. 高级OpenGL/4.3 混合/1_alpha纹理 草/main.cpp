@@ -7,7 +7,6 @@
 #include <math.h>
 #include <string>
 #include <vector>
-#include <map>
 
 #include "shader.h"
 #include "stb_image.h"
@@ -126,7 +125,14 @@ int main() {
         -5.0f, -0.5f, -5.0f, 0.0f, 2.0f,
         5.0f, -0.5f, -5.0f, 2.0f, 2.0f};
 
-    float windowVertices[] = {
+    std::vector<glm::vec3> grassPosition;
+    grassPosition.push_back(glm::vec3(-1.5f, 0.0f, -0.48f));
+    grassPosition.push_back(glm::vec3(1.5f, 0.0f, 0.51f));
+    grassPosition.push_back(glm::vec3(0.0f, 0.0f, 0.7f));
+    grassPosition.push_back(glm::vec3(-0.3f, 0.0f, -2.3f));
+    grassPosition.push_back(glm::vec3(0.5f, 0.0f, -0.6f));
+
+    float grassVertices[] = {
         // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
         0.0f, 0.5f, 0.0f, 0.0f, 0.0f,
         0.0f, -0.5f, 0.0f, 0.0f, 1.0f,
@@ -135,20 +141,6 @@ int main() {
         0.0f, 0.5f, 0.0f, 0.0f, 0.0f,
         1.0f, -0.5f, 0.0f, 1.0f, 1.0f,
         1.0f, 0.5f, 0.0f, 1.0f, 0.0f};
-
-    std::vector<glm::vec3> windowPosition;
-    windowPosition.push_back(glm::vec3(-1.5f, 0.0f, -0.48f));
-    windowPosition.push_back(glm::vec3(1.5f, 0.0f, 0.51f));
-    windowPosition.push_back(glm::vec3(0.0f, 0.0f, 0.7f));
-    windowPosition.push_back(glm::vec3(-0.3f, 0.0f, -2.3f));
-    windowPosition.push_back(glm::vec3(0.5f, 0.0f, -0.6f));
-
-    // KEY: 用map关键字自动排序的特性，按 distance 从小到大记录 窗户位置
-    std::map<float, glm::vec3> sorted;
-    for (unsigned int i = 0; i < windowPosition.size(); i++) {
-        float distance = glm::length(cameraPosition - windowPosition[i]);
-        sorted[distance] = windowPosition[i];
-    }
 
     unsigned int cubeVAO, cubeVBO;
     glGenVertexArrays(1, &cubeVAO);
@@ -172,12 +164,12 @@ int main() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    unsigned int windowVAO, windowVBO;
-    glGenVertexArrays(1, &windowVAO);
-    glGenBuffers(1, &windowVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, windowVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(windowVertices), &windowVertices, GL_STATIC_DRAW);
-    glBindVertexArray(windowVAO);
+    unsigned int grassVAO, grassVBO;
+    glGenVertexArrays(1, &grassVAO);
+    glGenBuffers(1, &grassVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, grassVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(grassVertices), &grassVertices, GL_STATIC_DRAW);
+    glBindVertexArray(grassVAO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -189,13 +181,11 @@ int main() {
     /* texture */
     unsigned int cubeTexture = loadTexture("../textures/marble.jpg");
     unsigned int floorTexture = loadTexture("../textures/metal.png");
-    unsigned int windowTexture = loadTexture("../textures/blending_transparent_window.png");
+    unsigned int grassTexture = loadTexture("../textures/grass.png");
     shader.use();
     shader.setInt("texture1", 0);
 
     glEnable(GL_DEPTH_TEST);  // 启用深度测试 z-buffer
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     while (!glfwWindowShouldClose(window)) {
         // 0. 清屏
@@ -231,14 +221,14 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, floorTexture);
         shader.setTransformation(model, view, projection);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
 
-        /* window */
-        glBindVertexArray(windowVAO);
-        glBindTexture(GL_TEXTURE_2D, windowTexture);
-        for (std::map<float, glm::vec3>::reverse_iterator i = sorted.rbegin(); i != sorted.rend(); ++i) {
+        glBindVertexArray(grassVAO);
+        glBindTexture(GL_TEXTURE_2D, grassTexture);
+        for (size_t i = 0; i < grassPosition.size(); ++i) {
             model = glm::mat4(1.0f);
-            model = glm::translate(model, i->second);
-            shader.setTransformation(model, view, projection);
+            model = glm::translate(model, grassPosition[i]);
+            shader.setMat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
 
