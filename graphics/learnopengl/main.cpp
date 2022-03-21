@@ -74,78 +74,161 @@ int main() {
     glfwSetCursorPosCallback(window, mouse_callback);                   // 注册：鼠标移动响应函数
     glfwSetScrollCallback(window, scroll_callback);                     // 注册：鼠标滑轮滚动响应函数
 
-    float skyboxVertices[] = {
+    float cubeVertices[] = {
         // positions
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
 
-        -1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
 
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
 
-        -1.0f, -1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
 
-        -1.0f, 1.0f, -1.0f,
-        1.0f, 1.0f, -1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, -1.0f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+        -0.5f,
+        -0.5f,
 
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, 1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, 1.0f,
-        1.0f, -1.0f, 1.0f};
+        -0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        0.5f,
+        -0.5f,
+        0.5f,
+        -0.5f,
+    };
 
-    unsigned int skyboxVAO, skyboxVBO;
-    glGenVertexArrays(1, &skyboxVAO);
-    glGenBuffers(1, &skyboxVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-    glBindVertexArray(skyboxVAO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);  // position
+    // cube VAO
+    unsigned int cubeVAO, cubeVBO;
+    glGenVertexArrays(1, &cubeVAO);
+    glGenBuffers(1, &cubeVBO);
+    glBindVertexArray(cubeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-    std::vector<std::string> faces{
-        "../textures/skybox/right.jpg",
-        "../textures/skybox/left.jpg",
-        "../textures/skybox/top.jpg",
-        "../textures/skybox/bottom.jpg",
-        "../textures/skybox/front.jpg",
-        "../textures/skybox/back.jpg"};
+    Shader shaderRed("../shader.vert", "../red.frag");
+    Shader shaderGreen("../shader.vert", "../green.frag");
+    Shader shaderBlue("../shader.vert", "../blue.frag");
+    Shader shaderYellow("../shader.vert", "../yellow.frag");
+    // 获取 shader 中 uniform block(即 shader.Matrices) 的 index
+    unsigned int uniformBlockIndexRed = glGetUniformBlockIndex(shaderRed.ID, "Matrices");
+    unsigned int uniformBlockIndexGreen = glGetUniformBlockIndex(shaderGreen.ID, "Matrices");
+    unsigned int uniformBlockIndexBlue = glGetUniformBlockIndex(shaderBlue.ID, "Matrices");
+    unsigned int uniformBlockIndexYellow = glGetUniformBlockIndex(shaderYellow.ID, "Matrices");
+    // 将 shader.Matrices <-> 0
+    glUniformBlockBinding(shaderRed.ID, uniformBlockIndexRed, 0);
+    glUniformBlockBinding(shaderGreen.ID, uniformBlockIndexGreen, 0);
+    glUniformBlockBinding(shaderBlue.ID, uniformBlockIndexBlue, 0);
+    glUniformBlockBinding(shaderYellow.ID, uniformBlockIndexYellow, 0);
+    // 创建 unifrom buffer object
+    unsigned int uboMatrices;
+    glGenBuffers(1, &uboMatrices);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));  // 将 uboMatrices 中 [0, 2*sizeof(glm::mat4)] 绑定到 0
+    // 或
+    // glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboMatrices) // 将整个 uboMatrices 绑定到 0
 
-    /* shader */
-    Shader nanosuitShader("../nanosuit.vert", "../nanosuit.frag");
-    Shader skyboxShader("../skybox.vert", "../skybox.frag");
-
-    /* model */
-    Model nanosuitModel("../objects/nanosuit_reflection/nanosuit.obj", false);
-
-    /* texture */
-    unsigned int skyboxTexture = loadCubeMap(faces);
-    skyboxShader.use();
-    skyboxShader.setInt("skybox", 3);  // 天空盒放到第四个纹理单元（nanosuit占用了前三个）
+    glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     while (!glfwWindowShouldClose(window)) {
         // 0. 清屏
@@ -160,33 +243,37 @@ int main() {
         processInput(window);
 
         // 2. 渲染指令
-        glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
-        glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-        /* nanosuit */
-        nanosuitShader.use();
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-        nanosuitShader.setTransformation(model, view, projection);
-        nanosuitShader.setVec3("cameraPos", cameraPosition);
-        nanosuitShader.setInt("skybox", 2);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
-        nanosuitModel.Draw(nanosuitShader);
-
-        /* skybox */
-        glDepthFunc(GL_LEQUAL);
-        skyboxShader.use();
-        model = glm::mat4(1.0f);
-        view = glm::mat4(glm::mat3(glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp)));  // 移除摄像机位移部分
-        skyboxShader.setTransformation(model, view, projection);
-        glActiveTexture(GL_TEXTURE3);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
-        glBindVertexArray(skyboxVAO);
+        // draw 4 cubes
+        // RED
+        glBindVertexArray(cubeVAO);
+        shaderRed.use();
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-0.75f, 0.75f, 0.0f));  // move top-left
+        shaderRed.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-        glDepthFunc(GL_LESS);
+        // GREEN
+        shaderGreen.use();
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.75f, 0.75f, 0.0f));  // move top-right
+        shaderGreen.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // YELLOW
+        shaderYellow.use();
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-0.75f, -0.75f, 0.0f));  // move bottom-left
+        shaderYellow.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // BLUE
+        shaderBlue.use();
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.75f, -0.75f, 0.0f));  // move bottom-right
+        shaderBlue.setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // 3. 检查并调用事件，交换 framebuffer缓冲
         glfwPollEvents();         // 检查事件
