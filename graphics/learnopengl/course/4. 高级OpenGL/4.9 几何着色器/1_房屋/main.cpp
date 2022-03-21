@@ -74,79 +74,26 @@ int main() {
     glfwSetCursorPosCallback(window, mouse_callback);                   // 注册：鼠标移动响应函数
     glfwSetScrollCallback(window, scroll_callback);                     // 注册：鼠标滑轮滚动响应函数
 
-    float skyboxVertices[] = {
-        // positions
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
+    float points[] = {
+        -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,  // 左上
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f,   // 右上
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f,  // 右下
+        -0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // 左下
+    };
 
-        -1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f,
-
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-
-        -1.0f, -1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f,
-
-        -1.0f, 1.0f, -1.0f,
-        1.0f, 1.0f, -1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, -1.0f,
-
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, 1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, 1.0f,
-        1.0f, -1.0f, 1.0f};
-
-    unsigned int skyboxVAO, skyboxVBO;
-    glGenVertexArrays(1, &skyboxVAO);
-    glGenBuffers(1, &skyboxVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-    glBindVertexArray(skyboxVAO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);  // position
+    unsigned int VAO, VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(points), &points, GL_STATIC_DRAW);
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
 
-    std::vector<std::string> faces{
-        "../textures/skybox/right.jpg",
-        "../textures/skybox/left.jpg",
-        "../textures/skybox/top.jpg",
-        "../textures/skybox/bottom.jpg",
-        "../textures/skybox/front.jpg",
-        "../textures/skybox/back.jpg"};
-
-    /* shader */
-    Shader nanosuitShader("../nanosuit.vert", "../nanosuit.frag", "../nanosuit.geom");
-    Shader skyboxShader("../skybox.vert", "../skybox.frag");
-    Shader normalShader("../normal.vert", "../normal.frag", "../normal.geom");
-
-    /* model */
-    Model nanosuitModel("../objects/nanosuit_reflection/nanosuit.obj", false);
-
-    /* texture */
-    unsigned int skyboxTexture = loadCubeMap(faces);
-    skyboxShader.use();
-    skyboxShader.setInt("skybox", 3);  // 天空盒放到第四个纹理单元（nanosuit占用了前三个）
+    Shader shader("../shader.vert", "../shader.geom", "../shader.frag");
 
     while (!glfwWindowShouldClose(window)) {
         // 0. 清屏
@@ -161,38 +108,9 @@ int main() {
         processInput(window);
 
         // 2. 渲染指令
-        glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
-        glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-        /* nanosuit */
-        nanosuitShader.use();
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-        nanosuitShader.setTransformation(model, view, projection);
-        nanosuitShader.setVec3("cameraPos", cameraPosition);
-        nanosuitShader.setInt("skybox", 2);
-        nanosuitShader.setFloat("time", glfwGetTime());
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
-        nanosuitModel.Draw(nanosuitShader);
-        normalShader.use();
-        normalShader.setTransformation(model, view, projection);
-        nanosuitModel.Draw(normalShader);
-
-
-        /* skybox */
-        glDepthFunc(GL_LEQUAL);
-        skyboxShader.use();
-        model = glm::mat4(1.0f);
-        view = glm::mat4(glm::mat3(glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp)));  // 移除摄像机位移部分
-        skyboxShader.setTransformation(model, view, projection);
-        glActiveTexture(GL_TEXTURE3);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
-        glBindVertexArray(skyboxVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glDepthFunc(GL_LESS);
+        shader.use();
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_POINTS, 0, 4);
 
         // 3. 检查并调用事件，交换 framebuffer缓冲
         glfwPollEvents();         // 检查事件

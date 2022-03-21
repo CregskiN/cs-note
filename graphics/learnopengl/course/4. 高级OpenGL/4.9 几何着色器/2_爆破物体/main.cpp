@@ -138,7 +138,6 @@ int main() {
     /* shader */
     Shader nanosuitShader("../nanosuit.vert", "../nanosuit.frag", "../nanosuit.geom");
     Shader skyboxShader("../skybox.vert", "../skybox.frag");
-    Shader normalShader("../normal.vert", "../normal.frag", "../normal.geom");
 
     /* model */
     Model nanosuitModel("../objects/nanosuit_reflection/nanosuit.obj", false);
@@ -177,10 +176,6 @@ int main() {
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
         nanosuitModel.Draw(nanosuitShader);
-        normalShader.use();
-        normalShader.setTransformation(model, view, projection);
-        nanosuitModel.Draw(normalShader);
-
 
         /* skybox */
         glDepthFunc(GL_LEQUAL);
