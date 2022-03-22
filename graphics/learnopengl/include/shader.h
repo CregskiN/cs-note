@@ -21,6 +21,7 @@ class Shader {
     void setFloat(const std::string &name, float value) const;
     void setMat4(const std::string &name, glm::mat4 value) const;
     void setVec3(const std::string &name, glm::vec3 value) const;
+    void setVec2(const std::string &name, glm::vec2 value) const;
 
     void setTransformation(glm::mat4 model, glm::mat4 view, glm::mat4 projection) const;
     void setDirLight(const std::string &lightName, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) const;
@@ -156,6 +157,9 @@ void Shader::setMat4(const std::string &name, glm::mat4 value) const {
 }
 void Shader::setVec3(const std::string &name, glm::vec3 value) const {
     glUniform3fv(glGetUniformLocation(this->ID, name.c_str()), 1, glm::value_ptr(value));
+}
+void Shader::setVec2(const std::string &name, glm::vec2 value) const{
+    glUniform2fv(glGetUniformLocation(this->ID, name.c_str()), 1, glm::value_ptr(value));
 }
 void Shader::setTransformation(glm::mat4 model, glm::mat4 view, glm::mat4 projection) const {
     this->setMat4("model", model);
