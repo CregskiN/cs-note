@@ -52,9 +52,9 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
         0, 1, 0, -(yTop + yBottom) / 2,
         0, 0, 1, -(zNear + zFar) / 2,
         0, 0, 0, 1;
-    // orthorgraphic = lineTrans * moveTrans; // 先平移，再旋转，不能用复合变换
+    orthorgraphic = lineTrans * moveTrans; // 先平移，再旋转，不能用复合变换
     // 3. 组合 返回
-    projection = lineTrans * moveTrans * perspective;
+    projection = orthorgraphic * perspective;
     return projection;
 }
 

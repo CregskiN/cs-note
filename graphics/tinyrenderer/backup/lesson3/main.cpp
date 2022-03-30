@@ -84,10 +84,10 @@ int main(int argc, char** argv) {
 
 void triangle(Vec3f* positions, TGAImage& image, float* z_buffer, Vec2f* uv_coords, float itensity) {
     // 1. bounding box
-    int x_min = std::min(std::min(positions[0].x, 0.0f), std::min(positions[1].x, positions[2].x));
-    int y_min = std::min(std::min(positions[0].y, SCR_HEIGHT - 1.0f), std::min(positions[1].y, positions[2].y));
-    int x_max = std::max(positions[0].x, std::max(positions[1].x, positions[2].x));
-    int y_max = std::max(positions[0].y, std::max(positions[1].y, positions[2].y));
+    int x_min = std::max(std::min(screen_coords[0].x, std::min(screen_coords[1].x, screen_coords[2].x)), 0.0f);
+    int y_min = std::max(std::min(screen_coords[0].y, std::min(screen_coords[1].y, screen_coords[2].y)), 0.0f);
+    int x_max = std::min(std::max(screen_coords[0].x, std::max(screen_coords[1].x, screen_coords[2].x)), SCR_WIDTH - 1.0f);
+    int y_max = std::min(std::max(screen_coords[0].y, std::max(screen_coords[1].y, screen_coords[2].y)), SCR_HEIGHT - 1.0f);
     // 2. 判断点 (x, y) 是否在三角形内，如果是，则点亮像素
     Vec3f v(0.0f, 0.0f, 0.0f);
     Vec3f barycentric_coords(0.0f, 0.0f, 0.0f);
