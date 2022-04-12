@@ -11,7 +11,7 @@ Matrix::Matrix(Vec3f v) : m(std::vector<std::vector<float> >(4, std::vector<floa
     m[0][0] = v.x;
     m[1][0] = v.y;
     m[2][0] = v.z;
-}
+    }
 
 
 Matrix::Matrix(int r, int c) : m(std::vector<std::vector<float> >(r, std::vector<float>(c, 0.f))), rows(r), cols(c) { }

@@ -10,11 +10,9 @@ message(STATUS "Project: tinyrenderer Start To Complie") # 打印相关消息消
 # 1. 头文件
 include_directories(/usr/local/include)
 include_directories(include)
-# link_directories(/usr/local/lib)
-# link_directories(include)
-
+# link_directories(/usr/local/lib) link_directories(include)
 
 # aux_source_directory(. SRC_LIST) add_executable (learnopengl ${SRC_LIST})
-add_executable(tinyrenderer main.cpp ./include/tgaimage.cpp ./include/model.cpp ./include/stb_image.cpp ./include/geometry.cpp)
+add_executable(tinyrenderer main.cpp ./include/tgaimage.cpp ./include/model.cpp
+                            ./include/geometry.cpp ./include/our_gl.cpp)
 # target_link_libraries(tinyrenderer -lModel)
-
