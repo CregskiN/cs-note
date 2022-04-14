@@ -61,40 +61,46 @@ void projection(float coeff) {
     Projection[3][2] = coeff;
 }
 
-/**
- * @brief 计算重心坐标
- *
- * @param v
- * @param positions
- * @return Vec3f
- */
-Vec3f barycentric(Vec3f v, Vec4f* positions) {
-    Vec3f vec1 = Vec3f(positions[1][0] - positions[0][0], positions[2][0] - positions[0][0], positions[0][0] - v.x);
-    Vec3f vec2 = Vec3f(positions[1][1] - positions[0][1], positions[2][1] - positions[0][1], positions[0][1] - v.y);
-    Vec3f uv1 = cross(vec1, vec2);
-    return std::abs(uv1.z) > 1e-2 ? Vec3f(1.0f - (uv1.x + uv1.y) / uv1.z, uv1.x / uv1.z, uv1.y / uv1.z) : Vec3f(-1, 1, 1);
+Vec3f barycentric(Vec2f A, Vec2f B, Vec2f C, Vec2f P) {
+    Vec3f s[2];
+    for (int i = 2; i--;) {
+        s[i][0] = C[i] - A[i];
+        s[i][1] = B[i] - A[i];
+        s[i][2] = A[i] - P[i];
+    }
+    Vec3f u = cross(s[0], s[1]);
+    if (std::abs(u[2]) > 1e-2)  // dont forget that u[2] is integer. If it is zero then triangle ABC is degenerate
+        return Vec3f(1.f - (u.x + u.y) / u.z, u.y / u.z, u.x / u.z);
+    return Vec3f(-1, 1, 1);  // in this case generate negative coordinates, it will be thrown away by the rasterizator
 }
 
-void triangle(Vec4f screen_coords[3], IShader& shader, TGAImage& image, TGAImage& z_buffer) {
-    // 0. screen_coords 标准化
-    for (size_t i = 0; i < 3; ++i) {
-        for (size_t j = 0; j < 2; ++j) {
-            screen_coords[i][j] /= screen_coords[i][3];
-        }
-    }
+/**
+ * @brief
+ *
+ * @param clipped_coords 未做透视除法(标准化)的 clipped coordinates
+ * @param shader
+ * @param image
+ * @param z_buffer
+ */
+
+void triangle(mat<4, 3, float> &clipped_coords, IShader &shader, TGAImage &image, TGAImage &z_buffer) {
+    mat<3, 4, float> screen_coords = (Viewport * clipped_coords).transpose();
+    mat<3, 2, float> ndc_screen_coords;
+    for (size_t i = 0; i < 3; ++i)
+        ndc_screen_coords[i] = proj<2>(screen_coords[i] / screen_coords[i][3]);
 
     // 1. bounding box
-    int x_min = std::max(std::min(screen_coords[0][0], std::min(screen_coords[1][0], screen_coords[2][0])), 0.0f);
-    int y_min = std::max(std::min(screen_coords[0][1], std::min(screen_coords[1][1], screen_coords[2][1])), 0.0f);
-    int x_max = std::min(std::max(screen_coords[0][0], std::max(screen_coords[1][0], screen_coords[2][0])), SCR_WIDTH - 1.0f);
-    int y_max = std::min(std::max(screen_coords[0][1], std::max(screen_coords[1][1], screen_coords[2][1])), SCR_HEIGHT - 1.0f);
+    int x_min = std::max(std::min(ndc_screen_coords[0][0], std::min(ndc_screen_coords[1][0], ndc_screen_coords[2][0])), 0.0f);
+    int y_min = std::max(std::min(ndc_screen_coords[0][1], std::min(ndc_screen_coords[1][1], ndc_screen_coords[2][1])), 0.0f);
+    int x_max = std::min(std::max(ndc_screen_coords[0][0], std::max(ndc_screen_coords[1][0], ndc_screen_coords[2][0])), SCR_WIDTH - 1.0f);
+    int y_max = std::min(std::max(ndc_screen_coords[0][1], std::max(ndc_screen_coords[1][1], ndc_screen_coords[2][1])), SCR_HEIGHT - 1.0f);
 
     // 2. 判断点 (x, y) 是否在三角形内，如果是，则点亮像素
-    Vec3i v(0, 0, 0);
+    Vec2i v(0, 0);
     float vw = 0.0f;
     float frag_depth = 0.0f;
     TGAColor color;
-    Vec3f barycentric_coords(0.0f, 0.0f, 0.0f);
+    Vec3f barycentric_screen(0.0f, 0.0f, 0.0f);
     // Vec2f uv(0.0f, 0.0f);
     // float itensity = 0.0f;
 
@@ -102,16 +108,23 @@ void triangle(Vec4f screen_coords[3], IShader& shader, TGAImage& image, TGAImage
         for (int y = y_min; y <= y_max; ++y) {
             v.x = x;
             v.y = y;
+
             // 1. 判断是否在三角形内 by 重心坐标
-            barycentric_coords = barycentric(v, screen_coords);
-            if (barycentric_coords.x < 0 || barycentric_coords.y < 0 || barycentric_coords.z < 0) {
+            barycentric_screen = barycentric(ndc_screen_coords[0], ndc_screen_coords[1], ndc_screen_coords[2], v);
+            if (barycentric_screen.x < 0 || barycentric_screen.y < 0 || barycentric_screen.z < 0) {
                 continue;
             }
 
             // 2.1 插值计算 fragment depth，判断是否应该渲染
-            v.z = screen_coords[0][2] * barycentric_coords[0] + screen_coords[1][2] * barycentric_coords[1] + screen_coords[2][2] * barycentric_coords[2];
-            vw = screen_coords[0][3] * barycentric_coords[0] + screen_coords[1][3] * barycentric_coords[1] + screen_coords[2][3] * barycentric_coords[2];
-            frag_depth = std::max(0, std::min(255, (int)(v.z / vw + 0.5f)));
+            // v.z = clipped_coords[0][2] * barycentric_coords[0] + clipped_coords[1][2] * barycentric_coords[1] + clipped_coords[2][2] * barycentric_coords[2];
+            // vw = clipped_coords[0][3] * barycentric_coords[0] + clipped_coords[1][3] * barycentric_coords[1] + clipped_coords[2][3] * barycentric_coords[2];
+            // frag_depth = std::max(0, std::min(255, (int)(v.z / vw + 0.5f)));
+
+            Vec3f barycentric_clipped = Vec3f(barycentric_screen.x / screen_coords[0][3], barycentric_screen.y / screen_coords[1][3], barycentric_screen.z / screen_coords[2][3]);
+            barycentric_clipped = barycentric_clipped / (barycentric_clipped.x + barycentric_clipped.y + barycentric_clipped.z);
+
+            float frag_depth = clipped_coords[2] * barycentric_clipped;
+            
             if (frag_depth > z_buffer.get(v.x, v.y)[0]) {
                 // 2.2 插值计算 fragment uv
                 // uv.x = uv_coords[0].x * barycentric_coords[0] + uv_coords[1].x * barycentric_coords[1] + uv_coords[2].x * barycentric_coords[2];
@@ -120,7 +133,7 @@ void triangle(Vec4f screen_coords[3], IShader& shader, TGAImage& image, TGAImage
                 //（也可以先计算 triangle vertex color 再插值 fragment color，这里是先计算 triganle vertex itensity，在插值 fragment itensity）
                 // itensity = itensities[0] * barycentric_coords[0] + itensities[1] * barycentric_coords[1] + itensities[2] * barycentric_coords[2];
 
-                bool discard = shader.fragment(barycentric_coords, color);
+                bool discard = shader.fragment(barycentric_screen, color);
                 if (!discard) {                                    // 若该 fragment 无需 discard
                     z_buffer.set(v.x, v.y, TGAColor(frag_depth));  // 更新 z_buffer
                     image.set(v.x, v.y, color);                    // 更新 framebuffer

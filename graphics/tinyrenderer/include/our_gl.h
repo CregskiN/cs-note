@@ -22,6 +22,6 @@ struct IShader {
     virtual bool fragment(Vec3f bar, TGAColor &color) = 0;
 };
 
-void triangle(Vec4f screen_coords[3], IShader &shader, TGAImage &image, TGAImage &z_buffer);
+void triangle(mat<4, 3, float> &clipped_coords, IShader& shader, TGAImage& image, TGAImage& zbuffer);
 
 #endif
