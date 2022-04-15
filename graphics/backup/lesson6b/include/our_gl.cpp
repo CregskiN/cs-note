@@ -75,7 +75,7 @@ Vec3f barycentric(Vec3f v, Vec4f* positions) {
     return std::abs(uv1.z) > 1e-2 ? Vec3f(1.0f - (uv1.x + uv1.y) / uv1.z, uv1.x / uv1.z, uv1.y / uv1.z) : Vec3f(-1, 1, 1);
 }
 
-void triangle(Vec4f screen_coords[3], IShader& shader, TGAImage& image, float* z_buffer) {
+void triangle(Vec4f screen_coords[3], IShader& shader, TGAImage& image, TGAImage& z_buffer) {
     // 0. screen_coords 标准化
     for (size_t i = 0; i < 3; ++i) {
         for (size_t j = 0; j < 2; ++j) {
@@ -91,29 +91,39 @@ void triangle(Vec4f screen_coords[3], IShader& shader, TGAImage& image, float* z
 
     // 2. 判断点 (x, y) 是否在三角形内，如果是，则点亮像素
     Vec3i v(0, 0, 0);
+    float vw = 0.0f;
+    float frag_depth = 0.0f;
     TGAColor color;
+    Vec3f barycentric_coords(0.0f, 0.0f, 0.0f);
+    // Vec2f uv(0.0f, 0.0f);
+    // float itensity = 0.0f;
 
     for (int x = x_min; x <= x_max; ++x) {
         for (int y = y_min; y <= y_max; ++y) {
             v.x = x;
             v.y = y;
             // 1. 判断是否在三角形内 by 重心坐标
-            Vec3f barycentric_coords = barycentric(v, screen_coords);
+            barycentric_coords = barycentric(v, screen_coords);
             if (barycentric_coords.x < 0 || barycentric_coords.y < 0 || barycentric_coords.z < 0) {
                 continue;
             }
 
             // 2.1 插值计算 fragment depth，判断是否应该渲染
             v.z = screen_coords[0][2] * barycentric_coords[0] + screen_coords[1][2] * barycentric_coords[1] + screen_coords[2][2] * barycentric_coords[2];
-            float vw = screen_coords[0][3] * barycentric_coords[0] + screen_coords[1][3] * barycentric_coords[1] + screen_coords[2][3] * barycentric_coords[2];
-            float frag_depth = std::max(0, std::min(255, (int)(v.z / vw + 0.5f)));
-            // float frag_depth = v.z / vw;
+            vw = screen_coords[0][3] * barycentric_coords[0] + screen_coords[1][3] * barycentric_coords[1] + screen_coords[2][3] * barycentric_coords[2];
+            frag_depth = std::max(0, std::min(255, (int)(v.z / vw + 0.5f)));
+            if (frag_depth > z_buffer.get(v.x, v.y)[0]) {
+                // 2.2 插值计算 fragment uv
+                // uv.x = uv_coords[0].x * barycentric_coords[0] + uv_coords[1].x * barycentric_coords[1] + uv_coords[2].x * barycentric_coords[2];
+                // uv.y = uv_coords[0].y * barycentric_coords[0] + uv_coords[1].y * barycentric_coords[1] + uv_coords[2].y * barycentric_coords[2];
+                // 2.3 插值计算 fragment itensity
+                //（也可以先计算 triangle vertex color 再插值 fragment color，这里是先计算 triganle vertex itensity，在插值 fragment itensity）
+                // itensity = itensities[0] * barycentric_coords[0] + itensities[1] * barycentric_coords[1] + itensities[2] * barycentric_coords[2];
 
-            if (frag_depth > z_buffer[v.x + v.y * image.get_width()]) {
-                bool discard = shader.fragmentShader(barycentric_coords, color);
-                if (!discard) {                                            // 若该 fragment 无需 discard
-                    z_buffer[v.x + v.y * image.get_width()] = frag_depth;  // 更新 z_buffer
-                    image.set(v.x, v.y, color);                            // 更新 framebuffer
+                bool discard = shader.fragment(barycentric_coords, color);
+                if (!discard) {                                    // 若该 fragment 无需 discard
+                    z_buffer.set(v.x, v.y, TGAColor(frag_depth));  // 更新 z_buffer
+                    image.set(v.x, v.y, color);                    // 更新 framebuffer
                 }
             }
         }
