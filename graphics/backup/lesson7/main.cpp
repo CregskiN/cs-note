@@ -41,7 +41,11 @@ struct Shader : public IShader {
         Vec4f shadowbuffer_p = uniform_shadow_MVP * embed<4>((varying_tri * barycentric_coords), 1.0f);
         shadowbuffer_p = shadowbuffer_p / shadowbuffer_p[3];                           // ndc
         int frag_index = int(shadowbuffer_p[0]) + int(shadowbuffer_p[1]) * SCR_WIDTH;  // frag在shadowbuffer中的下标
-        float shadow = 0.3f + 0.7f * (shadow_buffer[frag_index] < shadowbuffer_p[2]);
+
+        // 若 shadow_buffer 已存储深度 等于 当前 frag 在 shadow_buffer 的深度，才能点亮
+        float old_depth = shadow_buffer[frag_index];
+        float frag_depth = shadowbuffer_p[2];
+        bool isLit = old_depth - frag_depth < 43.34f;  // TODO:为什么已有的depth > frag_depth 才能点亮，反过来不行？用绝对值也不行？
 
         Vec2f uv = varying_uv * barycentric_coords;
 
@@ -55,10 +59,12 @@ struct Shader : public IShader {
         Vec3f reflectLight = (normal * (normal * light * 2.0f) - light).normalize();
         float spec = pow(std::max(reflectLight.z, 0.0f), model->specular(uv));
 
-        for (size_t i = 0; i < 3; ++i) {
-            color[i] = std::min<float>(ambientColor[i] + diffuseColor[i] * shadow * (0.6f * spec + 1.2f * diff), 255);
-        }
+        // for (size_t i = 0; i < 3; ++i) {
+        // color[i] = ambientColor[i] + diffuseColor[i] * (0.6f * spec + 1.2f * diff) * (isLit ? 1.0f : 0.5f);
 
+        // }
+
+        color = TGAColor(255, 255, 255) * ((normal * light) * (isLit ? 1.0f : 0.5f));
         return false;
     }
 };

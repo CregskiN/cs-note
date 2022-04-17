@@ -25,11 +25,11 @@ void viewport(int screen_cube_x, int screen_cube_y, int screen_cube_width, int s
     Viewport = Matrix::identity();
     Viewport[0][3] = screen_cube_x + screen_cube_width / 2.f;
     Viewport[1][3] = screen_cube_y + screen_cube_height / 2.f;
-    Viewport[2][3] = 255.0f / 2.f;
+    Viewport[2][3] = SCR_DEPTH / 2.f;
 
     Viewport[0][0] = screen_cube_width / 2.f;
     Viewport[1][1] = screen_cube_height / 2.f;
-    Viewport[2][2] = 255.0f / 2.f;
+    Viewport[2][2] = SCR_DEPTH / 2.f;
 }
 
 /**
@@ -51,7 +51,7 @@ void lookAt(Vec3f eye, Vec3f center, Vec3f up) {
         rotate[1][i] = y[i];
         rotate[2][i] = z[i];
         rotate[i][3] = -center[i];
-        // translate[i][3] = -(eye - center)[i]; // TODO: 这行是我推导的完全体 View，不知道为什么与原作者给出的代码不一致
+        // translate[i][3] = -(eye - center)[i];
     }
     ModelView = rotate * translate;
 }
@@ -68,7 +68,7 @@ void projection(float coeff) {
  * @param positions
  * @return Vec3f
  */
-Vec3f barycentric(Vec3f v, Vec4f* positions) {
+Vec3f barycentric(Vec2f v, Vec4f* positions) {
     Vec3f vec1 = Vec3f(positions[1][0] - positions[0][0], positions[2][0] - positions[0][0], positions[0][0] - v.x);
     Vec3f vec2 = Vec3f(positions[1][1] - positions[0][1], positions[2][1] - positions[0][1], positions[0][1] - v.y);
     Vec3f uv1 = cross(vec1, vec2);
@@ -79,7 +79,7 @@ void triangle(Vec4f screen_coords[3], IShader& shader, TGAImage& image, float* z
     // 0. screen_coords 标准化
     for (size_t i = 0; i < 3; ++i) {
         for (size_t j = 0; j < 2; ++j) {
-            screen_coords[i][j] /= screen_coords[i][3];
+            screen_coords[i][j] /= screen_coords[i][3];  // ndc x y
         }
     }
 
@@ -90,7 +90,7 @@ void triangle(Vec4f screen_coords[3], IShader& shader, TGAImage& image, float* z
     int y_max = std::min(std::max(screen_coords[0][1], std::max(screen_coords[1][1], screen_coords[2][1])), SCR_HEIGHT - 1.0f);
 
     // 2. 判断点 (x, y) 是否在三角形内，如果是，则点亮像素
-    Vec3i v(0, 0, 0);
+    Vec2i v(0, 0);
     TGAColor color;
 
     for (int x = x_min; x <= x_max; ++x) {
@@ -104,10 +104,10 @@ void triangle(Vec4f screen_coords[3], IShader& shader, TGAImage& image, float* z
             }
 
             // 2.1 插值计算 fragment depth，判断是否应该渲染
-            v.z = screen_coords[0][2] * barycentric_coords[0] + screen_coords[1][2] * barycentric_coords[1] + screen_coords[2][2] * barycentric_coords[2];
-            float vw = screen_coords[0][3] * barycentric_coords[0] + screen_coords[1][3] * barycentric_coords[1] + screen_coords[2][3] * barycentric_coords[2];
-            float frag_depth = std::max(0, std::min(255, (int)(v.z / vw + 0.5f)));
-            // float frag_depth = v.z / vw;
+            float z = screen_coords[0][2] * barycentric_coords[0] + screen_coords[1][2] * barycentric_coords[1] + screen_coords[2][2] * barycentric_coords[2];
+            float w = screen_coords[0][3] * barycentric_coords[0] + screen_coords[1][3] * barycentric_coords[1] + screen_coords[2][3] * barycentric_coords[2];
+            // float frag_depth = std::max(0, std::min(255, (int)(z / w + 0.5f)));
+            float frag_depth = z / w;
 
             if (frag_depth > z_buffer[v.x + v.y * image.get_width()]) {
                 bool discard = shader.fragmentShader(barycentric_coords, color);
