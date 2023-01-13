@@ -42,6 +42,14 @@
 
 
 
+$\begin{bmatrix} 1 \\ 0 \end{bmatrix}$, $\begin{bmatrix} 0 \\ 1 \end{bmatrix}$, $\begin{bmatrix} cos\theta \\ sin\theta \end{bmatrix}$, $\begin{bmatrix} -sin\theta \\ cos\theta \end{bmatrix}$
+
+
+
+
+
+
+
 
 
 <img src="https://www.qiniu.cregskin.com/20220104131824.JPG" alt="IMG_0154(20220104-131754)" style="zoom:50%;" />
