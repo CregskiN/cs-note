@@ -1,4 +1,4 @@
-# 类型操作
+# Type Manipulation 类型操作
 
 ## 1. keyof 操作符
 
